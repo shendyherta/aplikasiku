@@ -17,6 +17,7 @@ import android.widget.Toast;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
@@ -25,6 +26,7 @@ import com.sh.aplikasiku.model.UserPantau;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import android.os.Bundle;
 import android.os.Bundle;
@@ -36,6 +38,7 @@ public class PantauKehamilan extends AppCompatActivity {
     private List<UserPantau> list = new ArrayList<>();
     private UserAdapterPantau userAdapterPantau;
     private ProgressDialog progressDialog;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -98,16 +101,22 @@ public class PantauKehamilan extends AppCompatActivity {
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
                         list.clear();
                         if (task.isSuccessful()) {
-                            for (QueryDocumentSnapshot document : task.getResult()) {
-                                String denyutjantung = document.get("denyutjantung").toString();
-                                String kondisibayi = document.get("kondisibayi").toString();
-                                UserPantau user = new UserPantau(denyutjantung, kondisibayi);
-                                user.setId(document.getId());
-                                list.add(user);
+                            DocumentSnapshot documentSnapshot = task.getResult().getDocuments().get(0);
+                            if (documentSnapshot.exists()) {
+                                Map<String, Object> map = documentSnapshot.getData();
+                                if (map.size() == 0) {
+                                    Toast.makeText(PantauKehamilan.this, "Belum ada data pantau kehamilan!", Toast.LENGTH_SHORT).show();
+                                } else {
+                                    for (QueryDocumentSnapshot document : task.getResult()) {
+                                        String denyutjantung = document.get("denyutjantung").toString();
+                                        String kondisibayi = document.get("kondisibayi").toString();
+                                        UserPantau user = new UserPantau(denyutjantung, kondisibayi);
+                                        user.setId(document.getId());
+                                        list.add(user);
+                                    }
+                                    showPantauKehamilan();
+                                }
                             }
-
-                            showPantauKehamilan();
-
                         } else {
                             Toast.makeText(getApplicationContext(), "Data Gagal", Toast.LENGTH_SHORT).show();
                         }
@@ -134,7 +143,7 @@ public class PantauKehamilan extends AppCompatActivity {
                 });
     }
 
-    private void showPantauKehamilan(){
+    private void showPantauKehamilan() {
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getApplicationContext(), LinearLayoutManager.VERTICAL, false);
         RecyclerView.ItemDecoration decoration = new DividerItemDecoration(getApplicationContext(), DividerItemDecoration.VERTICAL);
         recyclerView.setLayoutManager(layoutManager);

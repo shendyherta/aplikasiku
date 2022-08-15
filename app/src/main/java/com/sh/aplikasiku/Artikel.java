@@ -18,14 +18,17 @@ import android.widget.Toast;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.sh.aplikasiku.adapter.UserAdapter;
 import com.sh.aplikasiku.model.User;
+import com.sh.aplikasiku.model.UserRekam;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 public class Artikel extends AppCompatActivity {
     private RecyclerView recyclerView;
@@ -102,12 +105,20 @@ public class Artikel extends AppCompatActivity {
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
                         list.clear();
                         if (task.isSuccessful()) {
-                            for (QueryDocumentSnapshot document : task.getResult()) {
-                                User user = new User(document.getString("judul"), document.getString("penjelasan"));
-                                user.setId(document.getId());
-                                list.add(user);
+                            DocumentSnapshot documentSnapshot = task.getResult().getDocuments().get(0);
+                            if (documentSnapshot.exists()) {
+                                Map<String, Object> map = documentSnapshot.getData();
+                                if (map.size() == 0) {
+                                    Toast.makeText(Artikel.this, "Belum ada artikel!", Toast.LENGTH_SHORT).show();
+                                } else {
+                                    for (QueryDocumentSnapshot document : task.getResult()) {
+                                        User user = new User(document.getString("judul"), document.getString("penjelasan"));
+                                        user.setId(document.getId());
+                                        list.add(user);
+                                    }
+                                    userAdapter.notifyDataSetChanged();
+                                }
                             }
-                            userAdapter.notifyDataSetChanged();
                         } else {
                             Toast.makeText(getApplicationContext(), "Data Gagal", Toast.LENGTH_SHORT).show();
                         }

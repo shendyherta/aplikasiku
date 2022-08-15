@@ -17,6 +17,7 @@ import android.widget.Toast;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
@@ -25,6 +26,7 @@ import com.sh.aplikasiku.model.UserRekam;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import android.os.Bundle;
 
@@ -103,20 +105,27 @@ public class RekamMedis extends AppCompatActivity {
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
                         list.clear();
                         if (task.isSuccessful()) {
-                            for (QueryDocumentSnapshot document : task.getResult()) {
-                                String berat = document.get("berat").toString();
-                                String denyut = document.get("denyut").toString();
-                                String laju = document.get("laju").toString();
-                                String suhu = document.get("suhu").toString();
-                                String tekanan = document.get("tekanan").toString();
-                                String kondisi = document.get("kondisi").toString();
-                                String lingkar = document.get("lingkar").toString();
-                                UserRekam user = new UserRekam(berat, denyut, laju, suhu, tekanan, kondisi, lingkar);
-                                user.setId(document.getId());
-                                list.add(user);
+                            DocumentSnapshot documentSnapshot = task.getResult().getDocuments().get(0);
+                            if (documentSnapshot.exists()) {
+                                Map<String, Object> map = documentSnapshot.getData();
+                                if (map.size() == 0) {
+                                    Toast.makeText(RekamMedis.this, "Belum ada data rekam medis!", Toast.LENGTH_SHORT).show();
+                                } else {
+                                    for (QueryDocumentSnapshot document : task.getResult()) {
+                                        String berat = document.get("berat").toString();
+                                        String denyut = document.get("denyut").toString();
+                                        String laju = document.get("laju").toString();
+                                        String suhu = document.get("suhu").toString();
+                                        String tekanan = document.get("tekanan").toString();
+                                        String kondisi = document.get("kondisi").toString();
+                                        String lingkar = document.get("lingkar").toString();
+                                        UserRekam user = new UserRekam(berat, denyut, laju, suhu, tekanan, kondisi, lingkar);
+                                        user.setId(document.getId());
+                                        list.add(user);
+                                    }
+                                    showRekamMedis();
+                                }
                             }
-
-                            showRekamMedis();
 
                         } else {
                             Toast.makeText(getApplicationContext(), "Data Gagal", Toast.LENGTH_SHORT).show();

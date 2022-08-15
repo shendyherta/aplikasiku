@@ -35,12 +35,12 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void pantau(View view) {
-        Intent i = new Intent(MainActivity.this, RekamMedis.class);
+        Intent i = new Intent(MainActivity.this, PantauKehamilan.class);
         startActivity(i);
     }
 
     public void rekam(View view) {
-        Intent i = new Intent(MainActivity.this, PantauKehamilan.class);
+        Intent i = new Intent(MainActivity.this, RekamMedis.class);
         startActivity(i);
     }
 
