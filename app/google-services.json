@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "843982745350",
+    "project_id": "aplikasiku-8cb62",
+    "storage_bucket": "aplikasiku-8cb62.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:843982745350:android:6c27ad44c2a29312d8b887",
+        "android_client_info": {
+          "package_name": "com.sh.aplikasiku"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "843982745350-o22bb1tsaliam57vna9cvdbvc4fvjnje.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.sh.aplikasiku",
+            "certificate_hash": "fb21465ec1ef7d6c1c84bf1298510fa8c333ea4b"
+          }
+        },
+        {
+          "client_id": "843982745350-rh7vgipl32ia38me8gs9n84cmfak6ti2.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC79ZJ3cESRfjdqNX5OIFKlekX3kw15VjA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "843982745350-rh7vgipl32ia38me8gs9n84cmfak6ti2.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
