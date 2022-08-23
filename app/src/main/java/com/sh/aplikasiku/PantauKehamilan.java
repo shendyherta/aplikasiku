@@ -54,20 +54,27 @@ public class PantauKehamilan extends AppCompatActivity {
         userAdapterPantau.setDialog(new UserAdapterPantau.Dialog() {
             @Override
             public void onClick(int pos) {
-                final CharSequence[] dialogItem = {"edit", "hapus"};
+                final CharSequence[] dialogItem = {"lihat","edit", "hapus"};
                 AlertDialog.Builder dialog = new AlertDialog.Builder(PantauKehamilan.this);
                 dialog.setItems(dialogItem, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         switch (i) {
                             case 0:
+                                Intent intentbaca = new Intent(getApplicationContext(), TampilPantauKehamilan.class);
+                                intentbaca.putExtra("id", list.get(pos).getId());
+                                intentbaca.putExtra("denyutjantung", list.get(pos).getDenyut());
+                                intentbaca.putExtra("kondisibayi", list.get(pos).getKondisi());
+                                startActivity(intentbaca);
+                                break;
+                            case 1:
                                 Intent intent = new Intent(getApplicationContext(), EditPantau.class);
                                 intent.putExtra("id", list.get(pos).getId());
                                 intent.putExtra("denyutjantung", list.get(pos).getDenyut());
                                 intent.putExtra("kondisibayi", list.get(pos).getKondisi());
                                 startActivity(intent);
                                 break;
-                            case 1:
+                            case 2:
                                 deleteData(list.get(pos).getId());
                                 break;
                         }
@@ -101,10 +108,8 @@ public class PantauKehamilan extends AppCompatActivity {
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
                         list.clear();
                         if (task.isSuccessful()) {
-                            DocumentSnapshot documentSnapshot = task.getResult().getDocuments().get(0);
-                            if (documentSnapshot.exists()) {
-                                Map<String, Object> map = documentSnapshot.getData();
-                                if (map.size() == 0) {
+                            try {
+                                if (task.getResult().getDocuments().size() == 0) {
                                     Toast.makeText(PantauKehamilan.this, "Belum ada data pantau kehamilan!", Toast.LENGTH_SHORT).show();
                                 } else {
                                     for (QueryDocumentSnapshot document : task.getResult()) {
@@ -116,6 +121,8 @@ public class PantauKehamilan extends AppCompatActivity {
                                     }
                                     showPantauKehamilan();
                                 }
+                            } catch (Exception e) {
+                                Toast.makeText(getApplicationContext(), "Coba lagi nanti!", Toast.LENGTH_SHORT).show();
                             }
                         } else {
                             Toast.makeText(getApplicationContext(), "Data Gagal", Toast.LENGTH_SHORT).show();
@@ -129,7 +136,7 @@ public class PantauKehamilan extends AppCompatActivity {
 
     private void deleteData(String id) {
         progressDialog.show();
-        db.collection("users").document(id)
+        db.collection("pantau").document(id)
                 .delete()
                 .addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override

@@ -2,23 +2,38 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical"
+    android:orientation="horizontal"
     android:padding="10dp">
-    <TextView
-        android:id="@+id/judul"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textColor="@color/black"
-        android:textStyle="bold"
-        android:text="Judul"/>
+    <de.hdodenhof.circleimageview.CircleImageView
 
-    <TextView
-        android:id="@+id/penjelasan"
-        android:layout_width="wrap_content"
+        android:id="@+id/avatar"
+        android:layout_width="60dp"
+        android:layout_height="60dp"/>
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textColor="@color/black"
-        android:textSize="12dp"
-        android:text="Penjelasan"/>
+    android:orientation="vertical"
+        android:layout_marginStart="10dp">
+
+        <TextView
+            android:id="@+id/judul"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/black"
+            android:textStyle="bold"
+            android:text="Judul"/>
+
+        <TextView
+            android:id="@+id/penjelasan"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/black"
+            android:textSize="12dp"
+            android:text="Penjelasan"/>
+    </LinearLayout>
+
+
+
 
 
 </LinearLayout>

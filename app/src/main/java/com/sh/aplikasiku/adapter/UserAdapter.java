@@ -4,11 +4,13 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.sh.aplikasiku.R;
 import com.sh.aplikasiku.model.User;
 
@@ -46,6 +48,7 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.MyViewHolder>{
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
         holder.judul.setText(list.get(position).getJudul());
         holder.penjelasan.setText(list.get(position).getPenjelasan());
+        Glide.with(context).load(list.get(position).getAvatar()).into(holder.avatar);
     }
 
     @Override
@@ -55,10 +58,14 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.MyViewHolder>{
 
     class MyViewHolder extends RecyclerView.ViewHolder{
         TextView judul, penjelasan;
+        ImageView avatar;
+
+
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
             judul = itemView.findViewById(R.id.judul);
             penjelasan = itemView.findViewById(R.id.penjelasan);
+            avatar = itemView.findViewById(R.id.avatar);
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {

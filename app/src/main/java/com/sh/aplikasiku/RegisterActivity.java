@@ -11,17 +11,25 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.UserProfileChangeRequest;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FirebaseFirestore;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class RegisterActivity extends AppCompatActivity {
     private EditText editname, editemail, editpassword, editkonfirmpwd;
     private Button btnregister, btnlogin;
     private ProgressDialog progressDialog;
     private FirebaseAuth mAuth;
+    private FirebaseFirestore db = FirebaseFirestore.getInstance();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,6 +72,9 @@ public class RegisterActivity extends AppCompatActivity {
                 if (task.isSuccessful() && task.getResult() != null) {
                     FirebaseUser firebaseUser = task.getResult().getUser();
                     if (firebaseUser != null) {
+                        String idUser = firebaseUser.getUid();
+                        saveDataUser(idUser, name);
+
                         UserProfileChangeRequest request = new UserProfileChangeRequest.Builder()
                                 .setDisplayName(name)
                                 .build();
@@ -95,5 +106,35 @@ public class RegisterActivity extends AppCompatActivity {
         if (currentUser != null) {
             reload();
         }
+    }
+
+    private void saveDataUser(String idUser, String username) {
+        Map<String, Object> user = new HashMap<>();
+        user.put("id", idUser);
+        user.put("username", username);
+        user.put("role", 2);
+
+
+        progressDialog.show();
+        //untuk menambahkan data, jika id length not null berati edit kalau di else nya berarti fitur tambah
+
+
+        db.collection("users")
+                .add(user)
+                .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                    @Override
+                    public void onSuccess(DocumentReference documentReference) {
+                        Toast.makeText(getApplicationContext(), "Berhasil", Toast.LENGTH_SHORT).show();
+                        progressDialog.dismiss();
+                        finish();
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Toast.makeText(getApplicationContext(), e.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
+                        progressDialog.dismiss();
+                    }
+                });
     }
 }

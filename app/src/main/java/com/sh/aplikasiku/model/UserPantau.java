@@ -4,7 +4,12 @@ public class UserPantau {
     private String id, denyut, kondisi;
 
     public UserPantau(String denyut, String kondisi){
+        this.kondisi = kondisi;
+        this.denyut = denyut;
+    }
 
+    public UserPantau(String id, String denyut, String kondisi){
+        this.id = id;
         this.kondisi = kondisi;
         this.denyut = denyut;
     }

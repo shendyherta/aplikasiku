@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/container"
+    tools:context=".MainUserActivity"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#FFFFFF"
@@ -30,7 +32,7 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Puskesmas Boro Blitar, halo Admin!" />
+                    android:text="Puskesmas Boro Blitar, Halo User!" />
 
                 <TextView
                     android:layout_width="match_parent"
@@ -47,14 +49,14 @@
                 android:background="@drawable/bel" />
         </LinearLayout>
 
-<!--        <EditText-->
-<!--            android:layout_width="match_parent"-->
-<!--            android:layout_height="45dp"-->
-<!--            android:layout_marginTop="10dp"-->
-<!--            android:background="@drawable/bg_form"-->
-<!--            android:drawableStart="@drawable/cari"-->
-<!--            android:hint="Cari Sesuatu"-->
-<!--            android:paddingLeft="10dp" />-->
+        <!--        <EditText-->
+        <!--            android:layout_width="match_parent"-->
+        <!--            android:layout_height="45dp"-->
+        <!--            android:layout_marginTop="10dp"-->
+        <!--            android:background="@drawable/bg_form"-->
+        <!--            android:drawableStart="@drawable/cari"-->
+        <!--            android:hint="Cari Sesuatu"-->
+        <!--            android:paddingLeft="10dp" />-->
         <!--part menu 1-->
         <LinearLayout
             android:layout_width="match_parent"
@@ -183,50 +185,50 @@
             </LinearLayout>
         </LinearLayout>
         <!-- part menu 3-->
-<!--        <LinearLayout-->
+        <!--        <LinearLayout-->
 
-<!--            android:id="@+id/linearLayout"-->
-<!--            android:layout_width="match_parent"-->
-<!--            android:layout_height="70dp"-->
-<!--            android:layout_alignParentBottom="true"-->
-<!--            android:layout_gravity="bottom"-->
-<!--            android:layout_marginStart="0dp"-->
-<!--            android:layout_marginTop="150dp"-->
-<!--            android:background="#FB9803"-->
-<!--            android:gravity="center"-->
-<!--            android:orientation="horizontal">-->
-
-
-<!--            <ImageView-->
-
-<!--                android:layout_width="60dp"-->
-<!--                android:layout_height="90dp"-->
-<!--                android:onClick="dashboard"-->
-<!--                android:src="@drawable/dashboard" />-->
+        <!--            android:id="@+id/linearLayout"-->
+        <!--            android:layout_width="match_parent"-->
+        <!--            android:layout_height="70dp"-->
+        <!--            android:layout_alignParentBottom="true"-->
+        <!--            android:layout_gravity="bottom"-->
+        <!--            android:layout_marginStart="0dp"-->
+        <!--            android:layout_marginTop="150dp"-->
+        <!--            android:background="#FB9803"-->
+        <!--            android:gravity="center"-->
+        <!--            android:orientation="horizontal">-->
 
 
-<!--            <com.google.android.material.floatingactionbutton.FloatingActionButton-->
-<!--                android:layout_width="60dp"-->
-<!--                android:layout_height="90dp"-->
-<!--                android:layout_alignParentRight="true"-->
-<!--                android:layout_gravity="bottom|center"-->
-<!--                android:layout_marginLeft="80dp"-->
-<!--                android:layout_marginBottom="15dp"-->
-<!--                android:onClick="home"-->
-<!--                android:src="@drawable/home2"-->
-<!--                app:elevation="8dp" />-->
+        <!--            <ImageView-->
+
+        <!--                android:layout_width="60dp"-->
+        <!--                android:layout_height="90dp"-->
+        <!--                android:onClick="dashboard"-->
+        <!--                android:src="@drawable/dashboard" />-->
 
 
-<!--            <ImageView-->
-<!--                android:id="@+id/notifikasi"-->
-<!--                android:layout_width="60dp"-->
-<!--                android:layout_height="90dp"-->
-<!--                android:layout_alignParentRight="true"-->
-<!--                android:layout_marginLeft="80dp"-->
-<!--                android:onClick="notifikasi"-->
-<!--                android:src="@drawable/belllll" />-->
+        <!--            <com.google.android.material.floatingactionbutton.FloatingActionButton-->
+        <!--                android:layout_width="60dp"-->
+        <!--                android:layout_height="90dp"-->
+        <!--                android:layout_alignParentRight="true"-->
+        <!--                android:layout_gravity="bottom|center"-->
+        <!--                android:layout_marginLeft="80dp"-->
+        <!--                android:layout_marginBottom="15dp"-->
+        <!--                android:onClick="home"-->
+        <!--                android:src="@drawable/home2"-->
+        <!--                app:elevation="8dp" />-->
 
-<!--        </LinearLayout>-->
+
+        <!--            <ImageView-->
+        <!--                android:id="@+id/notifikasi"-->
+        <!--                android:layout_width="60dp"-->
+        <!--                android:layout_height="90dp"-->
+        <!--                android:layout_alignParentRight="true"-->
+        <!--                android:layout_marginLeft="80dp"-->
+        <!--                android:onClick="notifikasi"-->
+        <!--                android:src="@drawable/belllll" />-->
+
+        <!--        </LinearLayout>-->
 
     </LinearLayout>
 

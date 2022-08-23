@@ -21,11 +21,12 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class EditPantau extends AppCompatActivity {
-private EditText editkondisibayi, editdenyutjantung;
-private Button btnsave;
-private FirebaseFirestore db = FirebaseFirestore.getInstance();
-private ProgressDialog progressDialog;
-private String id = "";
+    private EditText editkondisibayi, editdenyutjantung;
+    private Button btnsave;
+    private FirebaseFirestore db = FirebaseFirestore.getInstance();
+    private ProgressDialog progressDialog;
+    private String id = "";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -38,23 +39,24 @@ private String id = "";
         progressDialog = new ProgressDialog(EditPantau.this);
         progressDialog.setTitle("loading");
         progressDialog.setMessage("menyimpan...");
-        
+
         btnsave.setOnClickListener(v -> {
-            if(editdenyutjantung.getText().length()>0 && editkondisibayi.getText().length()>0){
+            if (editdenyutjantung.getText().length() > 0 && editkondisibayi.getText().length() > 0) {
                 saveData(editdenyutjantung.getText().toString(), editkondisibayi.getText().toString());
-            }else{
+            } else {
                 Toast.makeText(getApplicationContext(), "Silakan isi dulu artikel", Toast.LENGTH_SHORT).show();
             }
         });
         Intent intent = getIntent();
-        if(intent!=null){
-            id= intent.getStringExtra("id");
+        if (intent != null) {
+            id = intent.getStringExtra("id");
             editdenyutjantung.setText(intent.getStringExtra("Denyut Jantung"));
             editkondisibayi.setText(intent.getStringExtra("Kondisi Bayi"));
 
         }
     }
-    private void saveData(String denyut, String kondisi){
+
+    private void saveData(String denyut, String kondisi) {
         Map<String, Object> user = new HashMap<>();
         user.put("denyutjantung", denyut);
         user.put("kondisibayi", kondisi);
@@ -63,22 +65,22 @@ private String id = "";
         progressDialog.show();
         //untuk menambahkan data, jika id length not null berati edit kalau di else nya berarti fitur tambah
 
-        if(id!=null){
+        if (id != null) {
             db.collection("pantau").document(id)
                     .set(user)
                     .addOnCompleteListener(new OnCompleteListener<Void>() {
                         @Override
                         public void onComplete(@NonNull Task<Void> task) {
-                            if(task.isSuccessful()){
+                            if (task.isSuccessful()) {
                                 Toast.makeText(getApplicationContext(), "Berhasil", Toast.LENGTH_SHORT).show();
                                 finish();
-                            }else{
+                            } else {
                                 Toast.makeText(getApplicationContext(), "Gagal", Toast.LENGTH_SHORT).show();
                             }
                         }
                     });
 
-        }else {
+        } else {
             db.collection("pantau")
                     .add(user)
                     .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
