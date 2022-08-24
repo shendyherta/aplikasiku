@@ -1,71 +1,81 @@
 package com.sh.aplikasiku.model;
 
 public class UserRekam {
-    private String id, berat, lingkar, suhu, laju, kondisi, tekanan, denyut;
+    private String id, beratBadan, lingkarBadan, kondisiHB, tekananDarah,
+            lajuPernafasan, suhu, denyutJantung;
 
-    public UserRekam(String berat, String denyut, String laju, String suhu, String tekanan, String kondisi, String lingkar){
-        this.berat = berat;
-        this.lingkar = lingkar;
+    public UserRekam(String beratBadan, String lingkarBadan, String kondisiHB, String tekananDarah,
+                     String lajuPernafasan, String suhu, String denyutJantung) {
+        this.beratBadan = beratBadan;
+        this.lingkarBadan = lingkarBadan;
+        this.kondisiHB = kondisiHB;
+        this.tekananDarah = tekananDarah;
+        this.lajuPernafasan = lajuPernafasan;
         this.suhu = suhu;
-        this.laju = laju;
-        this.kondisi = kondisi;
-        this.tekanan = tekanan;
-        this.denyut = denyut;
+        this.denyutJantung = denyutJantung;
     }
 
-    public String getId(){
+    public String getId() {
         return id;
     }
-    public void setId(String id){
+
+    public void setId(String id) {
         this.id = id;
     }
 
-    public String getLingkar(){
-        return lingkar;
-    }
-    public void setLingkar(String lingkar){
-        this.lingkar = lingkar;
+    public String getBeratBadan() {
+        return beratBadan;
     }
 
-    public String getSuhu(){
+    public void setBeratBadan(String beratBadan) {
+        this.beratBadan = beratBadan;
+    }
+
+    public String getLingkarBadan() {
+        return lingkarBadan;
+    }
+
+    public void setLingkarBadan(String lingkarBadan) {
+        this.lingkarBadan = lingkarBadan;
+    }
+
+    public String getKondisiHB() {
+        return kondisiHB;
+    }
+
+    public void setKondisiHB(String kondisiHB) {
+        this.kondisiHB = kondisiHB;
+    }
+
+    public String getTekananDarah() {
+        return tekananDarah;
+    }
+
+    public void setTekananDarah(String tekananDarah) {
+        this.tekananDarah = tekananDarah;
+    }
+
+    public String getLajuPernafasan() {
+        return lajuPernafasan;
+    }
+
+    public void setLajuPernafasan(String lajuPernafasan) {
+        this.lajuPernafasan = lajuPernafasan;
+    }
+
+    public String getSuhu() {
         return suhu;
     }
-    public void setSuhu(String suhu){
+
+    public void setSuhu(String suhu) {
         this.suhu = suhu;
     }
 
-    public String getLaju(){
-        return laju;
-    }
-    public void setLaju(String laju){
-        this.laju = laju;
+    public String getDenyutJantung() {
+        return denyutJantung;
     }
 
-    public String getKondisi(){
-        return kondisi;
-    }
-    public void setBKondisi(String kondisi){
-        this.kondisi = kondisi;
-    }
-
-    public String getTekanan(){
-        return tekanan;
-    }
-    public void setTekanan(String tekanan){
-        this.tekanan = tekanan;
-    }
-
-    public String getDenyut(){
-        return denyut;
-    }
-    public void setDenyut(String denyut){
-        this.denyut= denyut;
-    }
-
-    public String getBerat(){
-        return berat;
-    }
-    public void setBerat(String berat){
-        this.berat = berat;
+    public void setDenyutJantung(String denyutJantung) {
+        this.denyutJantung = denyutJantung;
     }
 }

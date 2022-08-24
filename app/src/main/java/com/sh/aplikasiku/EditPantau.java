@@ -33,6 +33,9 @@ public class EditPantau extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_pantau);
+
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
         editdenyutjantung = findViewById(R.id.denyutjantung);
         editkondisibayi = findViewById(R.id.kondisibayi);
         btnsave = findViewById(R.id.btn_save);

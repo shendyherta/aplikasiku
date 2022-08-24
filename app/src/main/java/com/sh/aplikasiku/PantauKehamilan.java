@@ -13,6 +13,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
@@ -46,6 +47,8 @@ public class PantauKehamilan extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_pantau_kehamilan);
+
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         //get userdata
         sharedPref = getSharedPreferences(getString(R.string.data_user), MODE_PRIVATE);
@@ -114,35 +117,30 @@ public class PantauKehamilan extends AppCompatActivity {
         progressDialog.show();
         db.collection("pantau")
                 .get()
-                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                    @SuppressLint("NotifyDataSetChanged")
-                    @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        list.clear();
-                        if (task.isSuccessful()) {
-                            try {
-                                if (task.getResult().getDocuments().size() == 0) {
-                                    Toast.makeText(PantauKehamilan.this, "Belum ada data pantau kehamilan!", Toast.LENGTH_SHORT).show();
-                                } else {
-                                    for (QueryDocumentSnapshot document : task.getResult()) {
-                                        String denyutjantung = document.get("denyutjantung").toString();
-                                        String kondisibayi = document.get("kondisibayi").toString();
-                                        UserPantau user = new UserPantau(denyutjantung, kondisibayi);
-                                        user.setId(document.getId());
-                                        list.add(user);
-                                    }
-                                    showPantauKehamilan();
+                .addOnCompleteListener(task -> {
+                    list.clear();
+                    if (task.isSuccessful()) {
+                        try {
+                            Log.d("QWE", "getData: " + task.getResult().getDocuments());
+                            if (task.getResult().getDocuments().size() == 0) {
+                                Toast.makeText(PantauKehamilan.this, "Belum ada data pantau kehamilan!", Toast.LENGTH_SHORT).show();
+                            } else {
+                                for (QueryDocumentSnapshot document : task.getResult()) {
+                                    String denyutjantung = document.get("denyutjantung").toString();
+                                    String kondisibayi = document.get("kondisibayi").toString();
+                                    UserPantau user = new UserPantau(denyutjantung, kondisibayi);
+                                    user.setId(document.getId());
+                                    list.add(user);
                                 }
-                            } catch (Exception e) {
-                                Toast.makeText(getApplicationContext(), "Coba lagi nanti!", Toast.LENGTH_SHORT).show();
+                                showPantauKehamilan();
                             }
-                        } else {
-                            Toast.makeText(getApplicationContext(), "Data Gagal", Toast.LENGTH_SHORT).show();
+                        } catch (Exception e) {
+                            Toast.makeText(getApplicationContext(), "Coba lagi nanti!", Toast.LENGTH_SHORT).show();
                         }
-                        progressDialog.dismiss();
+                    } else {
+                        Toast.makeText(getApplicationContext(), "Data Gagal", Toast.LENGTH_SHORT).show();
                     }
-
-
+                    progressDialog.dismiss();
                 });
     }
 

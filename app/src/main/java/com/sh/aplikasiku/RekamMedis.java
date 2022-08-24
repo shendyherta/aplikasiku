@@ -47,6 +47,8 @@ public class RekamMedis extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_rekam_medis);
 
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
         //get userrole
         sharedPref = getPreferences(Context.MODE_PRIVATE);
         userrole = sharedPref.getInt(getString(R.string.user_role), 0);
@@ -71,25 +73,25 @@ public class RekamMedis extends AppCompatActivity {
                             case 0:
                                 Intent intentbaca = new Intent(getApplicationContext(), TampilanRekam.class);
                                 intentbaca.putExtra("id", list.get(pos).getId());
-                                intentbaca.putExtra("berat", list.get(pos).getBerat());
-                                intentbaca.putExtra("lingkar", list.get(pos).getLingkar());
-                                intentbaca.putExtra("laju", list.get(pos).getLaju());
-                                intentbaca.putExtra("tekanan", list.get(pos).getTekanan());
+                                intentbaca.putExtra("berat", list.get(pos).getBeratBadan());
+                                intentbaca.putExtra("lingkar", list.get(pos).getLingkarBadan());
+                                intentbaca.putExtra("laju", list.get(pos).getLajuPernafasan());
+                                intentbaca.putExtra("tekanan", list.get(pos).getTekananDarah());
                                 intentbaca.putExtra("suhu", list.get(pos).getSuhu());
-                                intentbaca.putExtra("denyut", list.get(pos).getDenyut());
-                                intentbaca.putExtra("kondisi", list.get(pos).getKondisi());
+                                intentbaca.putExtra("denyut", list.get(pos).getDenyutJantung());
+                                intentbaca.putExtra("kondisi", list.get(pos).getKondisiHB());
                                 startActivity(intentbaca);
                                 break;
                             case 1:
                                 Intent intent = new Intent(getApplicationContext(), EditRekam.class);
                                 intent.putExtra("id", list.get(pos).getId());
-                                intent.putExtra("berat", list.get(pos).getBerat());
-                                intent.putExtra("lingkar", list.get(pos).getLingkar());
-                                intent.putExtra("laju", list.get(pos).getLaju());
-                                intent.putExtra("tekanan", list.get(pos).getTekanan());
+                                intent.putExtra("berat", list.get(pos).getBeratBadan());
+                                intent.putExtra("lingkar", list.get(pos).getLingkarBadan());
+                                intent.putExtra("laju", list.get(pos).getLajuPernafasan());
+                                intent.putExtra("tekanan", list.get(pos).getTekananDarah());
                                 intent.putExtra("suhu", list.get(pos).getSuhu());
-                                intent.putExtra("denyut", list.get(pos).getDenyut());
-                                intent.putExtra("kondisi", list.get(pos).getKondisi());
+                                intent.putExtra("denyut", list.get(pos).getDenyutJantung());
+                                intent.putExtra("kondisi", list.get(pos).getKondisiHB());
                                 startActivity(intent);
                                 break;
                             case 2:
@@ -104,13 +106,13 @@ public class RekamMedis extends AppCompatActivity {
             userAdapterRekam.setDialog(pos -> {
                 Intent intentbaca = new Intent(getApplicationContext(), TampilanRekam.class);
                 intentbaca.putExtra("id", list.get(pos).getId());
-                intentbaca.putExtra("berat", list.get(pos).getBerat());
-                intentbaca.putExtra("lingkar", list.get(pos).getLingkar());
-                intentbaca.putExtra("laju", list.get(pos).getLaju());
-                intentbaca.putExtra("tekanan", list.get(pos).getTekanan());
+                intentbaca.putExtra("berat", list.get(pos).getBeratBadan());
+                intentbaca.putExtra("lingkar", list.get(pos).getLingkarBadan());
+                intentbaca.putExtra("laju", list.get(pos).getLajuPernafasan());
+                intentbaca.putExtra("tekanan", list.get(pos).getTekananDarah());
                 intentbaca.putExtra("suhu", list.get(pos).getSuhu());
-                intentbaca.putExtra("denyut", list.get(pos).getDenyut());
-                intentbaca.putExtra("kondisi", list.get(pos).getKondisi());
+                intentbaca.putExtra("denyut", list.get(pos).getDenyutJantung());
+                intentbaca.putExtra("kondisi", list.get(pos).getKondisiHB());
                 startActivity(intentbaca);
             });
         }
@@ -133,38 +135,35 @@ public class RekamMedis extends AppCompatActivity {
         progressDialog.show();
         db.collection("rekammedis")
                 .get()
-                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                    @SuppressLint("NotifyDataSetChanged")
-                    @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        list.clear();
-                        if (task.isSuccessful()) {
-                            try {
-                                if (task.getResult().getDocuments().size() == 0) {
-                                    Toast.makeText(RekamMedis.this, "Belum ada data rekam medis!", Toast.LENGTH_SHORT).show();
-                                } else {
-                                    for (QueryDocumentSnapshot document : task.getResult()) {
-                                        String berat = document.get("berat").toString();
-                                        String denyut = document.get("denyut").toString();
-                                        String laju = document.get("laju").toString();
-                                        String suhu = document.get("suhu").toString();
-                                        String tekanan = document.get("tekanan").toString();
-                                        String kondisi = document.get("kondisi").toString();
-                                        String lingkar = document.get("lingkar").toString();
-                                        UserRekam user = new UserRekam(berat, denyut, laju, suhu, tekanan, kondisi, lingkar);
-                                        user.setId(document.getId());
-                                        list.add(user);
-                                    }
-                                    showRekamMedis();
+                .addOnCompleteListener(task -> {
+                    list.clear();
+                    if (task.isSuccessful()) {
+                        try {
+                            Log.d("QWE", "getData: " + task.getResult().getDocuments());
+                            if (task.getResult().getDocuments().size() == 0) {
+                                Toast.makeText(RekamMedis.this, "Belum ada data rekam medis!", Toast.LENGTH_SHORT).show();
+                            } else {
+                                for (QueryDocumentSnapshot document : task.getResult()) {
+                                    String berat = document.get("berat").toString();
+                                    String denyut = document.get("denyut").toString();
+                                    String laju = document.get("laju").toString();
+                                    String suhu = document.get("suhu").toString();
+                                    String tekanan = document.get("tekanan").toString();
+                                    String kondisi = document.get("kondisi").toString();
+                                    String lingkar = document.get("lingkar").toString();
+                                    UserRekam user = new UserRekam(berat, denyut, laju, suhu, tekanan, kondisi, lingkar);
+                                    user.setId(document.getId());
+                                    list.add(user);
                                 }
-                            } catch (Exception e) {
-                                Toast.makeText(getApplicationContext(), "Coba lagi nanti!", Toast.LENGTH_SHORT).show();
+                                showRekamMedis();
                             }
-                        } else {
-                            Toast.makeText(getApplicationContext(), "Data Gagal", Toast.LENGTH_SHORT).show();
+                        } catch (Exception e) {
+                            Toast.makeText(getApplicationContext(), "Coba lagi nanti!", Toast.LENGTH_SHORT).show();
                         }
-                        progressDialog.dismiss();
+                    } else {
+                        Toast.makeText(getApplicationContext(), "Data Gagal", Toast.LENGTH_SHORT).show();
                     }
+                    progressDialog.dismiss();
                 });
     }
 

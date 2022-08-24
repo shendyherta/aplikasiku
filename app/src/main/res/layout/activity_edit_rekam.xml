@@ -5,23 +5,37 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".EditRekam">
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:padding="14dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Pasien" />
+
+        <androidx.appcompat.widget.AppCompatSpinner
+            android:id="@+id/spinner_pasien"
+            android:layout_width="match_parent"
+            android:layout_height="60dp" />
+
         <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
             app:boxBackgroundColor="@color/white"
             app:boxBackgroundMode="outline">
+
             <EditText
                 android:id="@+id/berat"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:inputType="text"
-                android:hint="Berat Badan" />
-                
+                android:hint="Berat Badan"
+                android:inputType="text" />
+
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
@@ -30,12 +44,13 @@
             android:layout_marginTop="10dp"
             app:boxBackgroundColor="@color/white"
             app:boxBackgroundMode="outline">
+
             <EditText
                 android:id="@+id/lingkar"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:inputType="text"
-                android:hint="Lingkar Lengan" />
+                android:hint="Lingkar Lengan"
+                android:inputType="text" />
 
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -45,12 +60,13 @@
             android:layout_marginTop="10dp"
             app:boxBackgroundColor="@color/white"
             app:boxBackgroundMode="outline">
+
             <EditText
                 android:id="@+id/kondisi"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:inputType="text"
-                android:hint="Kondisi HB" />
+                android:hint="Kondisi HB"
+                android:inputType="text" />
 
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -60,12 +76,13 @@
             android:layout_marginTop="10dp"
             app:boxBackgroundColor="@color/white"
             app:boxBackgroundMode="outline">
+
             <EditText
                 android:id="@+id/tekanan"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:inputType="text"
-                android:hint="Tekanan Darah" />
+                android:hint="Tekanan Darah"
+                android:inputType="text" />
 
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -75,12 +92,13 @@
             android:layout_marginTop="10dp"
             app:boxBackgroundColor="@color/white"
             app:boxBackgroundMode="outline">
+
             <EditText
                 android:id="@+id/laju"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:inputType="text"
-                android:hint="Laju Pernafasan" />
+                android:hint="Laju Pernafasan"
+                android:inputType="text" />
 
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -90,12 +108,13 @@
             android:layout_marginTop="10dp"
             app:boxBackgroundColor="@color/white"
             app:boxBackgroundMode="outline">
+
             <EditText
                 android:id="@+id/suhu"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:inputType="text"
-                android:hint="Suhu" />
+                android:hint="Suhu"
+                android:inputType="text" />
 
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -105,25 +124,22 @@
             android:layout_marginTop="10dp"
             app:boxBackgroundColor="@color/white"
             app:boxBackgroundMode="outline">
+
             <EditText
                 android:id="@+id/denyut"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:inputType="text"
-                android:hint="Denyut Jantung" />
+                android:hint="Denyut Jantung"
+                android:inputType="text" />
 
         </com.google.android.material.textfield.TextInputLayout>
 
-
-
         <Button
-    android:id="@+id/btn_save"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:layout_marginTop="10dp"
-    android:text="Simpan"/>
-
-
+            android:id="@+id/btn_save"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:text="Simpan" />
     </LinearLayout>
 
 </ScrollView>

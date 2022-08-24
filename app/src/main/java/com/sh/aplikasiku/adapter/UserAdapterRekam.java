@@ -42,13 +42,13 @@ public class UserAdapterRekam extends RecyclerView.Adapter<UserAdapterRekam.MyVi
 
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
-        holder.berat.setText(list.get(position).getBerat());
-        holder.lingkar.setText(list.get(position).getLingkar());
-        holder.denyut.setText(list.get(position).getDenyut());
-        holder.kondisi.setText(list.get(position).getKondisi());
-        holder.laju.setText(list.get(position).getLaju());
+        holder.berat.setText(list.get(position).getBeratBadan());
+        holder.lingkar.setText(list.get(position).getLingkarBadan());
+        holder.denyut.setText(list.get(position).getDenyutJantung());
+        holder.kondisi.setText(list.get(position).getKondisiHB());
+        holder.laju.setText(list.get(position).getLajuPernafasan());
         holder.suhu.setText(list.get(position).getSuhu());
-        holder.tekanan.setText(list.get(position).getTekanan());
+        holder.tekanan.setText(list.get(position).getTekananDarah());
     }
 
     @Override

@@ -12,30 +12,26 @@ import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.storage.FirebaseStorage;
 import com.sh.aplikasiku.adapter.UserAdapter;
-import com.sh.aplikasiku.model.User;
-import com.sh.aplikasiku.model.UserRekam;
+import com.sh.aplikasiku.model.UserArtikel;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 public class Artikel extends AppCompatActivity {
     private RecyclerView recyclerView;
     private FloatingActionButton btnAdd;
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
-    private List<User> list = new ArrayList<>();
+    private List<UserArtikel> list = new ArrayList<>();
     private UserAdapter userAdapter;
     private ProgressDialog progressDialog;
 
@@ -120,9 +116,9 @@ public class Artikel extends AppCompatActivity {
                                     Toast.makeText(Artikel.this, "Belum ada artikel!", Toast.LENGTH_SHORT).show();
                                 } else {
                                     for (QueryDocumentSnapshot document : task.getResult()) {
-                                        User user = new User(document.getString("judul"), document.getString("penjelasan"), document.getString("avatar"));
-                                        user.setId(document.getId());
-                                        list.add(user);
+                                        UserArtikel userArtikel = new UserArtikel(document.getString("judul"), document.getString("penjelasan"), document.getString("avatar"));
+                                        userArtikel.setId(document.getId());
+                                        list.add(userArtikel);
                                     }
                                     userAdapter.notifyDataSetChanged();
                                 }

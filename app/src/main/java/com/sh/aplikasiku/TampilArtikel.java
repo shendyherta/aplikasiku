@@ -6,7 +6,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.widget.TextView;
 
@@ -14,7 +13,7 @@ import com.bumptech.glide.Glide;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.sh.aplikasiku.adapter.UserAdapter;
-import com.sh.aplikasiku.model.User;
+import com.sh.aplikasiku.model.UserArtikel;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,7 +22,7 @@ public class TampilArtikel extends AppCompatActivity {
     private RecyclerView recyclerView;
     private FloatingActionButton btnAdd;
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
-    private List<User> list = new ArrayList<>();
+    private List<UserArtikel> list = new ArrayList<>();
     private UserAdapter userAdapter;
     private ProgressDialog progressDialog;
     private AppCompatImageView gambar;

@@ -12,15 +12,13 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.sh.aplikasiku.R;
-import com.sh.aplikasiku.model.User;
-
-import org.w3c.dom.Text;
+import com.sh.aplikasiku.model.UserArtikel;
 
 import java.util.List;
 
 public class UserAdapter extends RecyclerView.Adapter<UserAdapter.MyViewHolder>{
     private Context context;
-    private List<User> list;
+    private List<UserArtikel> list;
     private Dialog dialog;
 
     public interface Dialog{
@@ -32,7 +30,7 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.MyViewHolder>{
     }
 
     //konstruktor
-    public UserAdapter(Context context, List<User> list){
+    public UserAdapter(Context context, List<UserArtikel> list){
         this.context = context;
         this.list = list;
     }

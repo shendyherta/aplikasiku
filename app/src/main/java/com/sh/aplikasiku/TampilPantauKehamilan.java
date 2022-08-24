@@ -31,9 +31,13 @@ public class TampilPantauKehamilan extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_tampil_pantau_kehamilan);
+
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
         recyclerView = findViewById(R.id.recyclerview);
         tampildenyutjantung = findViewById(R.id.denyutjantung);
         tampilkondisibayi = findViewById(R.id.kondisibayi);
+
         Intent intent = getIntent();
         if(intent!=null){
             id= intent.getStringExtra("id");
