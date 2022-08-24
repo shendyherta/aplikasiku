@@ -9,8 +9,10 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -37,11 +39,18 @@ public class RekamMedis extends AppCompatActivity {
     private List<UserRekam> list = new ArrayList<>();
     private UserAdapterRekam userAdapterRekam;
     private ProgressDialog progressDialog;
+    private SharedPreferences sharedPref;
+    private int userrole;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_rekam_medis);
+
+        //get userrole
+        sharedPref = getPreferences(Context.MODE_PRIVATE);
+        userrole = sharedPref.getInt(getString(R.string.user_role), 0);
+
         recyclerView = findViewById(R.id.recyclerview);
         btnAdd = findViewById(R.id.btn_add);
 
@@ -50,9 +59,9 @@ public class RekamMedis extends AppCompatActivity {
         progressDialog.setMessage("Mengambil data");
 
         userAdapterRekam = new UserAdapterRekam(getApplicationContext(), list);
-        userAdapterRekam.setDialog(new UserAdapterRekam.Dialog() {
-            @Override
-            public void onClick(int pos) {
+
+        if (userrole == 1) {
+            userAdapterRekam.setDialog(pos -> {
                 final CharSequence[] dialogItem = {"tampil", "edit", "hapus"};
                 AlertDialog.Builder dialog = new AlertDialog.Builder(RekamMedis.this);
                 dialog.setItems(dialogItem, new DialogInterface.OnClickListener() {
@@ -90,8 +99,21 @@ public class RekamMedis extends AppCompatActivity {
                     }
                 });
                 dialog.show();
-            }
-        });
+            });
+        } else {
+            userAdapterRekam.setDialog(pos -> {
+                Intent intentbaca = new Intent(getApplicationContext(), TampilanRekam.class);
+                intentbaca.putExtra("id", list.get(pos).getId());
+                intentbaca.putExtra("berat", list.get(pos).getBerat());
+                intentbaca.putExtra("lingkar", list.get(pos).getLingkar());
+                intentbaca.putExtra("laju", list.get(pos).getLaju());
+                intentbaca.putExtra("tekanan", list.get(pos).getTekanan());
+                intentbaca.putExtra("suhu", list.get(pos).getSuhu());
+                intentbaca.putExtra("denyut", list.get(pos).getDenyut());
+                intentbaca.putExtra("kondisi", list.get(pos).getKondisi());
+                startActivity(intentbaca);
+            });
+        }
 
 
         btnAdd.setOnClickListener(v -> {

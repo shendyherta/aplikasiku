@@ -14,6 +14,8 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 
@@ -57,46 +59,46 @@ public class EditPantau extends AppCompatActivity {
     }
 
     private void saveData(String denyut, String kondisi) {
-        Map<String, Object> user = new HashMap<>();
-        user.put("denyutjantung", denyut);
-        user.put("kondisibayi", kondisi);
-
+        //get user id
+        String idUser = FirebaseAuth.getInstance().getCurrentUser().getUid();
 
         progressDialog.show();
         //untuk menambahkan data, jika id length not null berati edit kalau di else nya berarti fitur tambah
 
         if (id != null) {
+            //set data pantau to create
+            Map<String, Object> dataPantau = new HashMap<>();
+            dataPantau.put("denyutjantung", denyut);
+            dataPantau.put("kondisibayi", kondisi);
+
             db.collection("pantau").document(id)
-                    .set(user)
-                    .addOnCompleteListener(new OnCompleteListener<Void>() {
-                        @Override
-                        public void onComplete(@NonNull Task<Void> task) {
-                            if (task.isSuccessful()) {
-                                Toast.makeText(getApplicationContext(), "Berhasil", Toast.LENGTH_SHORT).show();
-                                finish();
-                            } else {
-                                Toast.makeText(getApplicationContext(), "Gagal", Toast.LENGTH_SHORT).show();
-                            }
+                    .set(dataPantau)
+                    .addOnCompleteListener(task -> {
+                        if (task.isSuccessful()) {
+                            Toast.makeText(getApplicationContext(), "Berhasil", Toast.LENGTH_SHORT).show();
+                            finish();
+                        } else {
+                            Toast.makeText(getApplicationContext(), "Gagal", Toast.LENGTH_SHORT).show();
                         }
                     });
 
         } else {
+            //set data pantau to create
+            Map<String, Object> dataPantau = new HashMap<>();
+            dataPantau.put("iduser", idUser);
+            dataPantau.put("denyutjantung", denyut);
+            dataPantau.put("kondisibayi", kondisi);
+
             db.collection("pantau")
-                    .add(user)
-                    .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
-                        @Override
-                        public void onSuccess(DocumentReference documentReference) {
-                            Toast.makeText(getApplicationContext(), "Berhasil", Toast.LENGTH_SHORT).show();
-                            progressDialog.dismiss();
-                            finish();
-                        }
+                    .add(dataPantau)
+                    .addOnSuccessListener(documentReference -> {
+                        Toast.makeText(getApplicationContext(), "Berhasil", Toast.LENGTH_SHORT).show();
+                        progressDialog.dismiss();
+                        finish();
                     })
-                    .addOnFailureListener(new OnFailureListener() {
-                        @Override
-                        public void onFailure(@NonNull Exception e) {
-                            Toast.makeText(getApplicationContext(), e.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
-                            progressDialog.dismiss();
-                        }
+                    .addOnFailureListener(e -> {
+                        Toast.makeText(getApplicationContext(), e.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
+                        progressDialog.dismiss();
                     });
         }
 

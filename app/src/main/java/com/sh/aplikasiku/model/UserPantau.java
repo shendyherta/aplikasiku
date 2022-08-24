@@ -1,7 +1,7 @@
 package com.sh.aplikasiku.model;
 
 public class UserPantau {
-    private String id, denyut, kondisi;
+    private String id, denyut, kondisi, idUser;
 
     public UserPantau(String denyut, String kondisi){
         this.kondisi = kondisi;

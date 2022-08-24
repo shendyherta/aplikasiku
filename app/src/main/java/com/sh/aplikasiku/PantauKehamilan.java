@@ -9,26 +9,26 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.util.Log;
+import android.content.SharedPreferences;
+import android.view.View;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.sh.aplikasiku.adapter.AdminAdapterPantau;
 import com.sh.aplikasiku.adapter.UserAdapterPantau;
 import com.sh.aplikasiku.model.UserPantau;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
-import android.os.Bundle;
 import android.os.Bundle;
 
 public class PantauKehamilan extends AppCompatActivity {
@@ -37,12 +37,23 @@ public class PantauKehamilan extends AppCompatActivity {
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     private List<UserPantau> list = new ArrayList<>();
     private UserAdapterPantau userAdapterPantau;
+    private AdminAdapterPantau adminAdapterPantau;
     private ProgressDialog progressDialog;
+    private SharedPreferences sharedPref;
+    private int userrole;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_pantau_kehamilan);
+
+        //get userdata
+        sharedPref = getSharedPreferences(getString(R.string.data_user), MODE_PRIVATE);
+        userrole = sharedPref.getInt(getString(R.string.user_role), 0);
+        String username = sharedPref.getString(getString(R.string.user_name), "");
+
+        Toast.makeText(this, userrole + " ini " + username, Toast.LENGTH_SHORT).show();
+
         recyclerView = findViewById(R.id.recyclerview);
         btnAdd = findViewById(R.id.btn_add);
 
@@ -50,11 +61,10 @@ public class PantauKehamilan extends AppCompatActivity {
         progressDialog.setTitle("loading");
         progressDialog.setMessage("Mengambil data");
 
-        userAdapterPantau = new UserAdapterPantau(getApplicationContext(), list);
-        userAdapterPantau.setDialog(new UserAdapterPantau.Dialog() {
-            @Override
-            public void onClick(int pos) {
-                final CharSequence[] dialogItem = {"lihat","edit", "hapus"};
+        if (userrole == 1) {
+            adminAdapterPantau = new AdminAdapterPantau(this, list);
+            adminAdapterPantau.setDialog(pos -> {
+                final CharSequence[] dialogItem = {"lihat", "edit", "hapus"};
                 AlertDialog.Builder dialog = new AlertDialog.Builder(PantauKehamilan.this);
                 dialog.setItems(dialogItem, new DialogInterface.OnClickListener() {
                     @Override
@@ -81,9 +91,11 @@ public class PantauKehamilan extends AppCompatActivity {
                     }
                 });
                 dialog.show();
-            }
-        });
-
+            });
+        } else {
+            btnAdd.setVisibility(View.GONE);
+            userAdapterPantau = new UserAdapterPantau(this, list);
+        }
 
         btnAdd.setOnClickListener(v -> {
             startActivity(new Intent(getApplicationContext(), EditPantau.class));
@@ -155,7 +167,12 @@ public class PantauKehamilan extends AppCompatActivity {
         RecyclerView.ItemDecoration decoration = new DividerItemDecoration(getApplicationContext(), DividerItemDecoration.VERTICAL);
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.addItemDecoration(decoration);
-        recyclerView.setAdapter(userAdapterPantau);
+
+        if (userrole == 1) {
+            recyclerView.setAdapter(adminAdapterPantau);
+        } else {
+            recyclerView.setAdapter(userAdapterPantau);
+        }
     }
 
 }

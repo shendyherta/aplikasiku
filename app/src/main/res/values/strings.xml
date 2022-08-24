@@ -12,5 +12,8 @@
     <string name="invalid_username">Not a valid username</string>
     <string name="invalid_password">Password must be >5 characters</string>
     <string name="login_failed">"Login failed"</string>
+    <string name="data_user">data_user</string>
+    <string name="user_role">user_role</string>
+    <string name="user_name">user_name</string>
     <string name="webclientid">843982745350-rh7vgipl32ia38me8gs9n84cmfak6ti2.apps.googleusercontent.com</string>
 </resources>

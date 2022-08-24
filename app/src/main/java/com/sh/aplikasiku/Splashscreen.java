@@ -32,6 +32,10 @@ public class Splashscreen extends AppCompatActivity {
             if (FirebaseAuth.getInstance().getCurrentUser() != null) {
                 String id = FirebaseAuth.getInstance().getCurrentUser().getUid();
                 getUserData(id);
+            } else {
+                Intent home = new Intent(Splashscreen.this, LoginActivity.class);
+                startActivity(home);
+                finish();
             }
         } catch (Exception e) {
             Log.d("HALOO", "run: " + e.getMessage());

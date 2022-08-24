@@ -2,7 +2,9 @@ package com.sh.aplikasiku;
 
 import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.EditText;
@@ -26,6 +28,7 @@ public class LoginActivity extends AppCompatActivity {
     private ProgressDialog progressDialog;
     private FirebaseAuth mAuth;
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
+    private SharedPreferences sharedPref;
 
     //private SignInButton btnGoogle;
     //private GoogleSignInClient mGoogleSignInClient;
@@ -39,6 +42,7 @@ public class LoginActivity extends AppCompatActivity {
         btnlogin = findViewById(R.id.btn_login);
         btnregister = findViewById(R.id.btn_register);
         //btnGoogle = findViewById(R.id.btn_google);
+        sharedPref = getSharedPreferences(getString(R.string.data_user), MODE_PRIVATE);
 
         mAuth = FirebaseAuth.getInstance();
         progressDialog = new ProgressDialog(LoginActivity.this);
@@ -100,6 +104,14 @@ public class LoginActivity extends AppCompatActivity {
                                 } else {
                                     for (QueryDocumentSnapshot document : task.getResult()) {
                                         int role = Integer.parseInt(document.get("role").toString());
+
+                                        //set user role and name
+                                        SharedPreferences.Editor editor = sharedPref.edit();
+                                        editor.putInt(getString(R.string.user_role), role);
+                                        editor.putString(getString(R.string.user_name), document.get("username").toString());
+                                        editor.apply();
+
+                                        //check user role
                                         if (role == 1) {
                                             startActivity(new Intent(getApplicationContext(), MainActivity.class));
                                         } else if (role == 2) {

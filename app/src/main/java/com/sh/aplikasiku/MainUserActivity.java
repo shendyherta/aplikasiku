@@ -2,7 +2,9 @@ package com.sh.aplikasiku;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -13,11 +15,18 @@ import com.google.firebase.auth.FirebaseUser;
 public class MainUserActivity extends AppCompatActivity {
     private FirebaseUser firebaseUser;
     private Button btnlogout;
+    private SharedPreferences sharedPref;
+    private String username;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_user);
+
+        //get username
+        sharedPref = getPreferences(Context.MODE_PRIVATE);
+        username = sharedPref.getString(getString(R.string.user_name), "");
+
         btnlogout = findViewById(R.id.logout);
         btnlogout.setOnClickListener(v -> {
             FirebaseAuth.getInstance().signOut();
