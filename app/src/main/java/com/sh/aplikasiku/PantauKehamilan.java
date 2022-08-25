@@ -65,6 +65,7 @@ public class PantauKehamilan extends AppCompatActivity {
         progressDialog.setMessage("Mengambil data");
 
         if (userrole == 1) {
+            btnAdd.setVisibility(View.VISIBLE);
             adminAdapterPantau = new AdminAdapterPantau(this, list);
             adminAdapterPantau.setDialog(pos -> {
                 final CharSequence[] dialogItem = {"lihat", "edit", "hapus"};

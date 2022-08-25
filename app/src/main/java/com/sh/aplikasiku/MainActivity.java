@@ -25,11 +25,17 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         //get username
-        sharedPref = getPreferences(Context.MODE_PRIVATE);
+        sharedPref = getSharedPreferences(getString(R.string.data_user), MODE_PRIVATE);
         username = sharedPref.getString(getString(R.string.user_name), "");
 
         btnlogout = findViewById(R.id.logout);
         btnlogout.setOnClickListener(v -> {
+            //clear sharedpref
+            SharedPreferences.Editor editor = sharedPref.edit();
+            editor.clear();
+            editor.apply();
+
+            //logout from user
             FirebaseAuth.getInstance().signOut();
             startActivity(new Intent(getApplicationContext(), LoginActivity.class));
             finish();

@@ -131,9 +131,8 @@ public class EditRekam extends AppCompatActivity {
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
                         try {
-                            Log.d("QWE", "getData: " + task.getResult().getDocuments());
                             if (task.getResult().getDocuments().size() == 0) {
-                                Toast.makeText(getApplicationContext(), "Coba lagi nanti!2", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(getApplicationContext(), "Coba lagi nanti!", Toast.LENGTH_SHORT).show();
                             } else {
                                 for (QueryDocumentSnapshot document : task.getResult()) {
                                     String id = document.get("id").toString();
@@ -167,9 +166,6 @@ public class EditRekam extends AppCompatActivity {
                 // Here you get the current item (a User object) that is selected by its position
                 User user = adapter.getItem(position);
                 id_user = user.getId();
-                // Here you can do the action you want to...
-                Toast.makeText(getApplicationContext(), "ID: " + user.getId() + "\nName: " + user.getUsername(),
-                        Toast.LENGTH_SHORT).show();
             }
 
             @Override

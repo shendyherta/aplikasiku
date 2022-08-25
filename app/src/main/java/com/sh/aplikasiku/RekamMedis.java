@@ -14,6 +14,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.util.Log;
+import android.view.View;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -23,6 +24,8 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.sh.aplikasiku.adapter.AdminAdapterPantau;
+import com.sh.aplikasiku.adapter.AdminAdapterRekam;
 import com.sh.aplikasiku.adapter.UserAdapterRekam;
 import com.sh.aplikasiku.model.UserRekam;
 
@@ -38,6 +41,7 @@ public class RekamMedis extends AppCompatActivity {
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     private List<UserRekam> list = new ArrayList<>();
     private UserAdapterRekam userAdapterRekam;
+    private AdminAdapterRekam adminAdapterRekam;
     private ProgressDialog progressDialog;
     private SharedPreferences sharedPref;
     private int userrole;
@@ -50,7 +54,7 @@ public class RekamMedis extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         //get userrole
-        sharedPref = getPreferences(Context.MODE_PRIVATE);
+        sharedPref = getSharedPreferences(getString(R.string.data_user), MODE_PRIVATE);
         userrole = sharedPref.getInt(getString(R.string.user_role), 0);
 
         recyclerView = findViewById(R.id.recyclerview);
@@ -62,8 +66,13 @@ public class RekamMedis extends AppCompatActivity {
 
         userAdapterRekam = new UserAdapterRekam(getApplicationContext(), list);
 
+        btnAdd.setOnClickListener(v -> {
+            startActivity(new Intent(getApplicationContext(), EditRekam.class));
+        });
         if (userrole == 1) {
-            userAdapterRekam.setDialog(pos -> {
+            btnAdd.setVisibility(View.VISIBLE);
+            adminAdapterRekam = new AdminAdapterRekam(this, list);
+            adminAdapterRekam.setDialog(pos -> {
                 final CharSequence[] dialogItem = {"tampil", "edit", "hapus"};
                 AlertDialog.Builder dialog = new AlertDialog.Builder(RekamMedis.this);
                 dialog.setItems(dialogItem, new DialogInterface.OnClickListener() {
@@ -103,25 +112,9 @@ public class RekamMedis extends AppCompatActivity {
                 dialog.show();
             });
         } else {
-            userAdapterRekam.setDialog(pos -> {
-                Intent intentbaca = new Intent(getApplicationContext(), TampilanRekam.class);
-                intentbaca.putExtra("id", list.get(pos).getId());
-                intentbaca.putExtra("berat", list.get(pos).getBeratBadan());
-                intentbaca.putExtra("lingkar", list.get(pos).getLingkarBadan());
-                intentbaca.putExtra("laju", list.get(pos).getLajuPernafasan());
-                intentbaca.putExtra("tekanan", list.get(pos).getTekananDarah());
-                intentbaca.putExtra("suhu", list.get(pos).getSuhu());
-                intentbaca.putExtra("denyut", list.get(pos).getDenyutJantung());
-                intentbaca.putExtra("kondisi", list.get(pos).getKondisiHB());
-                startActivity(intentbaca);
-            });
+            btnAdd.setVisibility(View.GONE);
+            userAdapterRekam = new UserAdapterRekam(this, list);
         }
-
-
-        btnAdd.setOnClickListener(v -> {
-            startActivity(new Intent(getApplicationContext(), EditRekam.class));
-        });
-
     }
 
     //untuk menampilkan getdata alias data yang telah diubah maupun ditambah
@@ -188,7 +181,12 @@ public class RekamMedis extends AppCompatActivity {
         RecyclerView.ItemDecoration decoration = new DividerItemDecoration(getApplicationContext(), DividerItemDecoration.VERTICAL);
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.addItemDecoration(decoration);
-        recyclerView.setAdapter(userAdapterRekam);
+
+        if (userrole == 1) {
+            recyclerView.setAdapter(adminAdapterRekam);
+        } else {
+            recyclerView.setAdapter(userAdapterRekam);
+        }
     }
 
 }

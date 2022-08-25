@@ -1,7 +1,6 @@
 package com.sh.aplikasiku.adapter;
 
 import android.content.Context;
-import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,19 +9,26 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.sh.aplikasiku.EditRekam;
 import com.sh.aplikasiku.R;
-import com.sh.aplikasiku.TampilPantauKehamilan;
 import com.sh.aplikasiku.model.UserRekam;
 
 import java.util.List;
 
-public class UserAdapterRekam extends RecyclerView.Adapter<UserAdapterRekam.MyViewHolder>{
+public class AdminAdapterRekam extends RecyclerView.Adapter<AdminAdapterRekam.MyViewHolder>{
     private Context context;
     private List<UserRekam> list;
+    private Dialog dialog;
+
+    public interface Dialog{
+        void onClick(int pos);
+    }
+
+    public void setDialog(Dialog dialog){
+        this.dialog = dialog;
+    }
 
     //konstruktor
-    public UserAdapterRekam(Context context, List<UserRekam> list){
+    public AdminAdapterRekam(Context context, List<UserRekam> list){
         this.context = context;
         this.list = list;
     }
@@ -43,19 +49,6 @@ public class UserAdapterRekam extends RecyclerView.Adapter<UserAdapterRekam.MyVi
         holder.laju.setText(list.get(position).getLajuPernafasan());
         holder.suhu.setText(list.get(position).getSuhu());
         holder.tekanan.setText(list.get(position).getTekananDarah());
-
-        holder.itemView.setOnClickListener(v -> {
-            Intent intent = new Intent(context, EditRekam.class);
-            intent.putExtra("id", list.get(position).getId());
-            intent.putExtra("berat", list.get(position).getBeratBadan());
-            intent.putExtra("lingkar", list.get(position).getLingkarBadan());
-            intent.putExtra("laju", list.get(position).getLajuPernafasan());
-            intent.putExtra("tekanan", list.get(position).getTekananDarah());
-            intent.putExtra("suhu", list.get(position).getSuhu());
-            intent.putExtra("denyut", list.get(position).getDenyutJantung());
-            intent.putExtra("kondisi", list.get(position).getKondisiHB());
-            context.startActivity(intent);
-        });
     }
 
     @Override
@@ -74,6 +67,14 @@ public class UserAdapterRekam extends RecyclerView.Adapter<UserAdapterRekam.MyVi
             laju = itemView.findViewById(R.id.laju);
             suhu = itemView.findViewById(R.id.suhu);
             tekanan = itemView.findViewById(R.id.tekanan);
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if(dialog!=null){
+                        dialog.onClick(getLayoutPosition());
+                    }
+                }
+            });
         }
     }
 }
