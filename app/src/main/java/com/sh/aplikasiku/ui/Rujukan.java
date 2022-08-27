@@ -1,4 +1,4 @@
-package com.sh.aplikasiku;
+package com.sh.aplikasiku.ui;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -7,6 +7,8 @@ import android.os.Bundle;
 import android.view.KeyEvent;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+
+import com.sh.aplikasiku.R;
 
 public class Rujukan extends AppCompatActivity {
 

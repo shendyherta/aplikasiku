@@ -13,8 +13,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.sh.aplikasiku.R;
-import com.sh.aplikasiku.TampilArtikel;
-import com.sh.aplikasiku.TampilPantauKehamilan;
+import com.sh.aplikasiku.ui.artikel.TampilArtikel;
 import com.sh.aplikasiku.model.UserArtikel;
 
 import java.util.List;

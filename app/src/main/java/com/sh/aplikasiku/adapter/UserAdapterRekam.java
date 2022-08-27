@@ -10,10 +10,8 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.sh.aplikasiku.EditRekam;
 import com.sh.aplikasiku.R;
-import com.sh.aplikasiku.TampilPantauKehamilan;
-import com.sh.aplikasiku.TampilanRekam;
+import com.sh.aplikasiku.ui.rekammedis.TampilanRekam;
 import com.sh.aplikasiku.model.UserRekam;
 
 import java.util.List;

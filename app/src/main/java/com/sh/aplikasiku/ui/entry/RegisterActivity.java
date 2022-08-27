@@ -1,4 +1,4 @@
-package com.sh.aplikasiku;
+package com.sh.aplikasiku.ui.entry;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -20,6 +20,8 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.UserProfileChangeRequest;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.sh.aplikasiku.ui.MainActivity;
+import com.sh.aplikasiku.R;
 
 import java.util.HashMap;
 import java.util.Map;

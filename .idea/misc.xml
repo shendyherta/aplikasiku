@@ -52,9 +52,14 @@
         <entry key="..\:/android-project/2022/aplikasiku/app/src/main/res/drawable/ic_notifications_black_24dp.xml" value="0.1315" />
         <entry key="..\:/android-project/2022/aplikasiku/app/src/main/res/drawable/person.xml" value="0.1315" />
         <entry key="..\:/android-project/2022/aplikasiku/app/src/main/res/drawable/splash_screen.xml" value="0.1315" />
+        <entry key="..\:/android-project/2022/aplikasiku/app/src/main/res/layout-w1240dp/activity_login.xml" value="0.24765625" />
+        <entry key="..\:/android-project/2022/aplikasiku/app/src/main/res/layout/activity_buka_edit_artikel.xml" value="0.22291666666666668" />
         <entry key="..\:/android-project/2022/aplikasiku/app/src/main/res/layout/activity_edit_rekam.xml" value="0.22291666666666668" />
+        <entry key="..\:/android-project/2022/aplikasiku/app/src/main/res/layout/activity_home.xml" value="0.22291666666666668" />
+        <entry key="..\:/android-project/2022/aplikasiku/app/src/main/res/layout/activity_login.xml" value="0.22291666666666668" />
         <entry key="..\:/android-project/2022/aplikasiku/app/src/main/res/layout/activity_login2.xml" value="0.2" />
         <entry key="..\:/android-project/2022/aplikasiku/app/src/main/res/layout/activity_main.xml" value="0.20092592592592592" />
+        <entry key="..\:/android-project/2022/aplikasiku/app/src/main/res/layout/activity_notifikasi.xml" value="0.22291666666666668" />
         <entry key="..\:/android-project/2022/aplikasiku/app/src/main/res/layout/activity_register.xml" value="0.22291666666666668" />
         <entry key="..\:/android-project/2022/aplikasiku/app/src/main/res/layout/activity_rekam_medis.xml" value="0.20925925925925926" />
         <entry key="..\:/android-project/2022/aplikasiku/app/src/main/res/mipmap-anydpi-v26/ic_logo.xml" value="0.1315" />

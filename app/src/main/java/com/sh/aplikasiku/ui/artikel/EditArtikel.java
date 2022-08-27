@@ -1,4 +1,4 @@
-package com.sh.aplikasiku;
+package com.sh.aplikasiku.ui.artikel;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -28,6 +28,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
+import com.sh.aplikasiku.R;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;

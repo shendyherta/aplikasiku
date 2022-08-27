@@ -1,4 +1,4 @@
-package com.sh.aplikasiku;
+package com.sh.aplikasiku.ui;
 
 import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
@@ -16,6 +16,8 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.sh.aplikasiku.R;
+import com.sh.aplikasiku.ui.entry.LoginActivity;
 
 public class Splashscreen extends AppCompatActivity {
     private int waktu_loading = 2000;

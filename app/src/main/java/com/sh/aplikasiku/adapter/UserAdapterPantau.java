@@ -11,8 +11,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.sh.aplikasiku.R;
-import com.sh.aplikasiku.TampilArtikel;
-import com.sh.aplikasiku.TampilPantauKehamilan;
+import com.sh.aplikasiku.ui.pantaukehamilan.TampilPantauKehamilan;
 import com.sh.aplikasiku.model.UserPantau;
 
 import java.util.List;

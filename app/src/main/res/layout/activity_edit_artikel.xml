@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".EditArtikel">
+    tools:context=".ui.artikel.EditArtikel">
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

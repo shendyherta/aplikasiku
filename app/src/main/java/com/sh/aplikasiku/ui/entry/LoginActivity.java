@@ -1,8 +1,6 @@
-package com.sh.aplikasiku;
+package com.sh.aplikasiku.ui.entry;
 
-import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -20,7 +18,8 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
-import com.google.firebase.firestore.QuerySnapshot;
+import com.sh.aplikasiku.ui.MainActivity;
+import com.sh.aplikasiku.R;
 
 public class LoginActivity extends AppCompatActivity {
     private EditText editemail, editpasssword;

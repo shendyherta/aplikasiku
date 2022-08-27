@@ -13,19 +13,16 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Aplikasiku">
         <activity
-            android:name=".BukaEditArtikel"
+            android:name=".ui.artikel.TampilArtikel"
             android:exported="false" />
         <activity
-            android:name=".TampilArtikel"
+            android:name=".ui.rekammedis.TampilanRekam"
             android:exported="false" />
         <activity
-            android:name=".TampilanRekam"
+            android:name=".ui.pantaukehamilan.TampilPantauKehamilan"
             android:exported="false" />
         <activity
-            android:name=".TampilPantauKehamilan"
-            android:exported="false" />
-        <activity
-            android:name=".Splashscreen"
+            android:name=".ui.Splashscreen"
             android:exported="true"
             android:theme="@style/Theme.Aplikasiku.AppThemeSplash">
             <intent-filter>
@@ -35,50 +32,39 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".EditArtikel"
+            android:name=".ui.artikel.EditArtikel"
             android:exported="false" />
         <activity
-            android:name=".EditRekam"
+            android:name=".ui.rekammedis.EditRekam"
             android:exported="false" />
         <activity
-            android:name=".EditPantau"
+            android:name=".ui.pantaukehamilan.EditPantau"
             android:exported="false" />
         <activity
-            android:name=".LoginActivity"
-            android:exported="false" />
-        <activity
-            android:name=".RegisterActivity"
-            android:exported="false" />
-        <activity
-            android:name=".Dashboard"
-            android:exported="false" />
-        <activity
-            android:name=".Home"
-            android:exported="false" />
-        <activity
-            android:name=".Notifikasi"
-            android:exported="false" />
-        <activity
-            android:name=".Rujukan"
-            android:exported="false" />
-        <activity
-            android:name=".RekamMedis"
-            android:exported="false" />
-        <activity
-            android:name=".Artikel"
-            android:exported="false" />
-        <activity
-            android:name=".PantauKehamilan"
-            android:exported="false" />
-        <activity
-            android:name=".ui.login.LoginActivity"
+            android:name=".ui.entry.LoginActivity"
             android:exported="false"
-            android:label="@string/title_activity_login" />
+            android:theme="@style/Theme.Aplikasiku.NoActionBar" />
         <activity
-            android:name=".MainActivity"
+            android:name=".ui.entry.RegisterActivity"
+            android:exported="false"
+            android:theme="@style/Theme.Aplikasiku.NoActionBar"  />
+        <activity
+            android:name=".ui.Rujukan"
+            android:exported="false" />
+        <activity
+            android:name=".ui.rekammedis.RekamMedis"
+            android:exported="false" />
+        <activity
+            android:name=".ui.artikel.Artikel"
+            android:exported="false" />
+        <activity
+            android:name=".ui.pantaukehamilan.PantauKehamilan"
+            android:exported="false" />
+        <activity
+            android:name=".ui.MainActivity"
             android:exported="false"
             android:label="@string/app_name"
-            android:theme="@style/Theme.Aplikasiku.NoActionBar"/>
+            android:theme="@style/Theme.Aplikasiku.NoActionBar" />
     </application>
 
 </manifest>

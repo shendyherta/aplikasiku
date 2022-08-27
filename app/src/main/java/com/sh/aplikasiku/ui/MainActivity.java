@@ -1,12 +1,9 @@
-package com.sh.aplikasiku;
+package com.sh.aplikasiku.ui;
 
-import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
@@ -15,6 +12,11 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.sh.aplikasiku.R;
+import com.sh.aplikasiku.ui.artikel.Artikel;
+import com.sh.aplikasiku.ui.entry.LoginActivity;
+import com.sh.aplikasiku.ui.pantaukehamilan.PantauKehamilan;
+import com.sh.aplikasiku.ui.rekammedis.RekamMedis;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -84,21 +86,5 @@ public class MainActivity extends AppCompatActivity {
         Intent i = new Intent(MainActivity.this, Rujukan.class);
         startActivity(i);
     }
-
-    public void home(View view) {
-        Intent i = new Intent(MainActivity.this, Home.class);
-        startActivity(i);
-    }
-
-    public void dashboard(View view) {
-        Intent i = new Intent(MainActivity.this, Dashboard.class);
-        startActivity(i);
-    }
-
-    public void notifikasi(View view) {
-        Intent i = new Intent(MainActivity.this, Notifikasi.class);
-        startActivity(i);
-    }
-
 
 }
