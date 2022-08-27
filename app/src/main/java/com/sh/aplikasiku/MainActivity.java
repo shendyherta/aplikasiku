@@ -1,6 +1,7 @@
 package com.sh.aplikasiku;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -9,6 +10,7 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -36,15 +38,30 @@ public class MainActivity extends AppCompatActivity {
 
         btnlogout = findViewById(R.id.logout);
         btnlogout.setOnClickListener(v -> {
-            //clear sharedpref
-            SharedPreferences.Editor editor = sharedPref.edit();
-            editor.clear();
-            editor.apply();
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setCancelable(true);
+            builder.setTitle("Perhatian!");
+            builder.setMessage("Apakah anda ingin keluar?");
+            builder.setPositiveButton("Ya",
+                    (dialog, which) -> {
+                        //clear sharedpref
+                        SharedPreferences.Editor editor = sharedPref.edit();
+                        editor.clear();
+                        editor.apply();
 
-            //logout from user
-            FirebaseAuth.getInstance().signOut();
-            startActivity(new Intent(getApplicationContext(), LoginActivity.class));
-            finish();
+                        //logout from user
+                        FirebaseAuth.getInstance().signOut();
+                        startActivity(new Intent(getApplicationContext(), LoginActivity.class));
+                        finish();
+
+                        dialog.dismiss();
+                    });
+            builder.setNegativeButton("Batal", (dialog, which) -> {
+                dialog.dismiss();
+            });
+
+            AlertDialog dialog = builder.create();
+            dialog.show();
         });
     }
 
