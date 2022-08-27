@@ -4,27 +4,53 @@
     android:id="@+id/container"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#FFFFFF"
-    android:paddingTop="?attr/actionBarSize">
+    android:background="#FFFFFF">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@drawable/bg"
-        android:orientation="vertical"
-        android:padding="10dp">
+        android:background="@color/grey"
+        android:orientation="vertical">
+
+        <androidx.appcompat.widget.Toolbar
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/white"
+            android:minHeight="?attr/actionBarSize">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="start"
+                android:text="@string/app_name"
+                android:textColor="@color/pink"
+                android:textSize="20sp"
+                android:textStyle="bold" />
+
+            <ImageButton
+                android:id="@+id/logout"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_gravity="end"
+                android:layout_marginEnd="20dp"
+                android:background="@android:color/transparent"
+                android:src="@drawable/log_out" />
+
+        </androidx.appcompat.widget.Toolbar>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:gravity="center"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:padding="20dp"
+            android:weightSum="4">
 
             <LinearLayout
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
+                android:layout_weight="3"
                 android:orientation="vertical">
 
                 <LinearLayout
@@ -52,193 +78,224 @@
                     android:textStyle="bold" />
             </LinearLayout>
 
-            <Button
-                android:id="@+id/logout"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:background="@drawable/bel" />
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <Button
+                    android:id="@+id/notification"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/ic_notifications_black_24dp" />
+
+            </LinearLayout>
         </LinearLayout>
 
-<!--        <EditText-->
-<!--            android:layout_width="match_parent"-->
-<!--            android:layout_height="45dp"-->
-<!--            android:layout_marginTop="10dp"-->
-<!--            android:background="@drawable/bg_form"-->
-<!--            android:drawableStart="@drawable/cari"-->
-<!--            android:hint="Cari Sesuatu"-->
-<!--            android:paddingLeft="10dp" />-->
+        <!--        <EditText-->
+        <!--            android:layout_width="match_parent"-->
+        <!--            android:layout_height="45dp"-->
+        <!--            android:layout_marginTop="10dp"-->
+        <!--            android:background="@drawable/bg_form"-->
+        <!--            android:drawableStart="@drawable/cari"-->
+        <!--            android:hint="Cari Sesuatu"-->
+        <!--            android:paddingLeft="10dp" />-->
         <!--part menu 1-->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="15dp"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:padding="20dp"
+            android:weightSum="2">
 
-            <LinearLayout
-
-                android:layout_width="match_parent"
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:background="@drawable/bg_card"
-                android:orientation="vertical"
-                android:padding="15dp">
+                android:layout_marginEnd="10dp"
+                android:layout_weight="1">
 
-                <ImageButton
+                <LinearLayout
                     android:id="@+id/pantau"
-                    android:layout_width="120dp"
-                    android:layout_height="120dp"
-                    android:layout_gravity="center"
-                    android:adjustViewBounds="true"
-                    android:cropToPadding="true"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
                     android:onClick="pantau"
-                    android:src="@drawable/grafik" />
+                    android:orientation="vertical"
+                    android:padding="15dp">
 
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Pantau Kehamilan"
-                    android:textAlignment="center"
-                    android:textStyle="bold" />
-            </LinearLayout>
+                    <ImageButton
+                        android:layout_width="120dp"
+                        android:layout_height="120dp"
+                        android:layout_gravity="center"
+                        android:adjustViewBounds="true"
+                        android:cropToPadding="true"
+                        android:src="@drawable/grafik" />
 
-            <RelativeLayout
-                android:layout_width="14dp"
-                android:layout_height="match_parent" />
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Pantau Kehamilan"
+                        android:textAlignment="center"
+                        android:textStyle="bold" />
+                </LinearLayout>
 
-            <LinearLayout
-                android:layout_width="match_parent"
+            </com.google.android.material.card.MaterialCardView>
+
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:background="@drawable/bg_card_2"
-                android:orientation="vertical"
-                android:padding="15dp">
+                android:layout_marginStart="10dp"
+                android:layout_weight="1">
 
-                <ImageButton
+                <LinearLayout
                     android:id="@+id/artikel"
-                    android:layout_width="120dp"
-                    android:layout_height="120dp"
-                    android:layout_gravity="center"
-                    android:adjustViewBounds="true"
-                    android:cropToPadding="true"
-                    android:onClick="artikel"
-                    android:src="@drawable/articles" />
-
-                <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Artikel"
-                    android:textAlignment="center"
-                    android:textStyle="bold" />
-            </LinearLayout>
+                    android:onClick="artikel"
+                    android:orientation="vertical"
+                    android:padding="15dp">
+
+                    <ImageButton
+                        android:layout_width="120dp"
+                        android:layout_height="120dp"
+                        android:layout_gravity="center"
+                        android:adjustViewBounds="true"
+                        android:cropToPadding="true"
+                        android:src="@drawable/articles" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Artikel"
+                        android:textAlignment="center"
+                        android:textStyle="bold" />
+                </LinearLayout>
+
+            </com.google.android.material.card.MaterialCardView>
+
         </LinearLayout>
+
         <!-- part menu 2-->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="15dp"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:padding="20dp"
+            android:weightSum="2">
 
-            <LinearLayout
-                android:layout_width="match_parent"
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:background="@drawable/bg_card"
-                android:orientation="vertical"
-                android:padding="15dp">
+                android:layout_marginEnd="10dp"
+                android:layout_weight="1">
 
-                <ImageButton
+                <LinearLayout
                     android:id="@+id/rekam"
-                    android:layout_width="120dp"
-                    android:layout_height="120dp"
-                    android:layout_gravity="center"
-                    android:adjustViewBounds="true"
-                    android:cropToPadding="true"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/bg_card"
                     android:onClick="rekam"
-                    android:src="@drawable/records" />
+                    android:orientation="vertical"
+                    android:padding="15dp">
 
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Rekam Medis"
-                    android:textAlignment="center"
-                    android:textStyle="bold" />
-            </LinearLayout>
+                    <ImageButton
+                        android:layout_width="120dp"
+                        android:layout_height="120dp"
+                        android:layout_gravity="center"
+                        android:adjustViewBounds="true"
+                        android:cropToPadding="true"
+                        android:src="@drawable/records" />
 
-            <RelativeLayout
-                android:layout_width="14dp"
-                android:layout_height="match_parent" />
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Rekam Medis"
+                        android:textAlignment="center"
+                        android:textStyle="bold" />
+                </LinearLayout>
 
-            <LinearLayout
-                android:layout_width="match_parent"
+            </com.google.android.material.card.MaterialCardView>
+
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:background="@drawable/bg_card_2"
-                android:orientation="vertical"
-                android:padding="15dp">
+                android:layout_marginStart="10dp"
+                android:layout_weight="1">
 
-                <ImageButton
+                <LinearLayout
                     android:id="@+id/rujukan"
-                    android:layout_width="120dp"
-                    android:layout_height="120dp"
-                    android:layout_gravity="center"
-                    android:adjustViewBounds="true"
-                    android:cropToPadding="true"
-                    android:onClick="rujukan"
-                    android:src="@drawable/ambulance" />
-
-                <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Rujukan"
-                    android:textAlignment="center"
-                    android:textStyle="bold" />
-            </LinearLayout>
+                    android:background="@drawable/bg_card_2"
+                    android:onClick="rujukan"
+                    android:orientation="vertical"
+                    android:padding="15dp">
+
+                    <ImageButton
+                        android:layout_width="120dp"
+                        android:layout_height="120dp"
+                        android:layout_gravity="center"
+                        android:adjustViewBounds="true"
+                        android:cropToPadding="true"
+                        android:src="@drawable/ambulance" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Rujukan"
+                        android:textAlignment="center"
+                        android:textStyle="bold" />
+                </LinearLayout>
+
+            </com.google.android.material.card.MaterialCardView>
+
         </LinearLayout>
+
         <!-- part menu 3-->
-<!--        <LinearLayout-->
+        <!--        <LinearLayout-->
 
-<!--            android:id="@+id/linearLayout"-->
-<!--            android:layout_width="match_parent"-->
-<!--            android:layout_height="70dp"-->
-<!--            android:layout_alignParentBottom="true"-->
-<!--            android:layout_gravity="bottom"-->
-<!--            android:layout_marginStart="0dp"-->
-<!--            android:layout_marginTop="150dp"-->
-<!--            android:background="#FB9803"-->
-<!--            android:gravity="center"-->
-<!--            android:orientation="horizontal">-->
-
-
-<!--            <ImageView-->
-
-<!--                android:layout_width="60dp"-->
-<!--                android:layout_height="90dp"-->
-<!--                android:onClick="dashboard"-->
-<!--                android:src="@drawable/dashboard" />-->
+        <!--            android:id="@+id/linearLayout"-->
+        <!--            android:layout_width="match_parent"-->
+        <!--            android:layout_height="70dp"-->
+        <!--            android:layout_alignParentBottom="true"-->
+        <!--            android:layout_gravity="bottom"-->
+        <!--            android:layout_marginStart="0dp"-->
+        <!--            android:layout_marginTop="150dp"-->
+        <!--            android:background="#FB9803"-->
+        <!--            android:gravity="center"-->
+        <!--            android:orientation="horizontal">-->
 
 
-<!--            <com.google.android.material.floatingactionbutton.FloatingActionButton-->
-<!--                android:layout_width="60dp"-->
-<!--                android:layout_height="90dp"-->
-<!--                android:layout_alignParentRight="true"-->
-<!--                android:layout_gravity="bottom|center"-->
-<!--                android:layout_marginLeft="80dp"-->
-<!--                android:layout_marginBottom="15dp"-->
-<!--                android:onClick="home"-->
-<!--                android:src="@drawable/home2"-->
-<!--                app:elevation="8dp" />-->
+        <!--            <ImageView-->
+
+        <!--                android:layout_width="60dp"-->
+        <!--                android:layout_height="90dp"-->
+        <!--                android:onClick="dashboard"-->
+        <!--                android:src="@drawable/dashboard" />-->
 
 
-<!--            <ImageView-->
-<!--                android:id="@+id/notifikasi"-->
-<!--                android:layout_width="60dp"-->
-<!--                android:layout_height="90dp"-->
-<!--                android:layout_alignParentRight="true"-->
-<!--                android:layout_marginLeft="80dp"-->
-<!--                android:onClick="notifikasi"-->
-<!--                android:src="@drawable/belllll" />-->
+        <!--            <com.google.android.material.floatingactionbutton.FloatingActionButton-->
+        <!--                android:layout_width="60dp"-->
+        <!--                android:layout_height="90dp"-->
+        <!--                android:layout_alignParentRight="true"-->
+        <!--                android:layout_gravity="bottom|center"-->
+        <!--                android:layout_marginLeft="80dp"-->
+        <!--                android:layout_marginBottom="15dp"-->
+        <!--                android:onClick="home"-->
+        <!--                android:src="@drawable/home2"-->
+        <!--                app:elevation="8dp" />-->
 
-<!--        </LinearLayout>-->
+
+        <!--            <ImageView-->
+        <!--                android:id="@+id/notifikasi"-->
+        <!--                android:layout_width="60dp"-->
+        <!--                android:layout_height="90dp"-->
+        <!--                android:layout_alignParentRight="true"-->
+        <!--                android:layout_marginLeft="80dp"-->
+        <!--                android:onClick="notifikasi"-->
+        <!--                android:src="@drawable/belllll" />-->
+
+        <!--        </LinearLayout>-->
 
     </LinearLayout>
 
