@@ -11,7 +11,6 @@ import android.webkit.WebViewClient;
 public class Rujukan extends AppCompatActivity {
 
     WebView mWebView;
-
     String URL = "https://yankes.kemkes.go.id/app/siranap/";
 
     @SuppressLint("SetJavaScriptEnabled")
@@ -20,6 +19,7 @@ public class Rujukan extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_rujukan);
 
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         mWebView = (WebView) findViewById(R.id.webView);
 
@@ -31,11 +31,8 @@ public class Rujukan extends AppCompatActivity {
 
     //method ini perlu ditambahkan agar saat halaman web diload tetap diload di aplikasi, tidak diload di webbrowseer
     private class MyWebViewClient extends WebViewClient {
-
-
         @Override
         public boolean shouldOverrideUrlLoading(WebView view, String url) {
-
             view.loadUrl(url);
             return true;
         }
@@ -44,11 +41,22 @@ public class Rujukan extends AppCompatActivity {
     //tambahkan method ini agar saat tombol back ditekan, tidak keluar dari aplikasi tapi kembali ke halaman sebelumnya
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
-
         if ((keyCode == KeyEvent.KEYCODE_BACK) && mWebView.canGoBack()) {
             mWebView.goBack();
             return true;
         }
         return super.onKeyDown(keyCode, event);
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        this.finish();
+    }
+
+    @Override
+    public boolean onSupportNavigateUp() {
+        onBackPressed();
+        return true;
     }
 }

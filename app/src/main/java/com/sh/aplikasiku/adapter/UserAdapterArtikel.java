@@ -1,6 +1,7 @@
 package com.sh.aplikasiku.adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,25 +13,18 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.sh.aplikasiku.R;
+import com.sh.aplikasiku.TampilArtikel;
+import com.sh.aplikasiku.TampilPantauKehamilan;
 import com.sh.aplikasiku.model.UserArtikel;
 
 import java.util.List;
 
-public class UserAdapter extends RecyclerView.Adapter<UserAdapter.MyViewHolder>{
+public class UserAdapterArtikel extends RecyclerView.Adapter<UserAdapterArtikel.MyViewHolder>{
     private Context context;
     private List<UserArtikel> list;
-    private Dialog dialog;
-
-    public interface Dialog{
-        void onClick(int pos);
-    }
-
-    public void setDialog(Dialog dialog){
-        this.dialog = dialog;
-    }
 
     //konstruktor
-    public UserAdapter(Context context, List<UserArtikel> list){
+    public UserAdapterArtikel(Context context, List<UserArtikel> list){
         this.context = context;
         this.list = list;
     }
@@ -47,6 +41,15 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.MyViewHolder>{
         holder.judul.setText(list.get(position).getJudul());
         holder.penjelasan.setText(list.get(position).getPenjelasan());
         Glide.with(context).load(list.get(position).getAvatar()).into(holder.avatar);
+
+        holder.itemView.setOnClickListener(v -> {
+            Intent intentbaca = new Intent(context, TampilArtikel.class);
+            intentbaca.putExtra("id", list.get(position).getId());
+            intentbaca.putExtra("judul", list.get(position).getJudul());
+            intentbaca.putExtra("penjelasan", list.get(position).getPenjelasan());
+            intentbaca.putExtra("avatar", list.get(position).getAvatar());
+            context.startActivity(intentbaca);
+        });
     }
 
     @Override
@@ -64,14 +67,6 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.MyViewHolder>{
             judul = itemView.findViewById(R.id.judul);
             penjelasan = itemView.findViewById(R.id.penjelasan);
             avatar = itemView.findViewById(R.id.avatar);
-            itemView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    if(dialog!=null){
-                        dialog.onClick(getLayoutPosition());
-                    }
-                }
-            });
         }
     }
 }

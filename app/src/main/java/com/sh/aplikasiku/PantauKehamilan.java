@@ -55,10 +55,14 @@ public class PantauKehamilan extends AppCompatActivity {
         userrole = sharedPref.getInt(getString(R.string.user_role), 0);
         String username = sharedPref.getString(getString(R.string.user_name), "");
 
-        Toast.makeText(this, userrole + " ini " + username, Toast.LENGTH_SHORT).show();
-
         recyclerView = findViewById(R.id.recyclerview);
         btnAdd = findViewById(R.id.btn_add);
+
+        btnAdd.setOnClickListener(v -> {
+            Intent intent = new Intent(getApplicationContext(), EditPantau.class);
+            intent.putExtra("option", "add");
+            startActivity(intent);
+        });
 
         progressDialog = new ProgressDialog(PantauKehamilan.this);
         progressDialog.setTitle("loading");
@@ -100,11 +104,6 @@ public class PantauKehamilan extends AppCompatActivity {
             btnAdd.setVisibility(View.GONE);
             userAdapterPantau = new UserAdapterPantau(this, list);
         }
-
-        btnAdd.setOnClickListener(v -> {
-            startActivity(new Intent(getApplicationContext(), EditPantau.class));
-        });
-
     }
 
     //untuk menampilkan getdata alias data yang telah diubah maupun ditambah
@@ -112,6 +111,18 @@ public class PantauKehamilan extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
         getData();
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        this.finish();
+    }
+
+    @Override
+    public boolean onSupportNavigateUp() {
+        onBackPressed();
+        return true;
     }
 
     private void getData() {

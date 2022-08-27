@@ -12,7 +12,7 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.sh.aplikasiku.adapter.UserAdapter;
+import com.sh.aplikasiku.adapter.UserAdapterArtikel;
 import com.sh.aplikasiku.model.UserArtikel;
 
 import java.util.ArrayList;
@@ -23,7 +23,7 @@ public class TampilArtikel extends AppCompatActivity {
     private FloatingActionButton btnAdd;
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     private List<UserArtikel> list = new ArrayList<>();
-    private UserAdapter userAdapter;
+    private UserAdapterArtikel userAdapterArtikel;
     private ProgressDialog progressDialog;
     private AppCompatImageView gambar;
     private TextView tampiljudul, tampilpenjelasan;
@@ -33,6 +33,9 @@ public class TampilArtikel extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_tampil_artikel);
+
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
         recyclerView = findViewById(R.id.recyclerview);
         tampiljudul = findViewById(R.id.judul);
         tampilpenjelasan = findViewById(R.id.penjelasan);
@@ -47,7 +50,17 @@ public class TampilArtikel extends AppCompatActivity {
             Glide.with(this).load(intent.getStringExtra("avatar")).into(gambar);
 
         }
-
     }
 
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        this.finish();
+    }
+
+    @Override
+    public boolean onSupportNavigateUp() {
+        onBackPressed();
+        return true;
+    }
 }

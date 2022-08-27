@@ -33,16 +33,18 @@ public class Splashscreen extends AppCompatActivity {
                 String id = FirebaseAuth.getInstance().getCurrentUser().getUid();
                 getUserData(id);
             } else {
-                Intent home = new Intent(Splashscreen.this, LoginActivity.class);
-                startActivity(home);
-                finish();
+                navigateToLogin();
             }
         } catch (Exception e) {
             Log.d("HALOO", "run: " + e.getMessage());
-            Intent home = new Intent(Splashscreen.this, LoginActivity.class);
-            startActivity(home);
-            finish();
+            navigateToLogin();
         }
+    }
+
+    private void navigateToLogin() {
+        Intent home = new Intent(Splashscreen.this, LoginActivity.class);
+        startActivity(home);
+        finish();
     }
 
     private void getUserData(String idUser) {
@@ -56,28 +58,22 @@ public class Splashscreen extends AppCompatActivity {
                         if (task.isSuccessful()) {
                             try {
                                 if (task.getResult().getDocuments().size() == 0) {
-                                    Toast.makeText(getApplicationContext(), "User tidak ditemukan!", Toast.LENGTH_SHORT).show();
+                                    Log.d("SplashScreen", "onComplete: User tidak ditemukan!");
+                                    navigateToLogin();
                                 } else {
                                     for (QueryDocumentSnapshot document : task.getResult()) {
-                                        int role = Integer.parseInt(document.get("role").toString());
-                                        if (role == 1) {
-                                            startActivity(new Intent(getApplicationContext(), MainActivity.class));
-                                            finish();
-                                        } else if (role == 2) {
-                                            startActivity(new Intent(getApplicationContext(), MainUserActivity.class));
-                                            finish();
-                                        } else {
-                                            startActivity(new Intent(getApplicationContext(), MainUserActivity.class));
-                                            finish();
-                                        }
+                                        startActivity(new Intent(getApplicationContext(), MainActivity.class));
+                                        finish();
                                     }
                                 }
                             } catch (Exception e) {
                                 Toast.makeText(getApplicationContext(), "Coba lagi nanti!", Toast.LENGTH_SHORT).show();
                                 Log.d("SPLASH", "onComplete: " + e.getMessage());
+                                navigateToLogin();
                             }
                         } else {
-                            Toast.makeText(getApplicationContext(), "Data Gagal", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getApplicationContext(), "Gagal mendapatkan data!", Toast.LENGTH_SHORT).show();
+                            navigateToLogin();
                         }
                     }
                 });

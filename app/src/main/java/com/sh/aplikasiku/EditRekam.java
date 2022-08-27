@@ -28,7 +28,7 @@ public class EditRekam extends AppCompatActivity {
     private AppCompatSpinner spinner_pasien;
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     private ProgressDialog progressDialog;
-    private String id = "", id_user;
+    private String id = "", id_user, option;
     private ArrayList<User> listUser = new ArrayList<>();
 
     @Override
@@ -62,17 +62,32 @@ public class EditRekam extends AppCompatActivity {
 
         Intent intent = getIntent();
         if (intent != null) {
-            id = intent.getStringExtra("id");
-            editberat.setText(intent.getStringExtra("Berat Badan"));
-            editlingkar.setText(intent.getStringExtra("Lingkar Lengan"));
-            editkondisi.setText(intent.getStringExtra("Kondisi"));
-            edittekanan.setText(intent.getStringExtra("Tekanan Darah"));
-            editlaju.setText(intent.getStringExtra("Laju Pernafasan"));
-            editsuhu.setText(intent.getStringExtra("Suhu Badan"));
-            editdenyut.setText(intent.getStringExtra("Denyut Jantung"));
+            option = intent.getStringExtra("option");
+            if (option.equalsIgnoreCase("edit")) {
+                id = intent.getStringExtra("id");
+                editberat.setText(intent.getStringExtra("berat"));
+                editlingkar.setText(intent.getStringExtra("lingkar"));
+                editkondisi.setText(intent.getStringExtra("laju"));
+                edittekanan.setText(intent.getStringExtra("tekanan"));
+                editlaju.setText(intent.getStringExtra("suhu"));
+                editsuhu.setText(intent.getStringExtra("denyut"));
+                editdenyut.setText(intent.getStringExtra("kondisi"));
+            }
         }
 
         getAllUserData();
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        this.finish();
+    }
+
+    @Override
+    public boolean onSupportNavigateUp() {
+        onBackPressed();
+        return true;
     }
 
     private void saveData(String denyut, String suhu, String laju, String tekanan, String kondisi, String berat, String lingkar) {
@@ -132,7 +147,7 @@ public class EditRekam extends AppCompatActivity {
                     if (task.isSuccessful()) {
                         try {
                             if (task.getResult().getDocuments().size() == 0) {
-                                Toast.makeText(getApplicationContext(), "Coba lagi nanti!", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(getApplicationContext(), "Data tidak ditemukan!!", Toast.LENGTH_SHORT).show();
                             } else {
                                 for (QueryDocumentSnapshot document : task.getResult()) {
                                     String id = document.get("id").toString();
@@ -173,7 +188,6 @@ public class EditRekam extends AppCompatActivity {
 
             }
         });
-
 
 
     }

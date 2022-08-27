@@ -27,7 +27,7 @@
         <activity
             android:name=".Splashscreen"
             android:exported="true"
-            android:theme="@style/Theme.Aplikasiku.NoActionBar">
+            android:theme="@style/Theme.Aplikasiku.AppThemeSplash">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -78,9 +78,6 @@
             android:name=".MainActivity"
             android:exported="false"
             android:label="@string/app_name" />
-        <activity
-            android:name=".MainUserActivity"
-            android:exported="false" />
     </application>
 
 </manifest>

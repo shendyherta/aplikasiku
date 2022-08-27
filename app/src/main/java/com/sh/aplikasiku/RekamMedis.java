@@ -67,46 +67,48 @@ public class RekamMedis extends AppCompatActivity {
         userAdapterRekam = new UserAdapterRekam(getApplicationContext(), list);
 
         btnAdd.setOnClickListener(v -> {
-            startActivity(new Intent(getApplicationContext(), EditRekam.class));
+            Intent intent = new Intent(getApplicationContext(), EditRekam.class);
+            intent.putExtra("option", "add");
+            startActivity(intent);
         });
+
         if (userrole == 1) {
             btnAdd.setVisibility(View.VISIBLE);
             adminAdapterRekam = new AdminAdapterRekam(this, list);
             adminAdapterRekam.setDialog(pos -> {
-                final CharSequence[] dialogItem = {"tampil", "edit", "hapus"};
+                final CharSequence[] dialogItem = {"lihat", "edit", "hapus"};
                 AlertDialog.Builder dialog = new AlertDialog.Builder(RekamMedis.this);
-                dialog.setItems(dialogItem, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        switch (i) {
-                            case 0:
-                                Intent intentbaca = new Intent(getApplicationContext(), TampilanRekam.class);
-                                intentbaca.putExtra("id", list.get(pos).getId());
-                                intentbaca.putExtra("berat", list.get(pos).getBeratBadan());
-                                intentbaca.putExtra("lingkar", list.get(pos).getLingkarBadan());
-                                intentbaca.putExtra("laju", list.get(pos).getLajuPernafasan());
-                                intentbaca.putExtra("tekanan", list.get(pos).getTekananDarah());
-                                intentbaca.putExtra("suhu", list.get(pos).getSuhu());
-                                intentbaca.putExtra("denyut", list.get(pos).getDenyutJantung());
-                                intentbaca.putExtra("kondisi", list.get(pos).getKondisiHB());
-                                startActivity(intentbaca);
-                                break;
-                            case 1:
-                                Intent intent = new Intent(getApplicationContext(), EditRekam.class);
-                                intent.putExtra("id", list.get(pos).getId());
-                                intent.putExtra("berat", list.get(pos).getBeratBadan());
-                                intent.putExtra("lingkar", list.get(pos).getLingkarBadan());
-                                intent.putExtra("laju", list.get(pos).getLajuPernafasan());
-                                intent.putExtra("tekanan", list.get(pos).getTekananDarah());
-                                intent.putExtra("suhu", list.get(pos).getSuhu());
-                                intent.putExtra("denyut", list.get(pos).getDenyutJantung());
-                                intent.putExtra("kondisi", list.get(pos).getKondisiHB());
-                                startActivity(intent);
-                                break;
-                            case 2:
-                                deleteData(list.get(pos).getId());
-                                break;
-                        }
+                dialog.setItems(dialogItem, (dialogInterface, i) -> {
+                    switch (i) {
+                        case 0:
+                            Intent intentbaca = new Intent(getApplicationContext(), TampilanRekam.class);
+                            intentbaca.putExtra("id", list.get(pos).getId());
+                            intentbaca.putExtra("berat", list.get(pos).getBeratBadan());
+                            intentbaca.putExtra("lingkar", list.get(pos).getLingkarBadan());
+                            intentbaca.putExtra("laju", list.get(pos).getLajuPernafasan());
+                            intentbaca.putExtra("tekanan", list.get(pos).getTekananDarah());
+                            intentbaca.putExtra("suhu", list.get(pos).getSuhu());
+                            intentbaca.putExtra("denyut", list.get(pos).getDenyutJantung());
+                            intentbaca.putExtra("kondisi", list.get(pos).getKondisiHB());
+                            intentbaca.putExtra("option", "tampil");
+                            startActivity(intentbaca);
+                            break;
+                        case 1:
+                            Intent intent = new Intent(getApplicationContext(), EditRekam.class);
+                            intent.putExtra("id", list.get(pos).getId());
+                            intent.putExtra("berat", list.get(pos).getBeratBadan());
+                            intent.putExtra("lingkar", list.get(pos).getLingkarBadan());
+                            intent.putExtra("laju", list.get(pos).getLajuPernafasan());
+                            intent.putExtra("tekanan", list.get(pos).getTekananDarah());
+                            intent.putExtra("suhu", list.get(pos).getSuhu());
+                            intent.putExtra("denyut", list.get(pos).getDenyutJantung());
+                            intent.putExtra("kondisi", list.get(pos).getKondisiHB());
+                            intent.putExtra("option", "edit");
+                            startActivity(intent);
+                            break;
+                        case 2:
+                            deleteData(list.get(pos).getId());
+                            break;
                     }
                 });
                 dialog.show();
@@ -164,15 +166,12 @@ public class RekamMedis extends AppCompatActivity {
         progressDialog.show();
         db.collection("rekammedis").document(id)
                 .delete()
-                .addOnCompleteListener(new OnCompleteListener<Void>() {
-                    @Override
-                    public void onComplete(@NonNull Task<Void> task) {
-                        if (!task.isSuccessful()) {
-                            Toast.makeText(getApplicationContext(), "Data Gagal Dihapus", Toast.LENGTH_SHORT).show();
-                        }
-                        progressDialog.dismiss();
-                        getData();
+                .addOnCompleteListener(task -> {
+                    if (!task.isSuccessful()) {
+                        Toast.makeText(getApplicationContext(), "Data Gagal Dihapus", Toast.LENGTH_SHORT).show();
                     }
+                    progressDialog.dismiss();
+                    getData();
                 });
     }
 

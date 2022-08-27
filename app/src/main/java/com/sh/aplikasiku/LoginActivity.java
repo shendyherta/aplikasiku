@@ -93,42 +93,32 @@ public class LoginActivity extends AppCompatActivity {
         db.collection("users")
                 .whereEqualTo("id", idUser)
                 .get()
-                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                    @SuppressLint("NotifyDataSetChanged")
-                    @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        if (task.isSuccessful()) {
-                            try {
-                                if (task.getResult().getDocuments().size() == 0) {
-                                    Toast.makeText(getApplicationContext(), "Coba lagi nanti!", Toast.LENGTH_SHORT).show();
-                                } else {
-                                    for (QueryDocumentSnapshot document : task.getResult()) {
-                                        int role = Integer.parseInt(document.get("role").toString());
-
-                                        //set user role and name
-                                        SharedPreferences.Editor editor = sharedPref.edit();
-                                        editor.putInt(getString(R.string.user_role), role);
-                                        editor.putString(getString(R.string.user_name), document.get("username").toString());
-                                        editor.apply();
-
-                                        //check user role
-                                        if (role == 1) {
-                                            startActivity(new Intent(getApplicationContext(), MainActivity.class));
-                                        } else if (role == 2) {
-                                            startActivity(new Intent(getApplicationContext(), MainUserActivity.class));
-                                        } else {
-                                            startActivity(new Intent(getApplicationContext(), MainUserActivity.class));
-                                        }
-                                    }
-                                }
-                            } catch (Exception e) {
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        try {
+                            if (task.getResult().getDocuments().size() == 0) {
                                 Toast.makeText(getApplicationContext(), "Coba lagi nanti!", Toast.LENGTH_SHORT).show();
+                            } else {
+                                for (QueryDocumentSnapshot document : task.getResult()) {
+                                    int role = Integer.parseInt(document.get("role").toString());
+
+                                    //set user role and name
+                                    SharedPreferences.Editor editor = sharedPref.edit();
+                                    editor.putInt(getString(R.string.user_role), role);
+                                    editor.putString(getString(R.string.user_name), document.get("username").toString());
+                                    editor.apply();
+
+                                    startActivity(new Intent(getApplicationContext(), MainActivity.class));
+                                    finish();
+                                }
                             }
-                        } else {
-                            Toast.makeText(getApplicationContext(), "Data Gagal", Toast.LENGTH_SHORT).show();
+                        } catch (Exception e) {
+                            Toast.makeText(getApplicationContext(), "Coba lagi nanti!", Toast.LENGTH_SHORT).show();
                         }
-                        progressDialog.dismiss();
+                    } else {
+                        Toast.makeText(getApplicationContext(), "Data Gagal", Toast.LENGTH_SHORT).show();
                     }
+                    progressDialog.dismiss();
                 });
     }
 }

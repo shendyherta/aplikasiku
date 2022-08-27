@@ -13,16 +13,17 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.sh.aplikasiku.EditRekam;
 import com.sh.aplikasiku.R;
 import com.sh.aplikasiku.TampilPantauKehamilan;
+import com.sh.aplikasiku.TampilanRekam;
 import com.sh.aplikasiku.model.UserRekam;
 
 import java.util.List;
 
-public class UserAdapterRekam extends RecyclerView.Adapter<UserAdapterRekam.MyViewHolder>{
+public class UserAdapterRekam extends RecyclerView.Adapter<UserAdapterRekam.MyViewHolder> {
     private Context context;
     private List<UserRekam> list;
 
     //konstruktor
-    public UserAdapterRekam(Context context, List<UserRekam> list){
+    public UserAdapterRekam(Context context, List<UserRekam> list) {
         this.context = context;
         this.list = list;
     }
@@ -45,7 +46,7 @@ public class UserAdapterRekam extends RecyclerView.Adapter<UserAdapterRekam.MyVi
         holder.tekanan.setText(list.get(position).getTekananDarah());
 
         holder.itemView.setOnClickListener(v -> {
-            Intent intent = new Intent(context, EditRekam.class);
+            Intent intent = new Intent(context, TampilanRekam.class);
             intent.putExtra("id", list.get(position).getId());
             intent.putExtra("berat", list.get(position).getBeratBadan());
             intent.putExtra("lingkar", list.get(position).getLingkarBadan());
@@ -63,8 +64,9 @@ public class UserAdapterRekam extends RecyclerView.Adapter<UserAdapterRekam.MyVi
         return list.size();
     }
 
-    class MyViewHolder extends RecyclerView.ViewHolder{
+    class MyViewHolder extends RecyclerView.ViewHolder {
         TextView berat, lingkar, suhu, laju, kondisi, tekanan, denyut;
+
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
             berat = itemView.findViewById(R.id.berat);

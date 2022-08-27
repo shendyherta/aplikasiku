@@ -37,16 +37,20 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class EditArtikel extends AppCompatActivity {
-private EditText editjudul, editpenjelasan;
-private ImageView avatar;
-private Button btnsave;
-private FirebaseFirestore db = FirebaseFirestore.getInstance();
-private ProgressDialog progressDialog;
-private String id = "";
+    private EditText editjudul, editpenjelasan;
+    private ImageView avatar;
+    private Button btnsave;
+    private FirebaseFirestore db = FirebaseFirestore.getInstance();
+    private ProgressDialog progressDialog;
+    private String id = "";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_artikel);
+
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
         editjudul = findViewById(R.id.judul);
         editpenjelasan = findViewById(R.id.penjelasan);
         btnsave = findViewById(R.id.btn_save);
@@ -56,21 +60,21 @@ private String id = "";
         progressDialog = new ProgressDialog(EditArtikel.this);
         progressDialog.setTitle("loading");
         progressDialog.setMessage("menyimpan...");
-        
+
         avatar.setOnClickListener(v -> {
             selectImage();
         });
 
         btnsave.setOnClickListener(v -> {
-            if(editjudul.getText().length()>0 && editpenjelasan.getText().length()>0){
+            if (editjudul.getText().length() > 0 && editpenjelasan.getText().length() > 0) {
                 upload(editjudul.getText().toString(), editpenjelasan.getText().toString());
-            }else{
+            } else {
                 Toast.makeText(getApplicationContext(), "Silakan isi dulu artikel", Toast.LENGTH_SHORT).show();
             }
         });
         Intent intent = getIntent();
-        if(intent!=null){
-            id= intent.getStringExtra("id");
+        if (intent != null) {
+            id = intent.getStringExtra("id");
             editjudul.setText(intent.getStringExtra("judul"));
             editpenjelasan.setText(intent.getStringExtra("penjelasan"));
             Glide.with(getApplicationContext()).load(intent.getStringExtra("avatar")).into(avatar);
@@ -78,21 +82,22 @@ private String id = "";
         }
     }
 
-    private void selectImage(){
+    private void selectImage() {
         final CharSequence[] items = {"Take Photo", "Choose from Library", "cancel"};
         AlertDialog.Builder builder = new AlertDialog.Builder(EditArtikel.this);
         builder.setTitle(getString(R.string.app_name));
         builder.setIcon(R.mipmap.ic_launcher);
-        builder.setItems(items, (dialog,item)->{
-            if(items[item].equals("Take Photo")){
+        builder.setItems(items, (dialog, item) -> {
+            if (items[item].equals("Take Photo")) {
                 Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                startActivityForResult(intent,10);
-            }else if(items[item].equals("Choose from Library")) {
+                startActivityForResult(intent, 10);
+            } else if (items[item].equals("Choose from Library")) {
                 Intent intent = new Intent(Intent.ACTION_PICK);
                 intent.setType("image/*");
                 startActivityForResult(Intent.createChooser(intent, "Select Image"), 20);
-            }else if(items[item].equals("Cancel")){
-                dialog.dismiss();;
+            } else if (items[item].equals("Cancel")) {
+                dialog.dismiss();
+                ;
             }
         });
         builder.show();
@@ -102,7 +107,7 @@ private String id = "";
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if(requestCode == 20 && resultCode == RESULT_OK && data !=null){
+        if (requestCode == 20 && resultCode == RESULT_OK && data != null) {
             final Uri path = data.getData();
             Thread thread = new Thread(() -> {
                 try {
@@ -112,15 +117,15 @@ private String id = "";
                         avatar.setImageBitmap(bitmap);
                     });
 
-                }catch(IOException e){
+                } catch (IOException e) {
                     e.printStackTrace();
                 }
             });
-thread.start();
+            thread.start();
         }
 
         //codingan take photo dari camera
-        if(requestCode == 10 && resultCode == RESULT_OK){
+        if (requestCode == 10 && resultCode == RESULT_OK) {
             final Bundle extras = data.getExtras();
             Thread thread = new Thread(() -> {
                 Bitmap bitmap = (Bitmap) extras.get("data");
@@ -133,7 +138,7 @@ thread.start();
 
     }
 
-    private void upload(String judul, String penjelasan){
+    private void upload(String judul, String penjelasan) {
         progressDialog.show();
         avatar.setDrawingCacheEnabled(true);
         avatar.buildDrawingCache();
@@ -144,45 +149,45 @@ thread.start();
 
         //upload
         FirebaseStorage storage = FirebaseStorage.getInstance();
-        StorageReference reference = storage.getReference("images").child("IMG"+new Date().getTime()+".jpeg");
+        StorageReference reference = storage.getReference("images").child("IMG" + new Date().getTime() + ".jpeg");
         UploadTask uploadTask = reference.putBytes(data);
         uploadTask.addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
 
-Toast.makeText(getApplicationContext(), e.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
-           progressDialog.dismiss();
+                Toast.makeText(getApplicationContext(), e.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
+                progressDialog.dismiss();
             }
         }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
             @Override
             public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-if(taskSnapshot.getMetadata()!=null){
-    if(taskSnapshot.getMetadata().getReference()!=null){
-        taskSnapshot.getMetadata().getReference().getDownloadUrl().addOnCompleteListener(new OnCompleteListener<Uri>() {
-            @Override
-            public void onComplete(@NonNull Task<Uri> task) {
-                if(task.getResult()!=null) {
-                    saveData(judul, penjelasan, task.getResult().toString());
-                }else{
+                if (taskSnapshot.getMetadata() != null) {
+                    if (taskSnapshot.getMetadata().getReference() != null) {
+                        taskSnapshot.getMetadata().getReference().getDownloadUrl().addOnCompleteListener(new OnCompleteListener<Uri>() {
+                            @Override
+                            public void onComplete(@NonNull Task<Uri> task) {
+                                if (task.getResult() != null) {
+                                    saveData(judul, penjelasan, task.getResult().toString());
+                                } else {
+                                    progressDialog.dismiss();
+                                    Toast.makeText(getApplicationContext(), "Gagal", Toast.LENGTH_SHORT).show();
+                                }
+                            }
+                        });
+                    } else {
+                        progressDialog.dismiss();
+                        Toast.makeText(getApplicationContext(), "Gagal", Toast.LENGTH_SHORT).show();
+                    }
+                } else {
                     progressDialog.dismiss();
                     Toast.makeText(getApplicationContext(), "Gagal", Toast.LENGTH_SHORT).show();
+
                 }
             }
         });
-    }else{
-        progressDialog.dismiss();
-        Toast.makeText(getApplicationContext(), "Gagal", Toast.LENGTH_SHORT).show();
-    }
-}else{
-    progressDialog.dismiss();
-    Toast.makeText(getApplicationContext(), "Gagal", Toast.LENGTH_SHORT).show();
-
-}
-            }
-        });
     }
 
-    private void saveData(String judul, String penjelasan, String avatar){
+    private void saveData(String judul, String penjelasan, String avatar) {
         Map<String, Object> user = new HashMap<>();
         user.put("judul", judul);
         user.put("penjelasan", penjelasan);
@@ -192,22 +197,22 @@ if(taskSnapshot.getMetadata()!=null){
         progressDialog.show();
         //untuk menambahkan data, jika id length not null berati edit kalau di else nya berarti fitur tambah
 
-        if(id!=null){
+        if (id != null) {
             db.collection("users").document(id)
                     .set(user)
                     .addOnCompleteListener(new OnCompleteListener<Void>() {
                         @Override
                         public void onComplete(@NonNull Task<Void> task) {
-                            if(task.isSuccessful()){
+                            if (task.isSuccessful()) {
                                 Toast.makeText(getApplicationContext(), "Berhasil", Toast.LENGTH_SHORT).show();
                                 finish();
-                            }else{
+                            } else {
                                 Toast.makeText(getApplicationContext(), "Gagal", Toast.LENGTH_SHORT).show();
                             }
                         }
                     });
 
-        }else {
+        } else {
             db.collection("users")
                     .add(user)
                     .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
@@ -226,6 +231,17 @@ if(taskSnapshot.getMetadata()!=null){
                         }
                     });
         }
+    }
 
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        this.finish();
+    }
+
+    @Override
+    public boolean onSupportNavigateUp() {
+        onBackPressed();
+        return true;
     }
 }

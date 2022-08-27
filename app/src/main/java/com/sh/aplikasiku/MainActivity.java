@@ -6,6 +6,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -16,6 +17,7 @@ import com.google.firebase.auth.FirebaseUser;
 public class MainActivity extends AppCompatActivity {
     private FirebaseUser firebaseUser;
     private Button btnlogout;
+    private TextView tvUsername;
     private SharedPreferences sharedPref;
     private String username;
 
@@ -27,6 +29,9 @@ public class MainActivity extends AppCompatActivity {
         //get username
         sharedPref = getSharedPreferences(getString(R.string.data_user), MODE_PRIVATE);
         username = sharedPref.getString(getString(R.string.user_name), "");
+
+        tvUsername = findViewById(R.id.tv_username);
+        tvUsername.setText(username);
 
         btnlogout = findViewById(R.id.logout);
         btnlogout.setOnClickListener(v -> {

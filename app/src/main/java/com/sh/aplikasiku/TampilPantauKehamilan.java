@@ -45,7 +45,18 @@ public class TampilPantauKehamilan extends AppCompatActivity {
             tampilkondisibayi.setText(intent.getStringExtra("kondisibayi"));
 
         }
+    }
 
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        this.finish();
+    }
+
+    @Override
+    public boolean onSupportNavigateUp() {
+        onBackPressed();
+        return true;
     }
 
 }
