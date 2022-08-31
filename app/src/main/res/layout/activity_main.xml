@@ -9,7 +9,6 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/grey"
         android:orientation="vertical">
 
         <androidx.appcompat.widget.Toolbar
@@ -27,22 +26,12 @@
                 android:textSize="20sp"
                 android:textStyle="bold" />
 
-        <ImageButton
-            android:id="@+id/logout"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:layout_gravity="end"
-            android:layout_marginEnd="20dp"
-            android:background="@android:color/transparent"
-            android:src="@drawable/ic_baseline_logout" />
-
-            <Button
-                android:id="@+id/notification"
+            <ImageView
+                android:id="@+id/iv_profile"
                 android:layout_width="30dp"
                 android:layout_height="30dp"
                 android:layout_gravity="end"
-                android:layout_marginEnd="20dp"
-                android:background="@drawable/ic_notifications_black_24dp" />
+                android:layout_marginEnd="20dp" />
 
         </androidx.appcompat.widget.Toolbar>
 
@@ -67,17 +56,17 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:text="Halo, "
                         android:textSize="20sp"
-                        android:textStyle="bold"
-                        android:text="Halo, " />
+                        android:textStyle="bold" />
 
                     <TextView
                         android:id="@+id/tv_username"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:text="Admin!"
                         android:textSize="20sp"
-                        android:textStyle="bold"
-                        android:text="Admin!" />
+                        android:textStyle="bold" />
                 </LinearLayout>
 
                 <TextView
@@ -102,20 +91,22 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:padding="20dp"
+            android:padding="10dp"
             android:weightSum="2">
 
             <com.google.android.material.card.MaterialCardView
+                android:id="@+id/pantau"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="10dp"
-                android:layout_weight="1">
+                android:layout_margin="10dp"
+                android:layout_weight="1"
+                android:onClick="pantau"
+                app:cardCornerRadius="5dp"
+                app:cardElevation="2dp">
 
                 <LinearLayout
-                    android:id="@+id/pantau"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:onClick="pantau"
                     android:orientation="vertical"
                     android:padding="15dp">
 
@@ -138,16 +129,18 @@
             </com.google.android.material.card.MaterialCardView>
 
             <com.google.android.material.card.MaterialCardView
+                android:id="@+id/artikel"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="10dp"
-                android:layout_weight="1">
+                android:layout_margin="10dp"
+                android:layout_weight="1"
+                android:onClick="artikel"
+                app:cardCornerRadius="5dp"
+                app:cardElevation="2dp">
 
                 <LinearLayout
-                    android:id="@+id/artikel"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:onClick="artikel"
                     android:orientation="vertical"
                     android:padding="15dp">
 
@@ -176,21 +169,22 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:padding="20dp"
+            android:padding="10dp"
             android:weightSum="2">
 
             <com.google.android.material.card.MaterialCardView
+                android:id="@+id/rekam"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="10dp"
-                android:layout_weight="1">
+                android:layout_margin="10dp"
+                android:layout_weight="1"
+                android:onClick="rekam"
+                app:cardCornerRadius="5dp"
+                app:cardElevation="2dp">
 
                 <LinearLayout
-                    android:id="@+id/rekam"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="@drawable/bg_card"
-                    android:onClick="rekam"
                     android:orientation="vertical"
                     android:padding="15dp">
 
@@ -213,17 +207,18 @@
             </com.google.android.material.card.MaterialCardView>
 
             <com.google.android.material.card.MaterialCardView
+                android:id="@+id/rujukan"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="10dp"
-                android:layout_weight="1">
+                android:layout_margin="10dp"
+                android:layout_weight="1"
+                android:onClick="rujukan"
+                app:cardCornerRadius="5dp"
+                app:cardElevation="2dp">
 
                 <LinearLayout
-                    android:id="@+id/rujukan"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="@drawable/bg_card_2"
-                    android:onClick="rujukan"
                     android:orientation="vertical"
                     android:padding="15dp">
 

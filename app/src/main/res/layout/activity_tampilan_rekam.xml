@@ -3,160 +3,244 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
-    android:padding="10dp">
+    android:padding="20dp">
 
     <androidx.appcompat.widget.LinearLayoutCompat
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:layout_marginBottom="20dp"
+        android:orientation="vertical">
 
-        <TextView
-            android:layout_width="wrap_content"
+        <androidx.appcompat.widget.LinearLayoutCompat
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textColor="@color/black"
-            android:textSize="12dp"
-            android:text="Berat : "/>
+            android:layout_marginBottom="20dp"
+            android:orientation="horizontal">
 
-        <TextView
-            android:id="@+id/berat"
-            android:layout_width="wrap_content"
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginEnd="10dp"
+                android:src="@drawable/ic_time" />
+
+            <TextView
+                android:id="@+id/tv_date"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="2-12-2021"
+                android:textColor="@color/black"
+                android:textSize="20dp" />
+
+        </androidx.appcompat.widget.LinearLayoutCompat>
+
+        <androidx.appcompat.widget.LinearLayoutCompat
+            android:id="@+id/ll_pasien"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textColor="@color/black"
-            android:textSize="12dp"
-            android:text=""/>
+            android:layout_marginBottom="5dp"
+            android:orientation="horizontal"
+            android:weightSum="5">
 
-    </androidx.appcompat.widget.LinearLayoutCompat>
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="5dp"
+                android:layout_weight="2"
+                android:text="Pasien"
+                android:textSize="14dp" />
 
+            <TextView
+                android:id="@+id/tv_pasien"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="3"
+                android:text=""
+                android:textColor="@color/black"
+                android:textSize="14dp" />
 
-    <androidx.appcompat.widget.LinearLayoutCompat
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        </androidx.appcompat.widget.LinearLayoutCompat>
 
-        <TextView
-            android:layout_width="wrap_content"
+        <androidx.appcompat.widget.LinearLayoutCompat
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textColor="@color/black"
-            android:textSize="12dp"
-            android:text="Denyut : "/>
+            android:layout_marginBottom="5dp"
+            android:orientation="horizontal"
+            android:weightSum="5">
 
-        <TextView
-            android:id="@+id/denyut"
-            android:layout_width="wrap_content"
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="5dp"
+                android:layout_weight="2"
+                android:text="Berat badan"
+                android:textSize="14dp" />
+
+            <TextView
+                android:id="@+id/berat"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="3"
+                android:text=""
+                android:textColor="@color/black"
+                android:textSize="14dp" />
+
+        </androidx.appcompat.widget.LinearLayoutCompat>
+
+        <androidx.appcompat.widget.LinearLayoutCompat
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textColor="@color/black"
-            android:textSize="12dp"
-            android:text=""/>
+            android:layout_marginBottom="5dp"
+            android:orientation="horizontal"
+            android:weightSum="5">
 
-    </androidx.appcompat.widget.LinearLayoutCompat>
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="5dp"
+                android:layout_weight="2"
+                android:text="Lingkar lengan"
+                android:textSize="14dp" />
 
-    <androidx.appcompat.widget.LinearLayoutCompat
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
+            <TextView
+                android:id="@+id/lingkar"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="3"
+                android:text=""
+                android:textColor="@color/black"
+                android:textSize="14dp" />
 
-        <TextView
-            android:layout_width="wrap_content"
+        </androidx.appcompat.widget.LinearLayoutCompat>
+
+        <androidx.appcompat.widget.LinearLayoutCompat
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textColor="@color/black"
-            android:textSize="12dp"
-            android:text="Kondisi : "/>
+            android:layout_marginBottom="5dp"
+            android:orientation="horizontal"
+            android:weightSum="5">
 
-        <TextView
-            android:id="@+id/kondisi"
-            android:layout_width="wrap_content"
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="5dp"
+                android:layout_weight="2"
+                android:text="Kondisi HB"
+                android:textSize="14dp" />
+
+            <TextView
+                android:id="@+id/kondisi"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="3"
+                android:text=""
+                android:textColor="@color/black"
+                android:textSize="16dp" />
+
+        </androidx.appcompat.widget.LinearLayoutCompat>
+
+        <androidx.appcompat.widget.LinearLayoutCompat
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textColor="@color/black"
-            android:textSize="12dp"
-            android:text=""/>
+            android:layout_marginBottom="5dp"
+            android:orientation="horizontal"
+            android:weightSum="5">
 
-    </androidx.appcompat.widget.LinearLayoutCompat>
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="5dp"
+                android:layout_weight="2"
+                android:text="Tekanan darah"
+                android:textSize="14dp" />
 
-    <androidx.appcompat.widget.LinearLayoutCompat
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
+            <TextView
+                android:id="@+id/tekanan"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="3"
+                android:text=""
+                android:textColor="@color/black"
+                android:textSize="14dp" />
 
-        <TextView
-            android:layout_width="wrap_content"
+        </androidx.appcompat.widget.LinearLayoutCompat>
+
+        <androidx.appcompat.widget.LinearLayoutCompat
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textColor="@color/black"
-            android:textSize="12dp"
-            android:text="Laju : "/>
+            android:layout_marginBottom="5dp"
+            android:orientation="horizontal"
+            android:weightSum="5">
 
-        <TextView
-            android:id="@+id/laju"
-            android:layout_width="wrap_content"
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="5dp"
+                android:layout_weight="2"
+                android:text="Laju pernafasan"
+                android:textSize="14dp" />
+
+            <TextView
+                android:id="@+id/laju"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="3"
+                android:text=""
+                android:textColor="@color/black"
+                android:textSize="14dp" />
+
+        </androidx.appcompat.widget.LinearLayoutCompat>
+
+        <androidx.appcompat.widget.LinearLayoutCompat
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textColor="@color/black"
-            android:textSize="12dp"
-            android:text=""/>
+            android:layout_marginBottom="5dp"
+            android:orientation="horizontal"
+            android:weightSum="5">
 
-    </androidx.appcompat.widget.LinearLayoutCompat>
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="5dp"
+                android:layout_weight="2"
+                android:text="Suhu tubuh"
+                android:textSize="14dp" />
 
-    <androidx.appcompat.widget.LinearLayoutCompat
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
+            <TextView
+                android:id="@+id/suhu"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="3"
+                android:text=""
+                android:textColor="@color/black"
+                android:textSize="14dp" />
 
-        <TextView
-            android:layout_width="wrap_content"
+        </androidx.appcompat.widget.LinearLayoutCompat>
+
+        <androidx.appcompat.widget.LinearLayoutCompat
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textColor="@color/black"
-            android:textSize="12dp"
-            android:text="Lingkar : "/>
+            android:layout_weight="5"
+            android:orientation="horizontal">
 
-        <TextView
-            android:id="@+id/lingkar"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textColor="@color/black"
-            android:textSize="12dp"
-            android:text=""/>
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="5dp"
+                android:layout_weight="2"
+                android:text="Denyut jantung"
+                android:textSize="14dp" />
 
-    </androidx.appcompat.widget.LinearLayoutCompat>
+            <TextView
+                android:id="@+id/denyut"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="3"
+                android:text=""
+                android:textColor="@color/black"
+                android:textSize="14dp" />
 
-    <androidx.appcompat.widget.LinearLayoutCompat
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textColor="@color/black"
-            android:textSize="12dp"
-            android:text="Suhu : "/>
-
-        <TextView
-            android:id="@+id/suhu"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textColor="@color/black"
-            android:textSize="12dp"
-            android:text=""/>
-
-    </androidx.appcompat.widget.LinearLayoutCompat>
-
-    <androidx.appcompat.widget.LinearLayoutCompat
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textColor="@color/black"
-            android:textSize="12dp"
-            android:text="Tekanan : "/>
-
-        <TextView
-            android:id="@+id/tekanan"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textColor="@color/black"
-            android:textSize="12dp"
-            android:text=""/>
+        </androidx.appcompat.widget.LinearLayoutCompat>
 
     </androidx.appcompat.widget.LinearLayoutCompat>
 

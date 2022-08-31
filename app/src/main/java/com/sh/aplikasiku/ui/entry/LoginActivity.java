@@ -10,6 +10,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.AppCompatTextView;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -23,14 +24,12 @@ import com.sh.aplikasiku.R;
 
 public class LoginActivity extends AppCompatActivity {
     private EditText editemail, editpasssword;
-    private Button btnlogin, btnregister;
+    private Button btnlogin;
+    private AppCompatTextView txtRegister;
     private ProgressDialog progressDialog;
     private FirebaseAuth mAuth;
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     private SharedPreferences sharedPref;
-
-    //private SignInButton btnGoogle;
-    //private GoogleSignInClient mGoogleSignInClient;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,8 +38,7 @@ public class LoginActivity extends AppCompatActivity {
         editemail = findViewById(R.id.email);
         editpasssword = findViewById(R.id.password);
         btnlogin = findViewById(R.id.btn_login);
-        btnregister = findViewById(R.id.btn_register);
-        //btnGoogle = findViewById(R.id.btn_google);
+        txtRegister = findViewById(R.id.txt_register);
         sharedPref = getSharedPreferences(getString(R.string.data_user), MODE_PRIVATE);
 
         mAuth = FirebaseAuth.getInstance();
@@ -50,7 +48,7 @@ public class LoginActivity extends AppCompatActivity {
         progressDialog.setCancelable(false);
 
 
-        btnregister.setOnClickListener(v -> {
+        txtRegister.setOnClickListener(v -> {
             startActivity(new Intent(getApplicationContext(), RegisterActivity.class));
         });
         btnlogin.setOnClickListener(v -> {
@@ -65,25 +63,24 @@ public class LoginActivity extends AppCompatActivity {
 
     private void login(String email, String password) {
         // coding login
+        String emailToSend = email.trim();
         progressDialog.show();
-        mAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-            @Override
-            public void onComplete(@NonNull Task<AuthResult> task) {
-                if (task.isSuccessful() && task.getResult() != null) {
-                    if (task.getResult().getUser() != null) {
-                        FirebaseUser firebaseUser = task.getResult().getUser();
-                        if (firebaseUser != null) {
-                            String idUser = firebaseUser.getUid();
-                            getUserData(idUser);
-                        }
-                    } else {
-                        progressDialog.dismiss();
-                        Toast.makeText(getApplicationContext(), "Login gagal", Toast.LENGTH_SHORT).show();
+
+        mAuth.signInWithEmailAndPassword(emailToSend, password).addOnCompleteListener(task -> {
+            if (task.isSuccessful() && task.getResult() != null) {
+                if (task.getResult().getUser() != null) {
+                    FirebaseUser firebaseUser = task.getResult().getUser();
+                    if (firebaseUser != null) {
+                        String idUser = firebaseUser.getUid();
+                        getUserData(idUser);
                     }
                 } else {
                     progressDialog.dismiss();
                     Toast.makeText(getApplicationContext(), "Login gagal", Toast.LENGTH_SHORT).show();
                 }
+            } else {
+                progressDialog.dismiss();
+                Toast.makeText(getApplicationContext(), "Login gagal", Toast.LENGTH_SHORT).show();
             }
         });
     }

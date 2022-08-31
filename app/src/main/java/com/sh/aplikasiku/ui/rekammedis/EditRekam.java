@@ -19,7 +19,9 @@ import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.sh.aplikasiku.R;
 import com.sh.aplikasiku.model.User;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -29,7 +31,7 @@ public class EditRekam extends AppCompatActivity {
     private AppCompatSpinner spinner_pasien;
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     private ProgressDialog progressDialog;
-    private String id = "", id_user, option;
+    private String id = "", id_user, pasien, option, dateCreated, dateUpdated;
     private ArrayList<User> listUser = new ArrayList<>();
 
     @Override
@@ -54,18 +56,33 @@ public class EditRekam extends AppCompatActivity {
         progressDialog.setMessage("menyimpan...");
 
         btnsave.setOnClickListener(v -> {
-            if (editberat.getText().length() > 0 && editlingkar.getText().length() > 0 && editkondisi.getText().length() > 0 && edittekanan.getText().length() > 0 && editlaju.getText().length() > 0 && editsuhu.getText().length() > 0 && editdenyut.getText().length() > 0) {
-                saveData(editberat.getText().toString(), editlingkar.getText().toString(), editkondisi.getText().toString(), edittekanan.getText().toString(), editlaju.getText().toString(), editsuhu.getText().toString(), editdenyut.getText().toString());
+            if (editberat.getText().length() > 0 &&
+                    editlingkar.getText().length() > 0 &&
+                    editkondisi.getText().length() > 0 &&
+                    edittekanan.getText().length() > 0 &&
+                    editlaju.getText().length() > 0 &&
+                    editsuhu.getText().length() > 0 &&
+                    editdenyut.getText().length() > 0) {
+                saveData(editberat.getText().toString(),
+                        editlingkar.getText().toString(),
+                        editkondisi.getText().toString(),
+                        edittekanan.getText().toString(),
+                        editlaju.getText().toString(),
+                        editsuhu.getText().toString(),
+                        editdenyut.getText().toString());
             } else {
                 Toast.makeText(getApplicationContext(), "Silakan isi dulu artikel", Toast.LENGTH_SHORT).show();
             }
         });
+
+        getAllUserData();
 
         Intent intent = getIntent();
         if (intent != null) {
             option = intent.getStringExtra("option");
             if (option.equalsIgnoreCase("edit")) {
                 id = intent.getStringExtra("id");
+                id_user = intent.getStringExtra("idUser");
                 editberat.setText(intent.getStringExtra("berat"));
                 editlingkar.setText(intent.getStringExtra("lingkar"));
                 editkondisi.setText(intent.getStringExtra("laju"));
@@ -73,10 +90,13 @@ public class EditRekam extends AppCompatActivity {
                 editlaju.setText(intent.getStringExtra("suhu"));
                 editsuhu.setText(intent.getStringExtra("denyut"));
                 editdenyut.setText(intent.getStringExtra("kondisi"));
+                dateCreated = intent.getStringExtra("dateCreated");
+                dateUpdated = intent.getStringExtra("dateUpdated");
+                spinner_pasien.setEnabled(false);
+            } else {
+                id = null;
             }
         }
-
-        getAllUserData();
     }
 
     @Override
@@ -91,12 +111,19 @@ public class EditRekam extends AppCompatActivity {
         return true;
     }
 
-    private void saveData(String denyut, String suhu, String laju, String tekanan, String kondisi, String berat, String lingkar) {
+    private void saveData(String berat, String lingkar, String kondisi, String tekanan, String laju, String suhu, String denyut) {
         progressDialog.show();
-        //untuk menambahkan data, jika id length not null berati edit kalau di else nya berarti fitur tambah
 
+        //untuk mendapatkan tanggal saat data dibuat
+        SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
+        Calendar c = Calendar.getInstance();
+        String date = sdf.format(c.getTime());
+
+        //untuk menambahkan data, jika id length not null berati edit kalau di else nya berarti fitur tambah
         if (id != null) {
             Map<String, Object> rekam = new HashMap<>();
+            rekam.put("idPasien", id_user);
+            rekam.put("pasien", pasien);
             rekam.put("berat", berat);
             rekam.put("lingkar", lingkar);
             rekam.put("kondisi", kondisi);
@@ -104,20 +131,25 @@ public class EditRekam extends AppCompatActivity {
             rekam.put("laju", laju);
             rekam.put("suhu", suhu);
             rekam.put("denyut", denyut);
+            rekam.put("dateCreated", date);
+            rekam.put("dateUpdated", date);
             db.collection("rekammedis").document(id)
                     .set(rekam)
                     .addOnCompleteListener(task -> {
                         if (task.isSuccessful()) {
                             Toast.makeText(getApplicationContext(), "Berhasil", Toast.LENGTH_SHORT).show();
+                            progressDialog.dismiss();
                             finish();
                         } else {
                             Toast.makeText(getApplicationContext(), "Gagal", Toast.LENGTH_SHORT).show();
+                            progressDialog.dismiss();
                         }
                     });
 
         } else {
             Map<String, Object> rekam = new HashMap<>();
-            rekam.put("idUser", id_user);
+            rekam.put("idPasien", id_user);
+            rekam.put("pasien", pasien);
             rekam.put("berat", berat);
             rekam.put("lingkar", lingkar);
             rekam.put("kondisi", kondisi);
@@ -125,7 +157,8 @@ public class EditRekam extends AppCompatActivity {
             rekam.put("laju", laju);
             rekam.put("suhu", suhu);
             rekam.put("denyut", denyut);
-
+            rekam.put("dateCreated", date);
+            rekam.put("dateUpdated", date);
             db.collection("rekammedis")
                     .add(rekam)
                     .addOnSuccessListener(documentReference -> {
@@ -160,7 +193,7 @@ public class EditRekam extends AppCompatActivity {
                                 setSpinnerPasien();
                             }
                         } catch (Exception e) {
-                            Log.d("QWE", "getData: " + e.getMessage());
+                            Log.d("EDITREKAMGETUSER", "getData: " + e.getMessage() + e.getLocalizedMessage());
                             Toast.makeText(getApplicationContext(), "Coba lagi nanti!", Toast.LENGTH_SHORT).show();
                         }
                     } else {
@@ -175,6 +208,11 @@ public class EditRekam extends AppCompatActivity {
                 android.R.layout.simple_spinner_item, listUser);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner_pasien.setAdapter(adapter);
+
+        if (id != null) {
+            spinner_pasien.setSelection(getUserPosition());
+        }
+
         spinner_pasien.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
 
             @Override
@@ -182,6 +220,7 @@ public class EditRekam extends AppCompatActivity {
                 // Here you get the current item (a User object) that is selected by its position
                 User user = adapter.getItem(position);
                 id_user = user.getId();
+                pasien = user.getUsername();
             }
 
             @Override
@@ -189,7 +228,18 @@ public class EditRekam extends AppCompatActivity {
 
             }
         });
-
-
     }
+
+    private int getUserPosition() {
+        int pos = 0;
+        for (int i = 0; i < listUser.size(); i++) {
+            String id = listUser.get(i).getId();
+            if (id.equals(id_user)) {
+                pos = i;
+                return pos;
+            }
+        }
+        return pos;
+    }
+
 }

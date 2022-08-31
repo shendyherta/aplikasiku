@@ -2,9 +2,11 @@ package com.sh.aplikasiku.ui.entry;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.AppCompatTextView;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.EditText;
@@ -20,6 +22,7 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.UserProfileChangeRequest;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.sh.aplikasiku.ui.MainActivity;
 import com.sh.aplikasiku.R;
 
@@ -28,10 +31,13 @@ import java.util.Map;
 
 public class RegisterActivity extends AppCompatActivity {
     private EditText editname, editemail, editpassword, editkonfirmpwd;
-    private Button btnregister, btnlogin;
+    private Button btnregister;
+
+    private AppCompatTextView txtLogin;
     private ProgressDialog progressDialog;
     private FirebaseAuth mAuth;
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
+    private SharedPreferences sharedPref;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,7 +48,9 @@ public class RegisterActivity extends AppCompatActivity {
         editpassword = findViewById(R.id.password);
         editkonfirmpwd = findViewById(R.id.pwd_konfirmasiregister);
         btnregister = findViewById(R.id.btn_register);
-        btnlogin = findViewById(R.id.btn_login);
+        txtLogin = findViewById(R.id.txt_login);
+
+        sharedPref = getSharedPreferences(getString(R.string.data_user), MODE_PRIVATE);
 
         mAuth = FirebaseAuth.getInstance();
         progressDialog = new ProgressDialog(RegisterActivity.this);
@@ -50,7 +58,7 @@ public class RegisterActivity extends AppCompatActivity {
         progressDialog.setMessage("silakan tunggu");
         progressDialog.setCancelable(false);
 
-        btnlogin.setOnClickListener(v -> {
+        txtLogin.setOnClickListener(v -> {
             finish();
         });
         btnregister.setOnClickListener(v -> {
@@ -67,47 +75,24 @@ public class RegisterActivity extends AppCompatActivity {
     }
 
     private void register(String name, String email, String password) {
+        String emailToSend = email.trim();
         progressDialog.show();
-        mAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-            @Override
-            public void onComplete(@NonNull Task<AuthResult> task) {
-                if (task.isSuccessful() && task.getResult() != null) {
-                    FirebaseUser firebaseUser = task.getResult().getUser();
-                    if (firebaseUser != null) {
-                        String idUser = firebaseUser.getUid();
-                        saveDataUser(idUser, name);
 
-                        UserProfileChangeRequest request = new UserProfileChangeRequest.Builder()
-                                .setDisplayName(name)
-                                .build();
-                        firebaseUser.updateProfile(request).addOnCompleteListener(new OnCompleteListener<Void>() {
-                            @Override
-                            public void onComplete(@NonNull Task<Void> task) {
-                                reload();
-                            }
-                        });
-                    } else {
-                        Toast.makeText(getApplicationContext(), "Register gagal", Toast.LENGTH_SHORT).show();
-                    }
+        mAuth.createUserWithEmailAndPassword(emailToSend, password).addOnCompleteListener(task -> {
+            if (task.isSuccessful() && task.getResult() != null) {
+                FirebaseUser firebaseUser = task.getResult().getUser();
+                if (firebaseUser != null) {
+                    String idUser = firebaseUser.getUid();
+                    saveDataUser(idUser, name);
                 } else {
-                    Toast.makeText(getApplicationContext(), task.getException().getLocalizedMessage(), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(), "Register gagal", Toast.LENGTH_SHORT).show();
+                    progressDialog.dismiss();
                 }
+            } else {
+                Toast.makeText(getApplicationContext(), task.getException().getLocalizedMessage(), Toast.LENGTH_SHORT).show();
+                progressDialog.dismiss();
             }
-
         });
-    }
-
-    private void reload() {
-        startActivity(new Intent(getApplicationContext(), MainActivity.class));
-    }
-
-    @Override
-    public void onStart() {
-        super.onStart();
-        FirebaseUser currentUser = mAuth.getCurrentUser();
-        if (currentUser != null) {
-            reload();
-        }
     }
 
     private void saveDataUser(String idUser, String username) {
@@ -116,27 +101,48 @@ public class RegisterActivity extends AppCompatActivity {
         user.put("username", username);
         user.put("role", 2);
 
-
         progressDialog.show();
-        //untuk menambahkan data, jika id length not null berati edit kalau di else nya berarti fitur tambah
-
-
         db.collection("users")
                 .add(user)
-                .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
-                    @Override
-                    public void onSuccess(DocumentReference documentReference) {
-                        Toast.makeText(getApplicationContext(), "Berhasil", Toast.LENGTH_SHORT).show();
-                        progressDialog.dismiss();
-                        finish();
-                    }
+                .addOnSuccessListener(documentReference -> {
+                    getUserData(idUser);
                 })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Toast.makeText(getApplicationContext(), e.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
-                        progressDialog.dismiss();
+                .addOnFailureListener(e -> {
+                    Toast.makeText(getApplicationContext(), e.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
+                    progressDialog.dismiss();
+                });
+    }
+
+    private void getUserData(String idUser) {
+        db.collection("users")
+                .whereEqualTo("id", idUser)
+                .get()
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        try {
+                            if (task.getResult().getDocuments().size() == 0) {
+                                Toast.makeText(getApplicationContext(), "Coba lagi nanti!", Toast.LENGTH_SHORT).show();
+                            } else {
+                                for (QueryDocumentSnapshot document : task.getResult()) {
+                                    int role = Integer.parseInt(document.get("role").toString());
+
+                                    //set user role and name
+                                    SharedPreferences.Editor editor = sharedPref.edit();
+                                    editor.putInt(getString(R.string.user_role), role);
+                                    editor.putString(getString(R.string.user_name), document.get("username").toString());
+                                    editor.apply();
+
+                                    startActivity(new Intent(getApplicationContext(), MainActivity.class));
+                                    finish();
+                                }
+                            }
+                        } catch (Exception e) {
+                            Toast.makeText(getApplicationContext(), "Coba lagi nanti!", Toast.LENGTH_SHORT).show();
+                        }
+                    } else {
+                        Toast.makeText(getApplicationContext(), "Data Gagal", Toast.LENGTH_SHORT).show();
                     }
+                    progressDialog.dismiss();
                 });
     }
 }

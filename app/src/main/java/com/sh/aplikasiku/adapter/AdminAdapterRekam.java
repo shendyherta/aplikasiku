@@ -49,6 +49,7 @@ public class AdminAdapterRekam extends RecyclerView.Adapter<AdminAdapterRekam.My
         holder.laju.setText(list.get(position).getLajuPernafasan());
         holder.suhu.setText(list.get(position).getSuhu());
         holder.tekanan.setText(list.get(position).getTekananDarah());
+        holder.pasien.setText(list.get(position).getPasien());
     }
 
     @Override
@@ -57,7 +58,7 @@ public class AdminAdapterRekam extends RecyclerView.Adapter<AdminAdapterRekam.My
     }
 
     class MyViewHolder extends RecyclerView.ViewHolder{
-        TextView berat, lingkar, suhu, laju, kondisi, tekanan, denyut;
+        TextView berat, lingkar, suhu, laju, kondisi, tekanan, denyut, pasien;
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
             berat = itemView.findViewById(R.id.berat);
@@ -67,6 +68,7 @@ public class AdminAdapterRekam extends RecyclerView.Adapter<AdminAdapterRekam.My
             laju = itemView.findViewById(R.id.laju);
             suhu = itemView.findViewById(R.id.suhu);
             tekanan = itemView.findViewById(R.id.tekanan);
+            pasien = itemView.findViewById(R.id.tv_pasien);
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {

@@ -63,7 +63,7 @@ public class UserAdapterRekam extends RecyclerView.Adapter<UserAdapterRekam.MyVi
     }
 
     class MyViewHolder extends RecyclerView.ViewHolder {
-        TextView berat, lingkar, suhu, laju, kondisi, tekanan, denyut;
+        TextView berat, lingkar, suhu, laju, kondisi, tekanan, denyut, pasien;
 
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -74,6 +74,9 @@ public class UserAdapterRekam extends RecyclerView.Adapter<UserAdapterRekam.MyVi
             laju = itemView.findViewById(R.id.laju);
             suhu = itemView.findViewById(R.id.suhu);
             tekanan = itemView.findViewById(R.id.tekanan);
+            pasien = itemView.findViewById(R.id.ll_pasien);
+
+            pasien.setVisibility(View.GONE);
         }
     }
 }

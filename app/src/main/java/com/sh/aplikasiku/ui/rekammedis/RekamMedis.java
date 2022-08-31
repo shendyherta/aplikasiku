@@ -1,6 +1,7 @@
 package com.sh.aplikasiku.ui.rekammedis;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.LinearLayoutCompat;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -35,6 +36,7 @@ public class RekamMedis extends AppCompatActivity {
     private AdminAdapterRekam adminAdapterRekam;
     private ProgressDialog progressDialog;
     private SharedPreferences sharedPref;
+    private LinearLayoutCompat llPasien;
     private int userrole;
 
     @Override
@@ -50,6 +52,7 @@ public class RekamMedis extends AppCompatActivity {
 
         recyclerView = findViewById(R.id.recyclerview);
         btnAdd = findViewById(R.id.btn_add);
+        llPasien = findViewById(R.id.ll_pasien);
 
         progressDialog = new ProgressDialog(RekamMedis.this);
         progressDialog.setTitle("loading");
@@ -67,13 +70,15 @@ public class RekamMedis extends AppCompatActivity {
             btnAdd.setVisibility(View.VISIBLE);
             adminAdapterRekam = new AdminAdapterRekam(this, list);
             adminAdapterRekam.setDialog(pos -> {
-                final CharSequence[] dialogItem = {"lihat", "edit", "hapus"};
+                final CharSequence[] dialogItem = {"Detail", "Edit", "Hapus"};
                 AlertDialog.Builder dialog = new AlertDialog.Builder(RekamMedis.this);
                 dialog.setItems(dialogItem, (dialogInterface, i) -> {
                     switch (i) {
                         case 0:
                             Intent intentbaca = new Intent(getApplicationContext(), TampilanRekam.class);
                             intentbaca.putExtra("id", list.get(pos).getId());
+                            intentbaca.putExtra("idUser", list.get(pos).getIdUser());
+                            intentbaca.putExtra("pasien", list.get(pos).getPasien());
                             intentbaca.putExtra("berat", list.get(pos).getBeratBadan());
                             intentbaca.putExtra("lingkar", list.get(pos).getLingkarBadan());
                             intentbaca.putExtra("laju", list.get(pos).getLajuPernafasan());
@@ -81,12 +86,15 @@ public class RekamMedis extends AppCompatActivity {
                             intentbaca.putExtra("suhu", list.get(pos).getSuhu());
                             intentbaca.putExtra("denyut", list.get(pos).getDenyutJantung());
                             intentbaca.putExtra("kondisi", list.get(pos).getKondisiHB());
+                            intentbaca.putExtra("dateCreated", list.get(pos).getDateCreated());
+                            intentbaca.putExtra("dateUpdated", list.get(pos).getDateUpdated());
                             intentbaca.putExtra("option", "tampil");
                             startActivity(intentbaca);
                             break;
                         case 1:
                             Intent intent = new Intent(getApplicationContext(), EditRekam.class);
                             intent.putExtra("id", list.get(pos).getId());
+                            intent.putExtra("idUser", list.get(pos).getIdUser());
                             intent.putExtra("berat", list.get(pos).getBeratBadan());
                             intent.putExtra("lingkar", list.get(pos).getLingkarBadan());
                             intent.putExtra("laju", list.get(pos).getLajuPernafasan());
@@ -94,6 +102,8 @@ public class RekamMedis extends AppCompatActivity {
                             intent.putExtra("suhu", list.get(pos).getSuhu());
                             intent.putExtra("denyut", list.get(pos).getDenyutJantung());
                             intent.putExtra("kondisi", list.get(pos).getKondisiHB());
+                            intent.putExtra("dateCreated", list.get(pos).getDateCreated());
+                            intent.putExtra("dateUpdated", list.get(pos).getDateUpdated());
                             intent.putExtra("option", "edit");
                             startActivity(intent);
                             break;
@@ -105,6 +115,7 @@ public class RekamMedis extends AppCompatActivity {
                 dialog.show();
             });
         } else {
+            llPasien.setVisibility(View.GONE);
             btnAdd.setVisibility(View.GONE);
             userAdapterRekam = new UserAdapterRekam(this, list);
         }
@@ -115,6 +126,18 @@ public class RekamMedis extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
         getData();
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        this.finish();
+    }
+
+    @Override
+    public boolean onSupportNavigateUp() {
+        onBackPressed();
+        return true;
     }
 
     private void getData() {
@@ -130,6 +153,9 @@ public class RekamMedis extends AppCompatActivity {
                                 Toast.makeText(RekamMedis.this, "Belum ada data rekam medis!", Toast.LENGTH_SHORT).show();
                             } else {
                                 for (QueryDocumentSnapshot document : task.getResult()) {
+                                    String id = document.getId();
+                                    String idUser = document.get("idPasien").toString();
+                                    String pasien = document.get("pasien").toString();
                                     String berat = document.get("berat").toString();
                                     String denyut = document.get("denyut").toString();
                                     String laju = document.get("laju").toString();
@@ -137,7 +163,9 @@ public class RekamMedis extends AppCompatActivity {
                                     String tekanan = document.get("tekanan").toString();
                                     String kondisi = document.get("kondisi").toString();
                                     String lingkar = document.get("lingkar").toString();
-                                    UserRekam user = new UserRekam(berat, denyut, laju, suhu, tekanan, kondisi, lingkar);
+                                    String dateCreated = document.get("dateCreated").toString();
+                                    String dateUpdated = document.get("dateUpdated").toString();
+                                    UserRekam user = new UserRekam(id, idUser, pasien, berat, lingkar, kondisi, tekanan, laju, suhu, denyut, dateCreated, dateUpdated);
                                     user.setId(document.getId());
                                     list.add(user);
                                 }
@@ -145,6 +173,7 @@ public class RekamMedis extends AppCompatActivity {
                             }
                         } catch (Exception e) {
                             Toast.makeText(getApplicationContext(), "Coba lagi nanti!", Toast.LENGTH_SHORT).show();
+                            Log.d("REKAMMEDISGETDATA", "getData: " + e.getMessage());
                         }
                     } else {
                         Toast.makeText(getApplicationContext(), "Data Gagal", Toast.LENGTH_SHORT).show();

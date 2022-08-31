@@ -1,11 +1,15 @@
 package com.sh.aplikasiku.model;
 
 public class UserRekam {
-    private String id, beratBadan, lingkarBadan, kondisiHB, tekananDarah,
-            lajuPernafasan, suhu, denyutJantung;
+    private String id, idUser, pasien, beratBadan, lingkarBadan, kondisiHB, tekananDarah,
+            lajuPernafasan, suhu, denyutJantung, dateCreated, dateUpdated;
 
-    public UserRekam(String beratBadan, String lingkarBadan, String kondisiHB, String tekananDarah,
-                     String lajuPernafasan, String suhu, String denyutJantung) {
+    public UserRekam(String id, String idUser, String pasien, String beratBadan, String lingkarBadan,
+                     String kondisiHB, String tekananDarah, String lajuPernafasan, String suhu,
+                     String denyutJantung, String dateCreated, String dateUpdated) {
+        this.id = id;
+        this.idUser = idUser;
+        this.pasien = pasien;
         this.beratBadan = beratBadan;
         this.lingkarBadan = lingkarBadan;
         this.kondisiHB = kondisiHB;
@@ -13,6 +17,8 @@ public class UserRekam {
         this.lajuPernafasan = lajuPernafasan;
         this.suhu = suhu;
         this.denyutJantung = denyutJantung;
+        this.dateCreated = dateCreated;
+        this.dateUpdated = dateUpdated;
     }
 
     public String getId() {
@@ -21,6 +27,22 @@ public class UserRekam {
 
     public void setId(String id) {
         this.id = id;
+    }
+
+    public String getIdUser() {
+        return idUser;
+    }
+
+    public void setIdUser(String idUser) {
+        this.idUser = idUser;
+    }
+
+    public String getPasien() {
+        return pasien;
+    }
+
+    public void setPasien(String pasien) {
+        this.pasien = pasien;
     }
 
     public String getBeratBadan() {
@@ -77,5 +99,21 @@ public class UserRekam {
 
     public void setDenyutJantung(String denyutJantung) {
         this.denyutJantung = denyutJantung;
+    }
+
+    public String getDateCreated() {
+        return dateCreated;
+    }
+
+    public void setDateCreated(String dateCreated) {
+        this.dateCreated = dateCreated;
+    }
+
+    public String getDateUpdated() {
+        return dateUpdated;
+    }
+
+    public void setDateUpdated(String dateUpdated) {
+        this.dateUpdated = dateUpdated;
     }
 }
