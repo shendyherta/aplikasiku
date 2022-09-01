@@ -31,14 +31,14 @@ public class UserAdapterArtikel extends RecyclerView.Adapter<UserAdapterArtikel.
     @NonNull
     @Override
     public MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.row_user, parent, false);
+        View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.row_artikel, parent, false);
         return new MyViewHolder(itemView);
     }
 
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
         holder.judul.setText(list.get(position).getJudul());
-        holder.penjelasan.setText(list.get(position).getPenjelasan());
+        holder.date.setText(list.get(position).getDateCreated());
         Glide.with(context).load(list.get(position).getAvatar()).into(holder.avatar);
 
         holder.itemView.setOnClickListener(v -> {
@@ -47,6 +47,8 @@ public class UserAdapterArtikel extends RecyclerView.Adapter<UserAdapterArtikel.
             intentbaca.putExtra("judul", list.get(position).getJudul());
             intentbaca.putExtra("penjelasan", list.get(position).getPenjelasan());
             intentbaca.putExtra("avatar", list.get(position).getAvatar());
+            intentbaca.putExtra("dateCreated", list.get(position).getDateCreated());
+            intentbaca.putExtra("dateUpdated", list.get(position).getDateUpdated());
             context.startActivity(intentbaca);
         });
     }
@@ -57,15 +59,15 @@ public class UserAdapterArtikel extends RecyclerView.Adapter<UserAdapterArtikel.
     }
 
     class MyViewHolder extends RecyclerView.ViewHolder{
-        TextView judul, penjelasan;
+        TextView judul, date;
         ImageView avatar;
 
 
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
             judul = itemView.findViewById(R.id.judul);
-            penjelasan = itemView.findViewById(R.id.penjelasan);
             avatar = itemView.findViewById(R.id.avatar);
+            date = itemView.findViewById(R.id.tv_date);
         }
     }
 }

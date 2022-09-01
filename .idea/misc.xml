@@ -51,12 +51,14 @@
         <entry key="..\:/android-project/2022/aplikasiku/app/src/main/res/drawable/cari.xml" value="0.1315" />
         <entry key="..\:/android-project/2022/aplikasiku/app/src/main/res/drawable/custom2.xml" value="0.1315" />
         <entry key="..\:/android-project/2022/aplikasiku/app/src/main/res/drawable/ic_baseline_add_24.xml" value="0.1655" />
+        <entry key="..\:/android-project/2022/aplikasiku/app/src/main/res/drawable/ic_baseline_image_24.xml" value="0.1655" />
         <entry key="..\:/android-project/2022/aplikasiku/app/src/main/res/drawable/ic_notifications_black_24dp.xml" value="0.1315" />
         <entry key="..\:/android-project/2022/aplikasiku/app/src/main/res/drawable/person.xml" value="0.1315" />
         <entry key="..\:/android-project/2022/aplikasiku/app/src/main/res/drawable/splash_screen.xml" value="0.1315" />
         <entry key="..\:/android-project/2022/aplikasiku/app/src/main/res/layout-w1240dp/activity_login.xml" value="0.24765625" />
+        <entry key="..\:/android-project/2022/aplikasiku/app/src/main/res/layout/activity_artikel.xml" value="0.22291666666666668" />
         <entry key="..\:/android-project/2022/aplikasiku/app/src/main/res/layout/activity_buka_edit_artikel.xml" value="0.22291666666666668" />
-        <entry key="..\:/android-project/2022/aplikasiku/app/src/main/res/layout/activity_edit_artikel.xml" value="0.22291666666666668" />
+        <entry key="..\:/android-project/2022/aplikasiku/app/src/main/res/layout/activity_edit_artikel.xml" value="0.22" />
         <entry key="..\:/android-project/2022/aplikasiku/app/src/main/res/layout/activity_edit_pantau.xml" value="0.22291666666666668" />
         <entry key="..\:/android-project/2022/aplikasiku/app/src/main/res/layout/activity_edit_rekam.xml" value="0.22291666666666668" />
         <entry key="..\:/android-project/2022/aplikasiku/app/src/main/res/layout/activity_home.xml" value="0.22291666666666668" />
@@ -68,9 +70,11 @@
         <entry key="..\:/android-project/2022/aplikasiku/app/src/main/res/layout/activity_register.xml" value="0.22291666666666668" />
         <entry key="..\:/android-project/2022/aplikasiku/app/src/main/res/layout/activity_rekam_medis.xml" value="0.25" />
         <entry key="..\:/android-project/2022/aplikasiku/app/src/main/res/layout/activity_splashscreen.xml" value="0.1" />
+        <entry key="..\:/android-project/2022/aplikasiku/app/src/main/res/layout/activity_tampil_artikel.xml" value="0.22291666666666668" />
         <entry key="..\:/android-project/2022/aplikasiku/app/src/main/res/layout/activity_tampil_pantau_kehamilan.xml" value="0.22291666666666668" />
         <entry key="..\:/android-project/2022/aplikasiku/app/src/main/res/layout/activity_tampilan_rekam.xml" value="0.33" />
-        <entry key="..\:/android-project/2022/aplikasiku/app/src/main/res/layout/popup_main.xml" value="0.22291666666666668" />
+        <entry key="..\:/android-project/2022/aplikasiku/app/src/main/res/layout/popup_main.xml" value="0.5" />
+        <entry key="..\:/android-project/2022/aplikasiku/app/src/main/res/layout/row_artikel.xml" value="0.22" />
         <entry key="..\:/android-project/2022/aplikasiku/app/src/main/res/layout/row_pantau_kehamilan.xml" value="0.33" />
         <entry key="..\:/android-project/2022/aplikasiku/app/src/main/res/layout/row_rekam_medis.xml" value="0.33" />
         <entry key="..\:/android-project/2022/aplikasiku/app/src/main/res/mipmap-anydpi-v26/ic_logo.xml" value="0.1315" />

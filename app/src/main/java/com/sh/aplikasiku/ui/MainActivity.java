@@ -94,20 +94,35 @@ public class MainActivity extends AppCompatActivity {
         popupWindow.setWidth(WindowManager.LayoutParams.WRAP_CONTENT);
         popupWindow.setHeight(WindowManager.LayoutParams.WRAP_CONTENT);
         popupWindow.setContentView(view);
-        popupWindow.showAsDropDown(ivProfile, -40, 18);
+        popupWindow.showAsDropDown(ivProfile, -200, 50);
 
         TextView tvLogout = view.findViewById(R.id.tv_logout);
 
         tvLogout.setOnClickListener(v -> {
-            //clear sharedpref
-            SharedPreferences.Editor editor = sharedPref.edit();
-            editor.clear();
-            editor.apply();
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setCancelable(true);
+            builder.setTitle("Perhatian!");
+            builder.setMessage("Apakah anda ingin keluar?");
+            builder.setPositiveButton("Ya",
+                    (dialog, which) -> {
+                        //clear sharedpref
+                        SharedPreferences.Editor editor = sharedPref.edit();
+                        editor.clear();
+                        editor.apply();
 
-            //logout from user
-            FirebaseAuth.getInstance().signOut();
-            startActivity(new Intent(getApplicationContext(), LoginActivity.class));
-            finish();
+                        //logout from user
+                        FirebaseAuth.getInstance().signOut();
+                        startActivity(new Intent(getApplicationContext(), LoginActivity.class));
+                        finish();
+
+                        dialog.dismiss();
+                    });
+            builder.setNegativeButton("Batal", (dialog, which) -> {
+                dialog.dismiss();
+            });
+
+            AlertDialog dialog = builder.create();
+            dialog.show();
         });
     }
 

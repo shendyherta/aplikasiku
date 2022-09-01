@@ -18,6 +18,8 @@ import android.widget.Toast;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.sh.aplikasiku.R;
@@ -132,38 +134,76 @@ public class PantauKehamilan extends AppCompatActivity {
 
     private void getData() {
         progressDialog.show();
-        db.collection("pantau")
-                .get()
-                .addOnCompleteListener(task -> {
-                    list.clear();
-                    if (task.isSuccessful()) {
-                        try {
-                            if (task.getResult().getDocuments().size() == 0) {
-                                Toast.makeText(PantauKehamilan.this, "Belum ada data pantau kehamilan!", Toast.LENGTH_SHORT).show();
-                            } else {
-                                for (QueryDocumentSnapshot document : task.getResult()) {
-                                    String id = document.getId();
-                                    String idUser = document.get("idPasien").toString();
-                                    String pasien = document.get("pasien").toString();
-                                    String denyutjantung = document.get("denyutjantung").toString();
-                                    String kondisibayi = document.get("kondisibayi").toString();
-                                    String dateCreated = document.get("dateCreated").toString();
-                                    String dateUpdated = document.get("dateUpdated").toString();
-                                    UserPantau user = new UserPantau(id, idUser, pasien,
-                                            denyutjantung, kondisibayi, dateCreated, dateUpdated);
-                                    user.setId(document.getId());
-                                    list.add(user);
+
+        if (userrole == 1) {
+            db.collection("pantau")
+                    .get()
+                    .addOnCompleteListener(task -> {
+                        list.clear();
+                        if (task.isSuccessful()) {
+                            try {
+                                if (task.getResult().getDocuments().size() == 0) {
+                                    Toast.makeText(PantauKehamilan.this, "Belum ada data pantau kehamilan!", Toast.LENGTH_SHORT).show();
+                                } else {
+                                    for (QueryDocumentSnapshot document : task.getResult()) {
+                                        String id = document.getId();
+                                        String idUser = document.get("idPasien").toString();
+                                        String pasien = document.get("pasien").toString();
+                                        String denyutjantung = document.get("denyutjantung").toString();
+                                        String kondisibayi = document.get("kondisibayi").toString();
+                                        String dateCreated = document.get("dateCreated").toString();
+                                        String dateUpdated = document.get("dateUpdated").toString();
+                                        UserPantau user = new UserPantau(id, idUser, pasien,
+                                                denyutjantung, kondisibayi, dateCreated, dateUpdated);
+                                        user.setId(document.getId());
+                                        list.add(user);
+                                    }
+                                    showPantauKehamilan();
                                 }
-                                showPantauKehamilan();
+                            } catch (Exception e) {
+                                Toast.makeText(getApplicationContext(), "Coba lagi nanti!", Toast.LENGTH_SHORT).show();
                             }
-                        } catch (Exception e) {
-                            Toast.makeText(getApplicationContext(), "Coba lagi nanti!", Toast.LENGTH_SHORT).show();
+                        } else {
+                            Toast.makeText(getApplicationContext(), "Data Gagal", Toast.LENGTH_SHORT).show();
                         }
-                    } else {
-                        Toast.makeText(getApplicationContext(), "Data Gagal", Toast.LENGTH_SHORT).show();
-                    }
-                    progressDialog.dismiss();
-                });
+                        progressDialog.dismiss();
+                    });
+        } else {
+            FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+            db.collection("pantau")
+                    .whereEqualTo("idPasien", firebaseUser.getUid())
+                    .get()
+                    .addOnCompleteListener(task -> {
+                        list.clear();
+                        if (task.isSuccessful()) {
+                            try {
+                                if (task.getResult().getDocuments().size() == 0) {
+                                    Toast.makeText(PantauKehamilan.this, "Belum ada data pantau kehamilan!", Toast.LENGTH_SHORT).show();
+                                } else {
+                                    for (QueryDocumentSnapshot document : task.getResult()) {
+                                        String id = document.getId();
+                                        String idUser = document.get("idPasien").toString();
+                                        String pasien = document.get("pasien").toString();
+                                        String denyutjantung = document.get("denyutjantung").toString();
+                                        String kondisibayi = document.get("kondisibayi").toString();
+                                        String dateCreated = document.get("dateCreated").toString();
+                                        String dateUpdated = document.get("dateUpdated").toString();
+                                        UserPantau user = new UserPantau(id, idUser, pasien,
+                                                denyutjantung, kondisibayi, dateCreated, dateUpdated);
+                                        user.setId(document.getId());
+                                        list.add(user);
+                                    }
+                                    showPantauKehamilan();
+                                }
+                            } catch (Exception e) {
+                                Toast.makeText(getApplicationContext(), "Coba lagi nanti!", Toast.LENGTH_SHORT).show();
+                            }
+                        } else {
+                            Toast.makeText(getApplicationContext(), "Data Gagal", Toast.LENGTH_SHORT).show();
+                        }
+                        progressDialog.dismiss();
+                    });
+        }
     }
 
     private void deleteData(String id) {
@@ -181,9 +221,7 @@ public class PantauKehamilan extends AppCompatActivity {
 
     private void showPantauKehamilan() {
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getApplicationContext(), LinearLayoutManager.VERTICAL, false);
-        RecyclerView.ItemDecoration decoration = new DividerItemDecoration(getApplicationContext(), DividerItemDecoration.VERTICAL);
         recyclerView.setLayoutManager(layoutManager);
-        recyclerView.addItemDecoration(decoration);
 
         if (userrole == 1) {
             recyclerView.setAdapter(adminAdapterPantau);

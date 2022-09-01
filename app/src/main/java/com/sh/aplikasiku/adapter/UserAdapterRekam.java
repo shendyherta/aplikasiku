@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.widget.LinearLayoutCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.sh.aplikasiku.R;
@@ -54,6 +55,7 @@ public class UserAdapterRekam extends RecyclerView.Adapter<UserAdapterRekam.MyVi
             intent.putExtra("suhu", list.get(position).getSuhu());
             intent.putExtra("denyut", list.get(position).getDenyutJantung());
             intent.putExtra("kondisi", list.get(position).getKondisiHB());
+            intent.putExtra("dateCreated", list.get(position).getDateCreated());
             context.startActivity(intent);
         });
     }
@@ -64,7 +66,8 @@ public class UserAdapterRekam extends RecyclerView.Adapter<UserAdapterRekam.MyVi
     }
 
     class MyViewHolder extends RecyclerView.ViewHolder {
-        TextView berat, lingkar, suhu, laju, kondisi, tekanan, denyut, pasien, date;
+        TextView berat, lingkar, suhu, laju, kondisi, tekanan, denyut, date;
+        LinearLayoutCompat llPasien;
 
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -75,10 +78,10 @@ public class UserAdapterRekam extends RecyclerView.Adapter<UserAdapterRekam.MyVi
             laju = itemView.findViewById(R.id.laju);
             suhu = itemView.findViewById(R.id.suhu);
             tekanan = itemView.findViewById(R.id.tekanan);
-            pasien = itemView.findViewById(R.id.ll_pasien);
             date = itemView.findViewById(R.id.tv_date);
+            llPasien = itemView.findViewById(R.id.ll_pasien);
 
-            pasien.setVisibility(View.GONE);
+            llPasien.setVisibility(View.GONE);
         }
     }
 }

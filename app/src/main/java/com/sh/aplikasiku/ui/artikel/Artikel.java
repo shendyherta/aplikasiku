@@ -67,7 +67,7 @@ public class Artikel extends AppCompatActivity {
         if (userrole == 1) {
             adminAdapterArtikel = new AdminAdapterArtikel(this, list);
             adminAdapterArtikel.setDialog(pos -> {
-                final CharSequence[] dialogItem = {"lihat","edit", "hapus"};
+                final CharSequence[] dialogItem = {"Detail","Edit", "Hapus"};
                 AlertDialog.Builder dialog = new AlertDialog.Builder(Artikel.this);
                 dialog.setItems(dialogItem, (dialogInterface, i) -> {
                     switch(i){
@@ -77,6 +77,8 @@ public class Artikel extends AppCompatActivity {
                             intentbaca.putExtra("judul", list.get(pos).getJudul());
                             intentbaca.putExtra("penjelasan", list.get(pos).getPenjelasan());
                             intentbaca.putExtra("avatar", list.get(pos).getAvatar());
+                            intentbaca.putExtra("dateCreated", list.get(pos).getDateCreated());
+                            intentbaca.putExtra("dateUpdated", list.get(pos).getDateUpdated());
                             startActivity(intentbaca);
                             break;
                         case 1:
@@ -85,6 +87,9 @@ public class Artikel extends AppCompatActivity {
                             intent.putExtra("judul", list.get(pos).getJudul());
                             intent.putExtra("penjelasan", list.get(pos).getPenjelasan());
                             intent.putExtra("avatar", list.get(pos).getAvatar());
+                            intent.putExtra("dateCreated", list.get(pos).getDateCreated());
+                            intent.putExtra("dateUpdated", list.get(pos).getDateUpdated());
+                            intent.putExtra("option", "edit");
                             startActivity(intent);
                             break;
                         case 2:
@@ -121,6 +126,7 @@ public class Artikel extends AppCompatActivity {
 
     private void getData(){
         progressDialog.show();
+
         db.collection("artikel")
                 .get()
                 .addOnCompleteListener(task -> {
@@ -131,7 +137,15 @@ public class Artikel extends AppCompatActivity {
                                 Toast.makeText(Artikel.this, "Belum ada artikel!", Toast.LENGTH_SHORT).show();
                             } else {
                                 for (QueryDocumentSnapshot document : task.getResult()) {
-                                    UserArtikel userArtikel = new UserArtikel(document.getString("judul"), document.getString("penjelasan"), document.getString("avatar"));
+                                    String id = document.getId();
+                                    String judul = document.get("judul").toString();
+                                    String penjelasan = document.get("penjelasan").toString();
+                                    String avatar = document.get("avatar").toString();
+                                    String dateCreated = document.get("dateCreated").toString();
+                                    String dateUpdated = document.get("dateUpdated").toString();
+                                    UserArtikel userArtikel = new UserArtikel(
+                                            id, judul, penjelasan, avatar, dateCreated, dateUpdated
+                                    );
                                     userArtikel.setId(document.getId());
                                     list.add(userArtikel);
                                 }
@@ -156,12 +170,9 @@ public class Artikel extends AppCompatActivity {
                         progressDialog.dismiss();
                     Toast.makeText(getApplicationContext(), "Data Gagal Dihapus", Toast.LENGTH_SHORT).show();
                     }else{
-                        FirebaseStorage.getInstance().getReferenceFromUrl(avatar).delete().addOnCompleteListener(new OnCompleteListener<Void>() {
-                            @Override
-                            public void onComplete(@NonNull Task<Void> task) {
-                                progressDialog.dismiss();
-                                getData();
-                            }
+                        FirebaseStorage.getInstance().getReferenceFromUrl(avatar).delete().addOnCompleteListener(task1 -> {
+                            progressDialog.dismiss();
+                            getData();
                         });
                     }
 
@@ -170,9 +181,7 @@ public class Artikel extends AppCompatActivity {
 
     private void showArtikel() {
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getApplicationContext(), LinearLayoutManager.VERTICAL, false);
-        RecyclerView.ItemDecoration decoration = new DividerItemDecoration(getApplicationContext(), DividerItemDecoration.VERTICAL);
         recyclerView.setLayoutManager(layoutManager);
-        recyclerView.addItemDecoration(decoration);
 
         if (userrole == 1) {
             recyclerView.setAdapter(adminAdapterArtikel);

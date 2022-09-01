@@ -46,8 +46,8 @@ public class TampilanRekam extends AppCompatActivity {
         tampilsuhu = findViewById(R.id.suhu);
         tampildenyut = findViewById(R.id.denyut);
         tampilpasien = findViewById(R.id.tv_pasien);
-        tampilUpdated = findViewById(R.id.tv_update);
         tampilCreated = findViewById(R.id.tv_date);
+        tampilUpdated = findViewById(R.id.tv_update);
         llPasien = findViewById(R.id.ll_pasien);
         llUpdate = findViewById(R.id.ll_update);
 

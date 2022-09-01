@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.widget.LinearLayoutCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.sh.aplikasiku.R;
@@ -58,16 +59,17 @@ public class UserAdapterPantau extends RecyclerView.Adapter<UserAdapterPantau.My
     }
 
     class MyViewHolder extends RecyclerView.ViewHolder {
-        TextView kondisibayi, denyutjantung, pasien, date;
+        TextView kondisibayi, denyutjantung, date;
+        LinearLayoutCompat llPasien;
 
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
             denyutjantung = itemView.findViewById(R.id.denyutjantung);
             kondisibayi = itemView.findViewById(R.id.kondisibayi);
-            pasien = itemView.findViewById(R.id.tv_pasien);
             date = itemView.findViewById(R.id.tv_date);
+            llPasien = itemView.findViewById(R.id.ll_pasien);
 
-            pasien.setVisibility(View.GONE);
+            llPasien.setVisibility(View.GONE);
         }
     }
 }

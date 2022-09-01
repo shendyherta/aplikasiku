@@ -15,6 +15,8 @@ import android.view.View;
 import android.widget.Toast;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.sh.aplikasiku.R;
@@ -53,7 +55,6 @@ public class RekamMedis extends AppCompatActivity {
 
         recyclerView = findViewById(R.id.recyclerview);
         btnAdd = findViewById(R.id.btn_add);
-        llPasien = findViewById(R.id.ll_pasien);
 
         progressDialog = new ProgressDialog(RekamMedis.this);
         progressDialog.setTitle("loading");
@@ -89,7 +90,6 @@ public class RekamMedis extends AppCompatActivity {
                             intentbaca.putExtra("kondisi", list.get(pos).getKondisiHB());
                             intentbaca.putExtra("dateCreated", list.get(pos).getDateCreated());
                             intentbaca.putExtra("dateUpdated", list.get(pos).getDateUpdated());
-                            intentbaca.putExtra("option", "tampil");
                             startActivity(intentbaca);
                             break;
                         case 1:
@@ -116,7 +116,6 @@ public class RekamMedis extends AppCompatActivity {
                 dialog.show();
             });
         } else {
-            llPasien.setVisibility(View.GONE);
             btnAdd.setVisibility(View.GONE);
             userAdapterRekam = new UserAdapterRekam(this, list);
         }
@@ -143,44 +142,88 @@ public class RekamMedis extends AppCompatActivity {
 
     private void getData() {
         progressDialog.show();
-        db.collection("rekammedis")
-                .get()
-                .addOnCompleteListener(task -> {
-                    list.clear();
-                    if (task.isSuccessful()) {
-                        try {
-                            Log.d("QWE", "getData: " + task.getResult().getDocuments());
-                            if (task.getResult().getDocuments().size() == 0) {
-                                Toast.makeText(RekamMedis.this, "Belum ada data rekam medis!", Toast.LENGTH_SHORT).show();
-                            } else {
-                                for (QueryDocumentSnapshot document : task.getResult()) {
-                                    String id = document.getId();
-                                    String idUser = document.get("idPasien").toString();
-                                    String pasien = document.get("pasien").toString();
-                                    String berat = document.get("berat").toString();
-                                    String denyut = document.get("denyut").toString();
-                                    String laju = document.get("laju").toString();
-                                    String suhu = document.get("suhu").toString();
-                                    String tekanan = document.get("tekanan").toString();
-                                    String kondisi = document.get("kondisi").toString();
-                                    String lingkar = document.get("lingkar").toString();
-                                    String dateCreated = document.get("dateCreated").toString();
-                                    String dateUpdated = document.get("dateUpdated").toString();
-                                    UserRekam user = new UserRekam(id, idUser, pasien, berat, lingkar, kondisi, tekanan, laju, suhu, denyut, dateCreated, dateUpdated);
-                                    user.setId(document.getId());
-                                    list.add(user);
+
+        if (userrole == 1) {
+            db.collection("rekammedis")
+                    .get()
+                    .addOnCompleteListener(task -> {
+                        list.clear();
+                        if (task.isSuccessful()) {
+                            try {
+                                if (task.getResult().getDocuments().size() == 0) {
+                                    Toast.makeText(RekamMedis.this, "Belum ada data rekam medis!", Toast.LENGTH_SHORT).show();
+                                } else {
+                                    for (QueryDocumentSnapshot document : task.getResult()) {
+                                        String id = document.getId();
+                                        String idUser = document.get("idPasien").toString();
+                                        String pasien = document.get("pasien").toString();
+                                        String berat = document.get("berat").toString();
+                                        String denyut = document.get("denyut").toString();
+                                        String laju = document.get("laju").toString();
+                                        String suhu = document.get("suhu").toString();
+                                        String tekanan = document.get("tekanan").toString();
+                                        String kondisi = document.get("kondisi").toString();
+                                        String lingkar = document.get("lingkar").toString();
+                                        String dateCreated = document.get("dateCreated").toString();
+                                        String dateUpdated = document.get("dateUpdated").toString();
+                                        UserRekam user = new UserRekam(id, idUser, pasien, berat, lingkar, kondisi, tekanan, laju, suhu, denyut, dateCreated, dateUpdated);
+                                        user.setId(document.getId());
+                                        list.add(user);
+                                    }
+                                    showRekamMedis();
                                 }
-                                showRekamMedis();
+                            } catch (Exception e) {
+                                Toast.makeText(getApplicationContext(), "Coba lagi nanti!", Toast.LENGTH_SHORT).show();
+                                Log.d("REKAMMEDISGETDATA", "getData: " + e.getMessage());
                             }
-                        } catch (Exception e) {
-                            Toast.makeText(getApplicationContext(), "Coba lagi nanti!", Toast.LENGTH_SHORT).show();
-                            Log.d("REKAMMEDISGETDATA", "getData: " + e.getMessage());
+                        } else {
+                            Toast.makeText(getApplicationContext(), "Data Gagal", Toast.LENGTH_SHORT).show();
                         }
-                    } else {
-                        Toast.makeText(getApplicationContext(), "Data Gagal", Toast.LENGTH_SHORT).show();
-                    }
-                    progressDialog.dismiss();
-                });
+                        progressDialog.dismiss();
+                    });
+        } else {
+            FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+            db.collection("rekammedis")
+                    .whereEqualTo("idPasien", firebaseUser.getUid())
+                    .get()
+                    .addOnCompleteListener(task -> {
+                        list.clear();
+                        if (task.isSuccessful()) {
+                            try {
+                                Log.d("QWE", "getData: " + task.getResult().getDocuments());
+                                if (task.getResult().getDocuments().size() == 0) {
+                                    Toast.makeText(RekamMedis.this, "Belum ada data rekam medis!", Toast.LENGTH_SHORT).show();
+                                } else {
+                                    for (QueryDocumentSnapshot document : task.getResult()) {
+                                        String id = document.getId();
+                                        String idUser = document.get("idPasien").toString();
+                                        String pasien = document.get("pasien").toString();
+                                        String berat = document.get("berat").toString();
+                                        String denyut = document.get("denyut").toString();
+                                        String laju = document.get("laju").toString();
+                                        String suhu = document.get("suhu").toString();
+                                        String tekanan = document.get("tekanan").toString();
+                                        String kondisi = document.get("kondisi").toString();
+                                        String lingkar = document.get("lingkar").toString();
+                                        String dateCreated = document.get("dateCreated").toString();
+                                        String dateUpdated = document.get("dateUpdated").toString();
+                                        UserRekam user = new UserRekam(id, idUser, pasien, berat, lingkar, kondisi, tekanan, laju, suhu, denyut, dateCreated, dateUpdated);
+                                        user.setId(document.getId());
+                                        list.add(user);
+                                    }
+                                    showRekamMedis();
+                                }
+                            } catch (Exception e) {
+                                Toast.makeText(getApplicationContext(), "Coba lagi nanti!", Toast.LENGTH_SHORT).show();
+                                Log.d("REKAMMEDISGETDATA", "getData: " + e.getMessage());
+                            }
+                        } else {
+                            Toast.makeText(getApplicationContext(), "Data Gagal", Toast.LENGTH_SHORT).show();
+                        }
+                        progressDialog.dismiss();
+                    });
+        }
+
     }
 
     private void deleteData(String id) {
@@ -198,9 +241,7 @@ public class RekamMedis extends AppCompatActivity {
 
     private void showRekamMedis() {
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getApplicationContext(), LinearLayoutManager.VERTICAL, false);
-        RecyclerView.ItemDecoration decoration = new DividerItemDecoration(getApplicationContext(), DividerItemDecoration.VERTICAL);
         recyclerView.setLayoutManager(layoutManager);
-        recyclerView.addItemDecoration(decoration);
 
         if (userrole == 1) {
             recyclerView.setAdapter(adminAdapterRekam);

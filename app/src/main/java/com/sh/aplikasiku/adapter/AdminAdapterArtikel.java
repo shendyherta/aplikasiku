@@ -38,14 +38,14 @@ public class AdminAdapterArtikel extends RecyclerView.Adapter<AdminAdapterArtike
     @NonNull
     @Override
     public MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.row_user, parent, false);
+        View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.row_artikel, parent, false);
         return new MyViewHolder(itemView);
     }
 
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
         holder.judul.setText(list.get(position).getJudul());
-        holder.penjelasan.setText(list.get(position).getPenjelasan());
+        holder.date.setText(list.get(position).getDateCreated());
         Glide.with(context).load(list.get(position).getAvatar()).into(holder.avatar);
     }
 
@@ -55,21 +55,19 @@ public class AdminAdapterArtikel extends RecyclerView.Adapter<AdminAdapterArtike
     }
 
     class MyViewHolder extends RecyclerView.ViewHolder{
-        TextView judul, penjelasan;
+        TextView judul, date;
         ImageView avatar;
 
 
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
             judul = itemView.findViewById(R.id.judul);
-            penjelasan = itemView.findViewById(R.id.penjelasan);
             avatar = itemView.findViewById(R.id.avatar);
-            itemView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    if(dialog!=null){
-                        dialog.onClick(getLayoutPosition());
-                    }
+            date = itemView.findViewById(R.id.tv_date);
+
+            itemView.setOnClickListener(view -> {
+                if(dialog!=null){
+                    dialog.onClick(getLayoutPosition());
                 }
             });
         }
