@@ -55,32 +55,6 @@ public class MainActivity extends AppCompatActivity {
 
         ivProfile.setOnClickListener(v -> {
             popupWindow();
-
-
-//            AlertDialog.Builder builder = new AlertDialog.Builder(this);
-//            builder.setCancelable(true);
-//            builder.setTitle("Perhatian!");
-//            builder.setMessage("Apakah anda ingin keluar?");
-//            builder.setPositiveButton("Ya",
-//                    (dialog, which) -> {
-//                        //clear sharedpref
-//                        SharedPreferences.Editor editor = sharedPref.edit();
-//                        editor.clear();
-//                        editor.apply();
-//
-//                        //logout from user
-//                        FirebaseAuth.getInstance().signOut();
-//                        startActivity(new Intent(getApplicationContext(), LoginActivity.class));
-//                        finish();
-//
-//                        dialog.dismiss();
-//                    });
-//            builder.setNegativeButton("Batal", (dialog, which) -> {
-//                dialog.dismiss();
-//            });
-//
-//            AlertDialog dialog = builder.create();
-//            dialog.show();
         });
 
         Glide.with(this).load("https://firebasestorage.googleapis.com/v0/b/aplikasiku-8cb62.appspot.com/o/images%2FIMG1661410701197.jpeg?alt=media&token=f30eb211-ffdf-4d5a-84c3-46c123ddbb1e").circleCrop().into(ivProfile);

@@ -40,6 +40,7 @@ public class EditRekam extends AppCompatActivity {
         setContentView(R.layout.activity_edit_rekam);
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setTitle("");
 
         editberat = findViewById(R.id.berat);
         editlingkar = findViewById(R.id.lingkar);
@@ -71,7 +72,7 @@ public class EditRekam extends AppCompatActivity {
                         editsuhu.getText().toString(),
                         editdenyut.getText().toString());
             } else {
-                Toast.makeText(getApplicationContext(), "Silakan isi dulu artikel", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(), "Mohon lengkapi form!", Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -85,11 +86,11 @@ public class EditRekam extends AppCompatActivity {
                 id_user = intent.getStringExtra("idUser");
                 editberat.setText(intent.getStringExtra("berat"));
                 editlingkar.setText(intent.getStringExtra("lingkar"));
-                editkondisi.setText(intent.getStringExtra("laju"));
+                editkondisi.setText(intent.getStringExtra("kondisi"));
                 edittekanan.setText(intent.getStringExtra("tekanan"));
-                editlaju.setText(intent.getStringExtra("suhu"));
-                editsuhu.setText(intent.getStringExtra("denyut"));
-                editdenyut.setText(intent.getStringExtra("kondisi"));
+                editlaju.setText(intent.getStringExtra("laju"));
+                editsuhu.setText(intent.getStringExtra("suhu"));
+                editdenyut.setText(intent.getStringExtra("denyut"));
                 dateCreated = intent.getStringExtra("dateCreated");
                 dateUpdated = intent.getStringExtra("dateUpdated");
                 spinner_pasien.setEnabled(false);
@@ -131,7 +132,7 @@ public class EditRekam extends AppCompatActivity {
             rekam.put("laju", laju);
             rekam.put("suhu", suhu);
             rekam.put("denyut", denyut);
-            rekam.put("dateCreated", date);
+            rekam.put("dateCreated", dateCreated);
             rekam.put("dateUpdated", date);
             db.collection("rekammedis").document(id)
                     .set(rekam)

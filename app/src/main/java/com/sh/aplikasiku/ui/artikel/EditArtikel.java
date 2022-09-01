@@ -51,6 +51,7 @@ public class EditArtikel extends AppCompatActivity {
         setContentView(R.layout.activity_edit_artikel);
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setTitle("");
 
         editjudul = findViewById(R.id.judul);
         editpenjelasan = findViewById(R.id.penjelasan);

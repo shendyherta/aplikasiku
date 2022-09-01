@@ -45,6 +45,7 @@ public class RekamMedis extends AppCompatActivity {
         setContentView(R.layout.activity_rekam_medis);
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setTitle("Rekam Medis");
 
         //get userrole
         sharedPref = getSharedPreferences(getString(R.string.data_user), MODE_PRIVATE);

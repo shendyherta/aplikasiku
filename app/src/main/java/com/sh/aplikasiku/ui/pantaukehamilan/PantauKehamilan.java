@@ -47,6 +47,7 @@ public class PantauKehamilan extends AppCompatActivity {
         setContentView(R.layout.activity_pantau_kehamilan);
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setTitle("Pantau Kehamilan");
 
         //get userdata
         sharedPref = getSharedPreferences(getString(R.string.data_user), MODE_PRIVATE);
@@ -70,30 +71,36 @@ public class PantauKehamilan extends AppCompatActivity {
             btnAdd.setVisibility(View.VISIBLE);
             adminAdapterPantau = new AdminAdapterPantau(this, list);
             adminAdapterPantau.setDialog(pos -> {
-                final CharSequence[] dialogItem = {"lihat", "edit", "hapus"};
+                final CharSequence[] dialogItem = {"Detail", "Edit", "Hapus"};
                 AlertDialog.Builder dialog = new AlertDialog.Builder(PantauKehamilan.this);
-                dialog.setItems(dialogItem, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        switch (i) {
-                            case 0:
-                                Intent intentbaca = new Intent(getApplicationContext(), TampilPantauKehamilan.class);
-                                intentbaca.putExtra("id", list.get(pos).getId());
-                                intentbaca.putExtra("denyutjantung", list.get(pos).getDenyut());
-                                intentbaca.putExtra("kondisibayi", list.get(pos).getKondisi());
-                                startActivity(intentbaca);
-                                break;
-                            case 1:
-                                Intent intent = new Intent(getApplicationContext(), EditPantau.class);
-                                intent.putExtra("id", list.get(pos).getId());
-                                intent.putExtra("denyutjantung", list.get(pos).getDenyut());
-                                intent.putExtra("kondisibayi", list.get(pos).getKondisi());
-                                startActivity(intent);
-                                break;
-                            case 2:
-                                deleteData(list.get(pos).getId());
-                                break;
-                        }
+                dialog.setItems(dialogItem, (dialogInterface, i) -> {
+                    switch (i) {
+                        case 0:
+                            Intent intentbaca = new Intent(getApplicationContext(), TampilPantauKehamilan.class);
+                            intentbaca.putExtra("id", list.get(pos).getId());
+                            intentbaca.putExtra("idUser", list.get(pos).getIdUser());
+                            intentbaca.putExtra("pasien", list.get(pos).getPasien());
+                            intentbaca.putExtra("denyutjantung", list.get(pos).getDenyut());
+                            intentbaca.putExtra("kondisibayi", list.get(pos).getKondisi());
+                            intentbaca.putExtra("dateCreated", list.get(pos).getDateCreated());
+                            intentbaca.putExtra("dateUpdated", list.get(pos).getDateUpdated());
+                            startActivity(intentbaca);
+                            break;
+                        case 1:
+                            Intent intent = new Intent(getApplicationContext(), EditPantau.class);
+                            intent.putExtra("id", list.get(pos).getId());
+                            intent.putExtra("idUser", list.get(pos).getIdUser());
+                            intent.putExtra("pasien", list.get(pos).getPasien());
+                            intent.putExtra("denyutjantung", list.get(pos).getDenyut());
+                            intent.putExtra("kondisibayi", list.get(pos).getKondisi());
+                            intent.putExtra("dateCreated", list.get(pos).getDateCreated());
+                            intent.putExtra("dateUpdated", list.get(pos).getDateUpdated());
+                            intent.putExtra("option", "edit");
+                            startActivity(intent);
+                            break;
+                        case 2:
+                            deleteData(list.get(pos).getId());
+                            break;
                     }
                 });
                 dialog.show();
@@ -131,14 +138,19 @@ public class PantauKehamilan extends AppCompatActivity {
                     list.clear();
                     if (task.isSuccessful()) {
                         try {
-                            Log.d("QWE", "getData: " + task.getResult().getDocuments());
                             if (task.getResult().getDocuments().size() == 0) {
                                 Toast.makeText(PantauKehamilan.this, "Belum ada data pantau kehamilan!", Toast.LENGTH_SHORT).show();
                             } else {
                                 for (QueryDocumentSnapshot document : task.getResult()) {
+                                    String id = document.getId();
+                                    String idUser = document.get("idPasien").toString();
+                                    String pasien = document.get("pasien").toString();
                                     String denyutjantung = document.get("denyutjantung").toString();
                                     String kondisibayi = document.get("kondisibayi").toString();
-                                    UserPantau user = new UserPantau(denyutjantung, kondisibayi);
+                                    String dateCreated = document.get("dateCreated").toString();
+                                    String dateUpdated = document.get("dateUpdated").toString();
+                                    UserPantau user = new UserPantau(id, idUser, pasien,
+                                            denyutjantung, kondisibayi, dateCreated, dateUpdated);
                                     user.setId(document.getId());
                                     list.add(user);
                                 }
@@ -158,15 +170,12 @@ public class PantauKehamilan extends AppCompatActivity {
         progressDialog.show();
         db.collection("pantau").document(id)
                 .delete()
-                .addOnCompleteListener(new OnCompleteListener<Void>() {
-                    @Override
-                    public void onComplete(@NonNull Task<Void> task) {
-                        if (!task.isSuccessful()) {
-                            Toast.makeText(getApplicationContext(), "Data Gagal Dihapus", Toast.LENGTH_SHORT).show();
-                        }
-                        progressDialog.dismiss();
-                        getData();
+                .addOnCompleteListener(task -> {
+                    if (!task.isSuccessful()) {
+                        Toast.makeText(getApplicationContext(), "Data Gagal Dihapus", Toast.LENGTH_SHORT).show();
                     }
+                    progressDialog.dismiss();
+                    getData();
                 });
     }
 

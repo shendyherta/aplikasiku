@@ -36,6 +36,7 @@ public class TampilArtikel extends AppCompatActivity {
         setContentView(R.layout.activity_tampil_artikel);
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setTitle("");
 
         recyclerView = findViewById(R.id.recyclerview);
         tampiljudul = findViewById(R.id.judul);

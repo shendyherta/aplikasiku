@@ -22,6 +22,7 @@ public class Rujukan extends AppCompatActivity {
         setContentView(R.layout.activity_rujukan);
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setTitle("Rujukan");
 
         mWebView = (WebView) findViewById(R.id.webView);
 

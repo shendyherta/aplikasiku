@@ -20,14 +20,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class TampilanRekam extends AppCompatActivity {
-    private RecyclerView recyclerView;
-    private FloatingActionButton btnAdd;
-    private FirebaseFirestore db = FirebaseFirestore.getInstance();
-    private List<UserRekam> list = new ArrayList<>();
     private TextView tampilberat, tampillingkar, tampilkondisi, tampiltekanan, tampillaju,
-            tampilsuhu, tampildenyut, tampilpasien;
-    private LinearLayoutCompat llPasien;
-    private String id = "";
+            tampilsuhu, tampildenyut, tampilpasien, tampilUpdated, tampilCreated;
+    private LinearLayoutCompat llPasien, llUpdate;
     private SharedPreferences sharedPref;
     private int userrole;
 
@@ -37,12 +32,12 @@ public class TampilanRekam extends AppCompatActivity {
         setContentView(R.layout.activity_tampilan_rekam);
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setTitle("");
 
         //get userrole
         sharedPref = getSharedPreferences(getString(R.string.data_user), MODE_PRIVATE);
         userrole = sharedPref.getInt(getString(R.string.user_role), 0);
 
-        recyclerView = findViewById(R.id.recyclerview);
         tampilberat = findViewById(R.id.berat);
         tampillingkar = findViewById(R.id.lingkar);
         tampilkondisi = findViewById(R.id.kondisi);
@@ -51,13 +46,15 @@ public class TampilanRekam extends AppCompatActivity {
         tampilsuhu = findViewById(R.id.suhu);
         tampildenyut = findViewById(R.id.denyut);
         tampilpasien = findViewById(R.id.tv_pasien);
+        tampilUpdated = findViewById(R.id.tv_update);
+        tampilCreated = findViewById(R.id.tv_date);
         llPasien = findViewById(R.id.ll_pasien);
+        llUpdate = findViewById(R.id.ll_update);
 
         Intent intent = getIntent();
 
         if (userrole == 1) {
             if (intent != null) {
-                id = intent.getStringExtra("id");
                 tampilberat.setText(intent.getStringExtra("berat"));
                 tampillingkar.setText(intent.getStringExtra("lingkar"));
                 tampillaju.setText(intent.getStringExtra("laju"));
@@ -66,10 +63,11 @@ public class TampilanRekam extends AppCompatActivity {
                 tampildenyut.setText(intent.getStringExtra("denyut"));
                 tampilkondisi.setText(intent.getStringExtra("kondisi"));
                 tampilpasien.setText(intent.getStringExtra("pasien"));
+                tampilUpdated.setText(intent.getStringExtra("dateUpdated"));
+                tampilCreated.setText(intent.getStringExtra("dateCreated"));
             }
         } else {
             if (intent != null) {
-                id = intent.getStringExtra("id");
                 tampilberat.setText(intent.getStringExtra("berat"));
                 tampillingkar.setText(intent.getStringExtra("lingkar"));
                 tampillaju.setText(intent.getStringExtra("laju"));
@@ -77,7 +75,9 @@ public class TampilanRekam extends AppCompatActivity {
                 tampilsuhu.setText(intent.getStringExtra("suhu"));
                 tampildenyut.setText(intent.getStringExtra("denyut"));
                 tampilkondisi.setText(intent.getStringExtra("kondisi"));
+                tampilCreated.setText(intent.getStringExtra("dateCreated"));
                 llPasien.setVisibility(View.GONE);
+                llUpdate.setVisibility(View.GONE);
             }
         }
 

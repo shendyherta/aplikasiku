@@ -4,7 +4,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="20dp"
     tools:context=".ui.rekammedis.RekamMedis">
 
     <androidx.recyclerview.widget.RecyclerView
@@ -12,6 +11,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:layout_constraintTop_toTopOf="parent"
+        android:padding="20dp"
         tools:itemCount="3"
         tools:listitem="@layout/row_rekam_medis" />
 

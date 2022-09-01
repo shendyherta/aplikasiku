@@ -37,12 +37,17 @@ public class UserAdapterPantau extends RecyclerView.Adapter<UserAdapterPantau.My
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
         holder.denyutjantung.setText(list.get(position).getDenyut());
         holder.kondisibayi.setText(list.get(position).getKondisi());
+        holder.date.setText(list.get(position).getDateCreated());
 
         holder.itemView.setOnClickListener(v -> {
             Intent intentbaca = new Intent(context, TampilPantauKehamilan.class);
             intentbaca.putExtra("id", list.get(position).getId());
+            intentbaca.putExtra("idUser", list.get(position).getIdUser());
+            intentbaca.putExtra("pasien", list.get(position).getPasien());
             intentbaca.putExtra("denyutjantung", list.get(position).getDenyut());
             intentbaca.putExtra("kondisibayi", list.get(position).getKondisi());
+            intentbaca.putExtra("dateCreated", list.get(position).getDateCreated());
+            intentbaca.putExtra("dateUpdated", list.get(position).getDateUpdated());
             context.startActivity(intentbaca);
         });
     }
@@ -53,12 +58,16 @@ public class UserAdapterPantau extends RecyclerView.Adapter<UserAdapterPantau.My
     }
 
     class MyViewHolder extends RecyclerView.ViewHolder {
-        TextView kondisibayi, denyutjantung;
+        TextView kondisibayi, denyutjantung, pasien, date;
 
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
             denyutjantung = itemView.findViewById(R.id.denyutjantung);
             kondisibayi = itemView.findViewById(R.id.kondisibayi);
+            pasien = itemView.findViewById(R.id.tv_pasien);
+            date = itemView.findViewById(R.id.tv_date);
+
+            pasien.setVisibility(View.GONE);
         }
     }
 }

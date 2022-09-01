@@ -42,6 +42,7 @@ public class UserAdapterRekam extends RecyclerView.Adapter<UserAdapterRekam.MyVi
         holder.laju.setText(list.get(position).getLajuPernafasan());
         holder.suhu.setText(list.get(position).getSuhu());
         holder.tekanan.setText(list.get(position).getTekananDarah());
+        holder.date.setText(list.get(position).getDateCreated());
 
         holder.itemView.setOnClickListener(v -> {
             Intent intent = new Intent(context, TampilanRekam.class);
@@ -63,7 +64,7 @@ public class UserAdapterRekam extends RecyclerView.Adapter<UserAdapterRekam.MyVi
     }
 
     class MyViewHolder extends RecyclerView.ViewHolder {
-        TextView berat, lingkar, suhu, laju, kondisi, tekanan, denyut, pasien;
+        TextView berat, lingkar, suhu, laju, kondisi, tekanan, denyut, pasien, date;
 
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -75,6 +76,7 @@ public class UserAdapterRekam extends RecyclerView.Adapter<UserAdapterRekam.MyVi
             suhu = itemView.findViewById(R.id.suhu);
             tekanan = itemView.findViewById(R.id.tekanan);
             pasien = itemView.findViewById(R.id.ll_pasien);
+            date = itemView.findViewById(R.id.tv_date);
 
             pasien.setVisibility(View.GONE);
         }

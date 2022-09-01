@@ -45,6 +45,7 @@ public class Artikel extends AppCompatActivity {
         setContentView(R.layout.activity_artikel);
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setTitle("Artikel");
 
         //get userrole
         sharedPref = getSharedPreferences(getString(R.string.data_user), MODE_PRIVATE);

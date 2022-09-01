@@ -44,6 +44,8 @@ public class AdminAdapterPantau extends RecyclerView.Adapter<AdminAdapterPantau.
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
         holder.denyutjantung.setText(list.get(position).getDenyut());
         holder.kondisibayi.setText(list.get(position).getKondisi());
+        holder.pasien.setText(list.get(position).getPasien());
+        holder.date.setText(list.get(position).getDateCreated());
     }
 
     @Override
@@ -52,19 +54,19 @@ public class AdminAdapterPantau extends RecyclerView.Adapter<AdminAdapterPantau.
     }
 
     class MyViewHolder extends RecyclerView.ViewHolder {
-        TextView kondisibayi, denyutjantung;
+        TextView kondisibayi, denyutjantung, pasien, date;
 
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
             denyutjantung = itemView.findViewById(R.id.denyutjantung);
             kondisibayi = itemView.findViewById(R.id.kondisibayi);
-            itemView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                        if(dialog!=null){
-                            dialog.onClick(getLayoutPosition());
-                        }
-                }
+            pasien = itemView.findViewById(R.id.tv_pasien);
+            date = itemView.findViewById(R.id.tv_date);
+
+            itemView.setOnClickListener(view -> {
+                    if(dialog!=null){
+                        dialog.onClick(getLayoutPosition());
+                    }
             });
         }
     }
