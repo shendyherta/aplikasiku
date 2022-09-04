@@ -10,10 +10,20 @@ import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
+import com.github.mikephil.charting.charts.LineChart;
+import com.github.mikephil.charting.components.Description;
+import com.github.mikephil.charting.components.LimitLine;
+import com.github.mikephil.charting.components.XAxis;
+import com.github.mikephil.charting.components.YAxis;
+import com.github.mikephil.charting.data.Entry;
+import com.github.mikephil.charting.data.LineData;
+import com.github.mikephil.charting.data.LineDataSet;
+import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -21,6 +31,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.sh.aplikasiku.R;
 import com.sh.aplikasiku.adapter.AdminAdapterRekam;
+import com.sh.aplikasiku.adapter.ClaimsXAxisValueFormatter;
 import com.sh.aplikasiku.adapter.UserAdapterRekam;
 import com.sh.aplikasiku.model.UserRekam;
 
@@ -32,6 +43,7 @@ import android.os.Bundle;
 public class RekamMedis extends AppCompatActivity {
     private RecyclerView recyclerView;
     private FloatingActionButton btnAdd;
+    private LineChart lineChart;
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     private List<UserRekam> list = new ArrayList<>();
     private UserAdapterRekam userAdapterRekam;
@@ -40,6 +52,10 @@ public class RekamMedis extends AppCompatActivity {
     private SharedPreferences sharedPref;
     private LinearLayoutCompat llPasien;
     private int userrole;
+    private List<Entry> lajuEntries = new ArrayList<Entry>();
+    private List<Entry> suhuEntries = new ArrayList<Entry>();
+    private List<Entry> tekananEntries = new ArrayList<Entry>();
+    private List<String> listLabels = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,6 +71,7 @@ public class RekamMedis extends AppCompatActivity {
 
         recyclerView = findViewById(R.id.recyclerview);
         btnAdd = findViewById(R.id.btn_add);
+        lineChart = findViewById(R.id.line_chart);
 
         progressDialog = new ProgressDialog(RekamMedis.this);
         progressDialog.setTitle("loading");
@@ -171,6 +188,7 @@ public class RekamMedis extends AppCompatActivity {
                                         list.add(user);
                                     }
                                     showRekamMedis();
+                                    lineChart.setVisibility(View.GONE);
                                 }
                             } catch (Exception e) {
                                 Toast.makeText(getApplicationContext(), "Coba lagi nanti!", Toast.LENGTH_SHORT).show();
@@ -212,6 +230,7 @@ public class RekamMedis extends AppCompatActivity {
                                         list.add(user);
                                     }
                                     showRekamMedis();
+                                    setRekamEntries();
                                 }
                             } catch (Exception e) {
                                 Toast.makeText(getApplicationContext(), "Coba lagi nanti!", Toast.LENGTH_SHORT).show();
@@ -248,6 +267,70 @@ public class RekamMedis extends AppCompatActivity {
         } else {
             recyclerView.setAdapter(userAdapterRekam);
         }
+    }
+
+    private void setRekamEntries() {
+        for(int i = 0; i < list.size(); i++) {
+            suhuEntries.add(new Entry(i+1, Integer.parseInt(list.get(i).getSuhu())));
+            lajuEntries.add(new Entry(i+1, Integer.parseInt(list.get(i).getLajuPernafasan())));
+            tekananEntries.add(new Entry(i+1, Integer.parseInt(list.get(i).getTekananDarah())));
+            listLabels.add(list.get(i).getDateCreated());
+        }
+        listLabels.add("");
+        setEntriesToChart();
+    }
+
+    private void setEntriesToChart() {
+        //set chart data
+        LineDataSet dataSetSuhu = new LineDataSet(suhuEntries, "Suhu tubuh");
+        dataSetSuhu.setColor(getResources().getColor(R.color.pink));
+        dataSetSuhu.setCircleColor(getResources().getColor(R.color.pink));
+        dataSetSuhu.setLineWidth(2f);
+
+        LineDataSet dataSetLaju = new LineDataSet(lajuEntries, "Laju pernafasan");
+        dataSetLaju.setColor(getResources().getColor(R.color.yellow));
+        dataSetLaju.setCircleColor(getResources().getColor(R.color.yellow));
+        dataSetLaju.setLineWidth(2f);
+
+        LineDataSet dataSetTekanan = new LineDataSet(tekananEntries, "Tekanan darah");
+        dataSetTekanan.setColor(getResources().getColor(R.color.blue));
+        dataSetTekanan.setCircleColor(getResources().getColor(R.color.blue));
+        dataSetTekanan.setLineWidth(2f);
+
+        List<ILineDataSet> datasets = new ArrayList<>();
+        datasets.add(dataSetSuhu);
+        datasets.add(dataSetLaju);
+        datasets.add(dataSetTekanan);
+
+        //set chart range
+        YAxis leftAxis = lineChart.getAxisLeft();
+        leftAxis.setAxisMinimum(0f);
+        leftAxis.setAxisMaximum(110f);
+
+        //set chart description
+        lineChart.getDescription().setEnabled(true);
+        Description description = new Description();
+        description.setText("Waktu Cek");
+        description.setTextSize(10f);
+        lineChart.setDescription(description);
+
+        //set chart label x axis
+        XAxis xAxis = lineChart.getXAxis();
+        xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
+        xAxis.setAxisMinimum(0f);
+        xAxis.setAxisMaximum(list.size()+1);
+        xAxis.setLabelCount(list.size()+1, true);
+        xAxis.setGranularityEnabled(true);
+        xAxis.setGranularity(7f);
+        xAxis.setCenterAxisLabels(true);
+        xAxis.setValueFormatter(new ClaimsXAxisValueFormatter(listLabels));
+
+        //set data to chart
+        LineData lineData = new LineData(datasets);
+        lineChart.getAxisRight().setEnabled(false);
+        lineChart.setData(lineData);
+        lineChart.setPinchZoom(false);
+        lineChart.invalidate();
     }
 
 }

@@ -8,13 +8,38 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
+import android.text.InputFilter;
+import android.util.AttributeSet;
 import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
+import com.github.mikephil.charting.charts.BarLineChartBase;
+import com.github.mikephil.charting.charts.CombinedChart;
+import com.github.mikephil.charting.charts.LineChart;
+import com.github.mikephil.charting.components.AxisBase;
+import com.github.mikephil.charting.components.Description;
+import com.github.mikephil.charting.components.LimitLine;
+import com.github.mikephil.charting.components.XAxis;
+import com.github.mikephil.charting.components.YAxis;
+import com.github.mikephil.charting.data.BarData;
+import com.github.mikephil.charting.data.BarDataSet;
+import com.github.mikephil.charting.data.BarEntry;
+import com.github.mikephil.charting.data.CombinedData;
+import com.github.mikephil.charting.data.Entry;
+import com.github.mikephil.charting.data.LineData;
+import com.github.mikephil.charting.data.LineDataSet;
+import com.github.mikephil.charting.formatter.IAxisValueFormatter;
+import com.github.mikephil.charting.formatter.IndexAxisValueFormatter;
+import com.github.mikephil.charting.formatter.ValueFormatter;
+import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -24,6 +49,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.sh.aplikasiku.R;
 import com.sh.aplikasiku.adapter.AdminAdapterPantau;
+import com.sh.aplikasiku.adapter.ClaimsXAxisValueFormatter;
 import com.sh.aplikasiku.adapter.UserAdapterPantau;
 import com.sh.aplikasiku.model.UserPantau;
 
@@ -35,8 +61,11 @@ import android.os.Bundle;
 public class PantauKehamilan extends AppCompatActivity {
     private RecyclerView recyclerView;
     private FloatingActionButton btnAdd;
+    private LineChart lineChart;
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     private List<UserPantau> list = new ArrayList<>();
+    private List<Entry> pantauEntries = new ArrayList<>();
+    private List<String> listLabels = new ArrayList<>();
     private UserAdapterPantau userAdapterPantau;
     private AdminAdapterPantau adminAdapterPantau;
     private ProgressDialog progressDialog;
@@ -58,6 +87,7 @@ public class PantauKehamilan extends AppCompatActivity {
 
         recyclerView = findViewById(R.id.recyclerview);
         btnAdd = findViewById(R.id.btn_add);
+        lineChart = findViewById(R.id.line_chart);
 
         btnAdd.setOnClickListener(v -> {
             Intent intent = new Intent(getApplicationContext(), EditPantau.class);
@@ -159,8 +189,10 @@ public class PantauKehamilan extends AppCompatActivity {
                                         list.add(user);
                                     }
                                     showPantauKehamilan();
+                                    lineChart.setVisibility(View.GONE);
                                 }
                             } catch (Exception e) {
+                                Log.d("GETDATAPANTAU", "getData: " + e.getMessage());
                                 Toast.makeText(getApplicationContext(), "Coba lagi nanti!", Toast.LENGTH_SHORT).show();
                             }
                         } else {
@@ -194,8 +226,10 @@ public class PantauKehamilan extends AppCompatActivity {
                                         list.add(user);
                                     }
                                     showPantauKehamilan();
+                                    setPantauEntries();
                                 }
                             } catch (Exception e) {
+                                Log.d("GETDATAPANTAU", "getData: " + e.getMessage());
                                 Toast.makeText(getApplicationContext(), "Coba lagi nanti!", Toast.LENGTH_SHORT).show();
                             }
                         } else {
@@ -228,6 +262,67 @@ public class PantauKehamilan extends AppCompatActivity {
         } else {
             recyclerView.setAdapter(userAdapterPantau);
         }
+    }
+
+    private void setPantauEntries() {
+        for(int i = 0; i < list.size(); i++) {
+            pantauEntries.add(new Entry(i+1, Integer.parseInt(list.get(i).getDenyut())));
+            listLabels.add(list.get(i).getDateCreated());
+        }
+        listLabels.add("");
+        setEntriesToChart();
+    }
+
+    private void setEntriesToChart() {
+        //set chart data
+        LineDataSet dataSet = new LineDataSet(pantauEntries, "Dentut");
+        dataSet.setColor(getResources().getColor(R.color.pink));
+        dataSet.setLineWidth(2f);
+
+        List<ILineDataSet> datasets = new ArrayList<>();
+        datasets.add(dataSet);
+
+        //set chart limit y axis
+        LimitLine minLine = new LimitLine(80f, "Batas normal bawah");
+        minLine.setLineColor(Color.GREEN);
+        minLine.setLineWidth(2f);
+
+        LimitLine maxLine = new LimitLine(90f, "Batas normal atas");
+        maxLine.setLineColor(Color.GREEN);
+        maxLine.setLineWidth(2f);
+
+        YAxis leftAxis = lineChart.getAxisLeft();
+        leftAxis.removeAllLimitLines();
+        leftAxis.addLimitLine(minLine);
+        leftAxis.addLimitLine(maxLine);
+        leftAxis.setDrawLimitLinesBehindData(true);
+        leftAxis.setAxisMinimum(65f);
+        leftAxis.setAxisMaximum(110f);
+
+        //set chart description
+        lineChart.getDescription().setEnabled(true);
+        Description description = new Description();
+        description.setText("Waktu Cek");
+        description.setTextSize(10f);
+        lineChart.setDescription(description);
+
+        //set chart label x axis
+        XAxis xAxis = lineChart.getXAxis();
+        xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
+        xAxis.setAxisMinimum(0f);
+        xAxis.setAxisMaximum(list.size()+1);
+        xAxis.setLabelCount(list.size()+1, true);
+        xAxis.setGranularityEnabled(true);
+        xAxis.setGranularity(7f);
+        xAxis.setCenterAxisLabels(true);
+        xAxis.setValueFormatter(new ClaimsXAxisValueFormatter(listLabels));
+
+        //set data to chart
+        LineData lineData = new LineData(datasets);
+        lineChart.getAxisRight().setEnabled(false);
+        lineChart.setData(lineData);
+        lineChart.setPinchZoom(false);
+        lineChart.invalidate();
     }
 
 }
