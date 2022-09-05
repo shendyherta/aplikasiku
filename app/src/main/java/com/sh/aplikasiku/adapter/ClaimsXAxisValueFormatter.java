@@ -30,7 +30,6 @@ Depends on the position number on the X axis, we need to display the label, Here
         SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
 
         for (int i = 0; i < datesList.size(); i++) {
-            Log.d("VALUEFORM", "getAxisLabel: " + value + datesList.get(i).toString());
             if (value > i+1 && value <i+2) {
                 position = i;
                 break;

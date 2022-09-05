@@ -13,6 +13,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Aplikasiku">
         <activity
+            android:name=".ui.AboutActivity"
+            android:exported="false" />
+        <activity
             android:name=".ui.artikel.TampilArtikel"
             android:exported="false" />
         <activity
@@ -47,7 +50,7 @@
         <activity
             android:name=".ui.entry.RegisterActivity"
             android:exported="false"
-            android:theme="@style/Theme.Aplikasiku.NoActionBar"  />
+            android:theme="@style/Theme.Aplikasiku.NoActionBar" />
         <activity
             android:name=".ui.Rujukan"
             android:exported="false" />

@@ -97,6 +97,7 @@ public class MainActivity extends AppCompatActivity {
         popupWindow.showAsDropDown(ivProfile, -200, 50);
 
         TextView tvLogout = view.findViewById(R.id.tv_logout);
+        TextView tvAbout = view.findViewById(R.id.tv_about);
 
         tvLogout.setOnClickListener(v -> {
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
@@ -124,6 +125,8 @@ public class MainActivity extends AppCompatActivity {
             AlertDialog dialog = builder.create();
             dialog.show();
         });
+
+        tvAbout.setOnClickListener(v -> startActivity(new Intent(this, AboutActivity.class)));
     }
 
 }

@@ -1,11 +1,14 @@
 package com.sh.aplikasiku.ui.artikel;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Intent;
@@ -39,6 +42,15 @@ public class Artikel extends AppCompatActivity {
     private SharedPreferences sharedPref;
     private int userrole;
 
+    //create activity result
+    ActivityResultLauncher<Intent> getCreateEditResult = registerForActivityResult(
+            new ActivityResultContracts.StartActivityForResult(),
+            result -> {
+                if (result.getResultCode() == Activity.RESULT_OK) {
+                    getData();
+                }
+            });
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -54,6 +66,7 @@ public class Artikel extends AppCompatActivity {
         recyclerView = findViewById(R.id.recyclerview);
         btnAdd = findViewById(R.id.btn_add);
 
+        //create progress bar
         progressDialog = new ProgressDialog(Artikel.this);
         progressDialog.setTitle("loading");
         progressDialog.setMessage("Mengambil data");
@@ -61,7 +74,7 @@ public class Artikel extends AppCompatActivity {
         btnAdd.setOnClickListener(v -> {
             Intent intent = new Intent(getApplicationContext(), EditArtikel.class);
             intent.putExtra("option", "add");
-            startActivity(intent);
+            getCreateEditResult.launch(intent);
         });
 
         if (userrole == 1) {
@@ -90,7 +103,7 @@ public class Artikel extends AppCompatActivity {
                             intent.putExtra("dateCreated", list.get(pos).getDateCreated());
                             intent.putExtra("dateUpdated", list.get(pos).getDateUpdated());
                             intent.putExtra("option", "edit");
-                            startActivity(intent);
+                            getCreateEditResult.launch(intent);
                             break;
                         case 2:
                             deleteData(list.get(pos).getId(), list.get(pos).getAvatar());
@@ -103,13 +116,14 @@ public class Artikel extends AppCompatActivity {
             btnAdd.setVisibility(View.GONE);
             userAdapterArtikel = new UserAdapterArtikel(this, list);
         }
+
+        getData();
     }
 
     //untuk menampilkan getdata alias data yang telah diubah maupun ditambah
     @Override
     protected void onStart() {
         super.onStart();
-        getData();
     }
 
     @Override
@@ -126,6 +140,7 @@ public class Artikel extends AppCompatActivity {
 
     private void getData(){
         progressDialog.show();
+        list.clear();
 
         db.collection("artikel")
                 .get()

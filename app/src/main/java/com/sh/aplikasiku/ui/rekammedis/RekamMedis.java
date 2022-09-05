@@ -1,11 +1,14 @@
 package com.sh.aplikasiku.ui.rekammedis;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.LinearLayoutCompat;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Intent;
@@ -57,6 +60,15 @@ public class RekamMedis extends AppCompatActivity {
     private List<Entry> tekananEntries = new ArrayList<Entry>();
     private List<String> listLabels = new ArrayList<>();
 
+    //create activity result
+    ActivityResultLauncher<Intent> getCreateEditResult = registerForActivityResult(
+            new ActivityResultContracts.StartActivityForResult(),
+            result -> {
+                if (result.getResultCode() == Activity.RESULT_OK) {
+                    getData();
+                }
+            });
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -73,6 +85,7 @@ public class RekamMedis extends AppCompatActivity {
         btnAdd = findViewById(R.id.btn_add);
         lineChart = findViewById(R.id.line_chart);
 
+        //create progress bar
         progressDialog = new ProgressDialog(RekamMedis.this);
         progressDialog.setTitle("loading");
         progressDialog.setMessage("Mengambil data");
@@ -82,7 +95,7 @@ public class RekamMedis extends AppCompatActivity {
         btnAdd.setOnClickListener(v -> {
             Intent intent = new Intent(getApplicationContext(), EditRekam.class);
             intent.putExtra("option", "add");
-            startActivity(intent);
+            getCreateEditResult.launch(intent);
         });
 
         if (userrole == 1) {
@@ -123,7 +136,7 @@ public class RekamMedis extends AppCompatActivity {
                             intent.putExtra("dateCreated", list.get(pos).getDateCreated());
                             intent.putExtra("dateUpdated", list.get(pos).getDateUpdated());
                             intent.putExtra("option", "edit");
-                            startActivity(intent);
+                            getCreateEditResult.launch(intent);
                             break;
                         case 2:
                             deleteData(list.get(pos).getId());
@@ -136,13 +149,14 @@ public class RekamMedis extends AppCompatActivity {
             btnAdd.setVisibility(View.GONE);
             userAdapterRekam = new UserAdapterRekam(this, list);
         }
+
+        getData();
     }
 
     //untuk menampilkan getdata alias data yang telah diubah maupun ditambah
     @Override
     protected void onStart() {
         super.onStart();
-        getData();
     }
 
     @Override

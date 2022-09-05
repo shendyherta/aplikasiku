@@ -117,6 +117,7 @@ public class EditPantau extends AppCompatActivity {
                         if (task.isSuccessful()) {
                             Toast.makeText(getApplicationContext(), "Berhasil", Toast.LENGTH_SHORT).show();
                             progressDialog.dismiss();
+                            setResult(RESULT_OK);
                             finish();
                         } else {
                             progressDialog.dismiss();
@@ -139,6 +140,7 @@ public class EditPantau extends AppCompatActivity {
                     .addOnSuccessListener(documentReference -> {
                         Toast.makeText(getApplicationContext(), "Berhasil", Toast.LENGTH_SHORT).show();
                         progressDialog.dismiss();
+                        setResult(RESULT_OK);
                         finish();
                     })
                     .addOnFailureListener(e -> {

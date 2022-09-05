@@ -1,11 +1,16 @@
 package com.sh.aplikasiku.ui.pantaukehamilan;
 
+import androidx.activity.result.ActivityResult;
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -15,6 +20,7 @@ import android.content.SharedPreferences;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.net.Uri;
 import android.text.InputFilter;
 import android.util.AttributeSet;
 import android.util.Log;
@@ -72,6 +78,15 @@ public class PantauKehamilan extends AppCompatActivity {
     private SharedPreferences sharedPref;
     private int userrole;
 
+    //create activity result
+    ActivityResultLauncher<Intent> getCreateEditResult = registerForActivityResult(
+            new ActivityResultContracts.StartActivityForResult(),
+            result -> {
+                if (result.getResultCode() == Activity.RESULT_OK) {
+                        getData();
+                }
+            });
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -92,9 +107,10 @@ public class PantauKehamilan extends AppCompatActivity {
         btnAdd.setOnClickListener(v -> {
             Intent intent = new Intent(getApplicationContext(), EditPantau.class);
             intent.putExtra("option", "add");
-            startActivity(intent);
+            getCreateEditResult.launch(intent);
         });
 
+        //create progress bar
         progressDialog = new ProgressDialog(PantauKehamilan.this);
         progressDialog.setTitle("loading");
         progressDialog.setMessage("Mengambil data");
@@ -128,7 +144,7 @@ public class PantauKehamilan extends AppCompatActivity {
                             intent.putExtra("dateCreated", list.get(pos).getDateCreated());
                             intent.putExtra("dateUpdated", list.get(pos).getDateUpdated());
                             intent.putExtra("option", "edit");
-                            startActivity(intent);
+                            getCreateEditResult.launch(intent);
                             break;
                         case 2:
                             deleteData(list.get(pos).getId());
@@ -141,13 +157,14 @@ public class PantauKehamilan extends AppCompatActivity {
             btnAdd.setVisibility(View.GONE);
             userAdapterPantau = new UserAdapterPantau(this, list);
         }
+
+        getData();
     }
 
     //untuk menampilkan getdata alias data yang telah diubah maupun ditambah
     @Override
     protected void onStart() {
         super.onStart();
-        getData();
     }
 
     @Override
@@ -164,6 +181,7 @@ public class PantauKehamilan extends AppCompatActivity {
 
     private void getData() {
         progressDialog.show();
+        list.clear();
 
         if (userrole == 1) {
             db.collection("pantau")
