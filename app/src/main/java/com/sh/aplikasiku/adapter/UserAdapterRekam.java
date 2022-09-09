@@ -9,6 +9,7 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.widget.LinearLayoutCompat;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.sh.aplikasiku.R;
@@ -45,6 +46,14 @@ public class UserAdapterRekam extends RecyclerView.Adapter<UserAdapterRekam.MyVi
         holder.tekanan.setText(list.get(position).getTekananDarah());
         holder.date.setText(list.get(position).getDateCreated());
 
+        holder.rujukan.setText(list.get(position).getRujukan());
+
+        String rujukan = list.get(position).getRujukan();
+
+        if (rujukan.equalsIgnoreCase("butuh rujukan")) {
+            holder.clHeader.setBackgroundColor(context.getResources().getColor(R.color.grey_blue));
+        }
+
         holder.itemView.setOnClickListener(v -> {
             Intent intent = new Intent(context, TampilanRekam.class);
             intent.putExtra("id", list.get(position).getId());
@@ -55,6 +64,7 @@ public class UserAdapterRekam extends RecyclerView.Adapter<UserAdapterRekam.MyVi
             intent.putExtra("suhu", list.get(position).getSuhu());
             intent.putExtra("denyut", list.get(position).getDenyutJantung());
             intent.putExtra("kondisi", list.get(position).getKondisiHB());
+            intent.putExtra("rujukan", list.get(position).getRujukan());
             intent.putExtra("dateCreated", list.get(position).getDateCreated());
             context.startActivity(intent);
         });
@@ -66,8 +76,9 @@ public class UserAdapterRekam extends RecyclerView.Adapter<UserAdapterRekam.MyVi
     }
 
     class MyViewHolder extends RecyclerView.ViewHolder {
-        TextView berat, lingkar, suhu, laju, kondisi, tekanan, denyut, date;
+        TextView berat, lingkar, suhu, laju, kondisi, tekanan, denyut, date, rujukan;
         LinearLayoutCompat llPasien;
+        ConstraintLayout clHeader;
 
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -80,6 +91,8 @@ public class UserAdapterRekam extends RecyclerView.Adapter<UserAdapterRekam.MyVi
             tekanan = itemView.findViewById(R.id.tekanan);
             date = itemView.findViewById(R.id.tv_date);
             llPasien = itemView.findViewById(R.id.ll_pasien);
+            rujukan = itemView.findViewById(R.id.tv_rujukan);
+            clHeader = itemView.findViewById(R.id.cl_header);
 
             llPasien.setVisibility(View.GONE);
         }

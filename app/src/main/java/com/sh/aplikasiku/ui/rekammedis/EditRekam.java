@@ -9,11 +9,13 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.RadioGroup;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatSpinner;
 
+import com.google.android.material.radiobutton.MaterialRadioButton;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.sh.aplikasiku.R;
@@ -29,9 +31,11 @@ public class EditRekam extends AppCompatActivity {
     private EditText editberat, editlingkar, editkondisi, edittekanan, editlaju, editsuhu, editdenyut;
     private Button btnsave;
     private AppCompatSpinner spinner_pasien;
+    private RadioGroup rgRujukan;
+    private MaterialRadioButton rbRujukanBaik, rbRujukanButuh;
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     private ProgressDialog progressDialog;
-    private String id = "", id_user, pasien, option, dateCreated, dateUpdated;
+    private String id = "", id_user, pasien, option, dateCreated, dateUpdated, rujukan;
     private ArrayList<User> listUser = new ArrayList<>();
 
     @Override
@@ -51,6 +55,9 @@ public class EditRekam extends AppCompatActivity {
         editdenyut = findViewById(R.id.denyut);
         btnsave = findViewById(R.id.btn_save);
         spinner_pasien = findViewById(R.id.spinner_pasien);
+        rgRujukan = findViewById(R.id.rg_rujukan);
+        rbRujukanBaik = findViewById(R.id.rb_rujukan_baik);
+        rbRujukanButuh = findViewById(R.id.rb_rujukan_butuh);
 
         progressDialog = new ProgressDialog(EditRekam.this);
         progressDialog.setTitle("loading");
@@ -63,16 +70,25 @@ public class EditRekam extends AppCompatActivity {
                     edittekanan.getText().length() > 0 &&
                     editlaju.getText().length() > 0 &&
                     editsuhu.getText().length() > 0 &&
-                    editdenyut.getText().length() > 0) {
+                    editdenyut.getText().length() > 0 && !rujukan.isEmpty()) {
                 saveData(editberat.getText().toString(),
                         editlingkar.getText().toString(),
                         editkondisi.getText().toString(),
                         edittekanan.getText().toString(),
                         editlaju.getText().toString(),
                         editsuhu.getText().toString(),
-                        editdenyut.getText().toString());
+                        editdenyut.getText().toString(),
+                        rujukan);
             } else {
                 Toast.makeText(getApplicationContext(), "Mohon lengkapi form!", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        rgRujukan.setOnCheckedChangeListener((radioGroup, i) -> {
+            if (rbRujukanBaik.isChecked()) {
+                rujukan = "Baik";
+            } else if (rbRujukanButuh.isChecked()) {
+                rujukan = "Butuh rujukan";
             }
         });
 
@@ -91,9 +107,18 @@ public class EditRekam extends AppCompatActivity {
                 editlaju.setText(intent.getStringExtra("laju"));
                 editsuhu.setText(intent.getStringExtra("suhu"));
                 editdenyut.setText(intent.getStringExtra("denyut"));
+                rujukan = intent.getStringExtra("rujukan");
                 dateCreated = intent.getStringExtra("dateCreated");
                 dateUpdated = intent.getStringExtra("dateUpdated");
                 spinner_pasien.setEnabled(false);
+
+                if (rujukan.equalsIgnoreCase("baik")) {
+                    rbRujukanBaik.setChecked(true);
+                    rbRujukanButuh.setChecked(false);
+                } else if (rujukan.equalsIgnoreCase("butuh rujukan")) {
+                    rbRujukanBaik.setChecked(false);
+                    rbRujukanButuh.setChecked(true);
+                }
             } else {
                 id = null;
             }
@@ -112,7 +137,7 @@ public class EditRekam extends AppCompatActivity {
         return true;
     }
 
-    private void saveData(String berat, String lingkar, String kondisi, String tekanan, String laju, String suhu, String denyut) {
+    private void saveData(String berat, String lingkar, String kondisi, String tekanan, String laju, String suhu, String denyut, String rujukan) {
         progressDialog.show();
 
         //untuk mendapatkan tanggal saat data dibuat
@@ -132,6 +157,7 @@ public class EditRekam extends AppCompatActivity {
             rekam.put("laju", laju);
             rekam.put("suhu", suhu);
             rekam.put("denyut", denyut);
+            rekam.put("rujukan", rujukan);
             rekam.put("dateCreated", dateCreated);
             rekam.put("dateUpdated", date);
             db.collection("rekammedis").document(id)
@@ -159,6 +185,7 @@ public class EditRekam extends AppCompatActivity {
             rekam.put("laju", laju);
             rekam.put("suhu", suhu);
             rekam.put("denyut", denyut);
+            rekam.put("rujukan", rujukan);
             rekam.put("dateCreated", date);
             rekam.put("dateUpdated", date);
             db.collection("rekammedis")

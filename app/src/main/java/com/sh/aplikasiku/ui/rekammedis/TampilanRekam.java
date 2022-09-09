@@ -2,6 +2,7 @@ package com.sh.aplikasiku.ui.rekammedis;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.LinearLayoutCompat;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.app.ProgressDialog;
@@ -21,7 +22,8 @@ import java.util.List;
 
 public class TampilanRekam extends AppCompatActivity {
     private TextView tampilberat, tampillingkar, tampilkondisi, tampiltekanan, tampillaju,
-            tampilsuhu, tampildenyut, tampilpasien, tampilUpdated, tampilCreated;
+            tampilsuhu, tampildenyut, tampilpasien, tampilUpdated, tampilCreated, tampilRujukan;
+    private ConstraintLayout clRujukan;
     private LinearLayoutCompat llPasien, llUpdate;
     private SharedPreferences sharedPref;
     private int userrole;
@@ -50,6 +52,8 @@ public class TampilanRekam extends AppCompatActivity {
         tampilUpdated = findViewById(R.id.tv_update);
         llPasien = findViewById(R.id.ll_pasien);
         llUpdate = findViewById(R.id.ll_update);
+        clRujukan = findViewById(R.id.cl_rujukan);
+        tampilRujukan = findViewById(R.id.tv_rujukan);
 
         Intent intent = getIntent();
 
@@ -63,8 +67,10 @@ public class TampilanRekam extends AppCompatActivity {
                 tampildenyut.setText(intent.getStringExtra("denyut"));
                 tampilkondisi.setText(intent.getStringExtra("kondisi"));
                 tampilpasien.setText(intent.getStringExtra("pasien"));
+                tampilRujukan.setText(intent.getStringExtra("rujukan"));
                 tampilUpdated.setText(intent.getStringExtra("dateUpdated"));
                 tampilCreated.setText(intent.getStringExtra("dateCreated"));
+                setRujukanBackground();
             }
         } else {
             if (intent != null) {
@@ -75,9 +81,11 @@ public class TampilanRekam extends AppCompatActivity {
                 tampilsuhu.setText(intent.getStringExtra("suhu"));
                 tampildenyut.setText(intent.getStringExtra("denyut"));
                 tampilkondisi.setText(intent.getStringExtra("kondisi"));
+                tampilRujukan.setText(intent.getStringExtra("rujukan"));
                 tampilCreated.setText(intent.getStringExtra("dateCreated"));
                 llPasien.setVisibility(View.GONE);
                 llUpdate.setVisibility(View.GONE);
+                setRujukanBackground();
             }
         }
 
@@ -93,6 +101,12 @@ public class TampilanRekam extends AppCompatActivity {
     public boolean onSupportNavigateUp() {
         onBackPressed();
         return true;
+    }
+
+    private void setRujukanBackground() {
+        if (tampilRujukan.getText().equals("Butuh rujukan")) {
+            clRujukan.setBackgroundColor(getResources().getColor(R.color.grey_blue));
+        }
     }
 
 }

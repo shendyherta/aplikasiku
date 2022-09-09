@@ -2,11 +2,11 @@ package com.sh.aplikasiku.model;
 
 public class UserRekam {
     private String id, idUser, pasien, beratBadan, lingkarBadan, kondisiHB, tekananDarah,
-            lajuPernafasan, suhu, denyutJantung, dateCreated, dateUpdated;
+            lajuPernafasan, suhu, denyutJantung, rujukan, dateCreated, dateUpdated;
 
     public UserRekam(String id, String idUser, String pasien, String beratBadan, String lingkarBadan,
                      String kondisiHB, String tekananDarah, String lajuPernafasan, String suhu,
-                     String denyutJantung, String dateCreated, String dateUpdated) {
+                     String denyutJantung, String rujukan, String dateCreated, String dateUpdated) {
         this.id = id;
         this.idUser = idUser;
         this.pasien = pasien;
@@ -17,6 +17,7 @@ public class UserRekam {
         this.lajuPernafasan = lajuPernafasan;
         this.suhu = suhu;
         this.denyutJantung = denyutJantung;
+        this.rujukan = rujukan;
         this.dateCreated = dateCreated;
         this.dateUpdated = dateUpdated;
     }
@@ -99,6 +100,14 @@ public class UserRekam {
 
     public void setDenyutJantung(String denyutJantung) {
         this.denyutJantung = denyutJantung;
+    }
+
+    public String getRujukan() {
+        return rujukan;
+    }
+
+    public void setRujukan(String rujukan) {
+        this.rujukan = rujukan;
     }
 
     public String getDateCreated() {

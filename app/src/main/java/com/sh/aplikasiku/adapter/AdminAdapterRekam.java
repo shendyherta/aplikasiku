@@ -7,6 +7,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.sh.aplikasiku.R;
@@ -51,6 +52,14 @@ public class AdminAdapterRekam extends RecyclerView.Adapter<AdminAdapterRekam.My
         holder.tekanan.setText(list.get(position).getTekananDarah());
         holder.pasien.setText(list.get(position).getPasien());
         holder.date.setText(list.get(position).getDateCreated());
+        holder.rujukan.setText(list.get(position).getRujukan());
+
+        String rujukan = list.get(position).getRujukan();
+
+        if (rujukan.equalsIgnoreCase("butuh rujukan")) {
+            holder.clHeader.setBackgroundColor(context.getResources().getColor(R.color.grey_blue));
+        }
+
     }
 
     @Override
@@ -59,7 +68,9 @@ public class AdminAdapterRekam extends RecyclerView.Adapter<AdminAdapterRekam.My
     }
 
     class MyViewHolder extends RecyclerView.ViewHolder{
-        TextView berat, lingkar, suhu, laju, kondisi, tekanan, denyut, pasien, date;
+        TextView berat, lingkar, suhu, laju, kondisi, tekanan, denyut, pasien, date, rujukan;
+        ConstraintLayout clHeader;
+
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
             berat = itemView.findViewById(R.id.berat);
@@ -71,6 +82,8 @@ public class AdminAdapterRekam extends RecyclerView.Adapter<AdminAdapterRekam.My
             tekanan = itemView.findViewById(R.id.tekanan);
             pasien = itemView.findViewById(R.id.tv_pasien);
             date = itemView.findViewById(R.id.tv_date);
+            rujukan = itemView.findViewById(R.id.tv_rujukan);
+            clHeader = itemView.findViewById(R.id.cl_header);
 
             itemView.setOnClickListener(view -> {
                 if(dialog!=null){

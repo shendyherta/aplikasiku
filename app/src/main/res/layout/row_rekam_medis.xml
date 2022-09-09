@@ -15,11 +15,11 @@
         android:orientation="vertical">
 
         <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/cl_header"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="10dp"
             android:background="@color/pink"
-            android:backgroundTint="@color/pink"
             android:paddingHorizontal="20dp"
             android:paddingVertical="10dp">
 
@@ -32,7 +32,6 @@
                 android:src="@drawable/ic_time"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-
                 app:tint="@color/white" />
 
             <TextView
@@ -45,7 +44,19 @@
                 app:layout_constraintStart_toEndOf="@id/iv_time"
                 app:layout_constraintTop_toTopOf="parent" />
 
+            <TextView
+                android:id="@+id/tv_rujukan"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Baik"
+                android:textColor="@color/white"
+                android:textSize="16dp"
+                android:layout_marginEnd="10dp"
+                app:layout_constraintEnd_toStartOf="@id/iv_next"
+                app:layout_constraintTop_toTopOf="parent"/>
+
             <ImageView
+                android:id="@+id/iv_next"
                 android:layout_width="15dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"

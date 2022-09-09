@@ -118,6 +118,7 @@ public class RekamMedis extends AppCompatActivity {
                             intentbaca.putExtra("suhu", list.get(pos).getSuhu());
                             intentbaca.putExtra("denyut", list.get(pos).getDenyutJantung());
                             intentbaca.putExtra("kondisi", list.get(pos).getKondisiHB());
+                            intentbaca.putExtra("rujukan", list.get(pos).getRujukan());
                             intentbaca.putExtra("dateCreated", list.get(pos).getDateCreated());
                             intentbaca.putExtra("dateUpdated", list.get(pos).getDateUpdated());
                             startActivity(intentbaca);
@@ -133,6 +134,7 @@ public class RekamMedis extends AppCompatActivity {
                             intent.putExtra("suhu", list.get(pos).getSuhu());
                             intent.putExtra("denyut", list.get(pos).getDenyutJantung());
                             intent.putExtra("kondisi", list.get(pos).getKondisiHB());
+                            intent.putExtra("rujukan", list.get(pos).getRujukan());
                             intent.putExtra("dateCreated", list.get(pos).getDateCreated());
                             intent.putExtra("dateUpdated", list.get(pos).getDateUpdated());
                             intent.putExtra("option", "edit");
@@ -195,9 +197,10 @@ public class RekamMedis extends AppCompatActivity {
                                         String tekanan = document.get("tekanan").toString();
                                         String kondisi = document.get("kondisi").toString();
                                         String lingkar = document.get("lingkar").toString();
+                                        String rujukan = document.get("rujukan").toString();
                                         String dateCreated = document.get("dateCreated").toString();
                                         String dateUpdated = document.get("dateUpdated").toString();
-                                        UserRekam user = new UserRekam(id, idUser, pasien, berat, lingkar, kondisi, tekanan, laju, suhu, denyut, dateCreated, dateUpdated);
+                                        UserRekam user = new UserRekam(id, idUser, pasien, berat, lingkar, kondisi, tekanan, laju, suhu, denyut, rujukan, dateCreated, dateUpdated);
                                         user.setId(document.getId());
                                         list.add(user);
                                     }
@@ -237,9 +240,10 @@ public class RekamMedis extends AppCompatActivity {
                                         String tekanan = document.get("tekanan").toString();
                                         String kondisi = document.get("kondisi").toString();
                                         String lingkar = document.get("lingkar").toString();
+                                        String rujukan = document.get("rujukan").toString();
                                         String dateCreated = document.get("dateCreated").toString();
                                         String dateUpdated = document.get("dateUpdated").toString();
-                                        UserRekam user = new UserRekam(id, idUser, pasien, berat, lingkar, kondisi, tekanan, laju, suhu, denyut, dateCreated, dateUpdated);
+                                        UserRekam user = new UserRekam(id, idUser, pasien, berat, lingkar, kondisi, tekanan, laju, suhu, denyut, rujukan, dateCreated, dateUpdated);
                                         user.setId(document.getId());
                                         list.add(user);
                                     }

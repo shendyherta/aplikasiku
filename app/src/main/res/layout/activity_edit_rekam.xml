@@ -134,13 +134,37 @@
 
         </com.google.android.material.textfield.TextInputLayout>
 
+        <RadioGroup
+            android:id="@+id/rg_rujukan"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:weightSum="2">
+
+            <com.google.android.material.radiobutton.MaterialRadioButton
+                android:id="@+id/rb_rujukan_baik"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:buttonTint="@color/grey_blue"
+                android:text="Baik" />
+
+            <com.google.android.material.radiobutton.MaterialRadioButton
+                android:id="@+id/rb_rujukan_butuh"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:buttonTint="@color/grey_blue"
+                android:text="Butuh rujukan" />
+        </RadioGroup>
+
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btn_save"
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:layout_marginTop="10dp"
-            app:cornerRadius="10dp"
-            android:text="Simpan" />
+            android:text="Simpan"
+            app:cornerRadius="10dp" />
     </LinearLayout>
 
 </ScrollView>
