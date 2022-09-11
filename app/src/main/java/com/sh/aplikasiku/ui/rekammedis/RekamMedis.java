@@ -1,26 +1,24 @@
 package com.sh.aplikasiku.ui.rekammedis;
 
-import androidx.activity.result.ActivityResultLauncher;
-import androidx.activity.result.contract.ActivityResultContracts;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.LinearLayoutCompat;
-import androidx.recyclerview.widget.DividerItemDecoration;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.Color;
+import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.components.Description;
-import com.github.mikephil.charting.components.LimitLine;
+import com.github.mikephil.charting.components.Legend;
 import com.github.mikephil.charting.components.XAxis;
 import com.github.mikephil.charting.components.YAxis;
 import com.github.mikephil.charting.data.Entry;
@@ -41,8 +39,6 @@ import com.sh.aplikasiku.model.UserRekam;
 import java.util.ArrayList;
 import java.util.List;
 
-import android.os.Bundle;
-
 public class RekamMedis extends AppCompatActivity {
     private RecyclerView recyclerView;
     private FloatingActionButton btnAdd;
@@ -53,8 +49,11 @@ public class RekamMedis extends AppCompatActivity {
     private AdminAdapterRekam adminAdapterRekam;
     private ProgressDialog progressDialog;
     private SharedPreferences sharedPref;
-    private LinearLayoutCompat llPasien;
     private int userrole;
+    private List<Entry> denyutEntries = new ArrayList<Entry>();
+    private List<Entry> beratEntries = new ArrayList<Entry>();
+    private List<Entry> lingkarEntries = new ArrayList<Entry>();
+    private List<Entry> kondisihbEntries = new ArrayList<Entry>();
     private List<Entry> lajuEntries = new ArrayList<Entry>();
     private List<Entry> suhuEntries = new ArrayList<Entry>();
     private List<Entry> tekananEntries = new ArrayList<Entry>();
@@ -269,7 +268,7 @@ public class RekamMedis extends AppCompatActivity {
                 .delete()
                 .addOnCompleteListener(task -> {
                     if (!task.isSuccessful()) {
-                        Toast.makeText(getApplicationContext(), "Data Gagal Dihapus", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getApplicationContext(), "Data gagal dihapus!", Toast.LENGTH_SHORT).show();
                     }
                     progressDialog.dismiss();
                     getData();
@@ -288,42 +287,78 @@ public class RekamMedis extends AppCompatActivity {
     }
 
     private void setRekamEntries() {
-        for(int i = 0; i < list.size(); i++) {
-            suhuEntries.add(new Entry(i+1, Integer.parseInt(list.get(i).getSuhu())));
-            lajuEntries.add(new Entry(i+1, Integer.parseInt(list.get(i).getLajuPernafasan())));
-            tekananEntries.add(new Entry(i+1, Integer.parseInt(list.get(i).getTekananDarah())));
+        for (int i = 0; i < list.size(); i++) {
+            denyutEntries.add(new Entry(i + 1, Float.parseFloat(list.get(i).getDenyutJantung())));
+            beratEntries.add(new Entry(i + 1, Float.parseFloat(list.get(i).getBeratBadan())));
+            lingkarEntries.add(new Entry(i + 1, Float.parseFloat(list.get(i).getLingkarBadan())));
+            kondisihbEntries.add(new Entry(i + 1, Float.parseFloat(list.get(i).getKondisiHB())));
+            suhuEntries.add(new Entry(i + 1, Float.parseFloat(list.get(i).getSuhu())));
+            lajuEntries.add(new Entry(i + 1, Float.parseFloat(list.get(i).getLajuPernafasan())));
+
+            String tekananDarah = list.get(i).getTekananDarah();
+            String sistolik = tekananDarah.substring(0, tekananDarah.indexOf("/"));
+            tekananEntries.add(new Entry(i + 1, Float.parseFloat(sistolik)));
+
             listLabels.add(list.get(i).getDateCreated());
         }
         listLabels.add("");
         setEntriesToChart();
     }
+//    private List<Entry> denyutEntries = new ArrayList<Entry>();
+//    private List<Entry> beratEntries = new ArrayList<Entry>();
+//    private List<Entry> lingkarEntries = new ArrayList<Entry>();
+//    private List<Entry> kondisihbEntries = new ArrayList<Entry>();
 
     private void setEntriesToChart() {
         //set chart data
-        LineDataSet dataSetSuhu = new LineDataSet(suhuEntries, "Suhu tubuh");
+        LineDataSet dataSetDenyut = new LineDataSet(denyutEntries, "Denyut jantung(80x/menit)");
+        dataSetDenyut.setColor(getResources().getColor(R.color.grey_blue));
+        dataSetDenyut.setCircleColor(getResources().getColor(R.color.grey_blue));
+        dataSetDenyut.setLineWidth(2f);
+
+        LineDataSet dataSetBerat = new LineDataSet(beratEntries, "Berat badan(65-70 kg)");
+        dataSetBerat.setColor(getResources().getColor(R.color.green));
+        dataSetBerat.setCircleColor(getResources().getColor(R.color.green));
+        dataSetBerat.setLineWidth(2f);
+
+        LineDataSet dataSetLingkar = new LineDataSet(lingkarEntries, "Lingkar lengan(28-30 cm)");
+        dataSetLingkar.setColor(getResources().getColor(R.color.purple));
+        dataSetLingkar.setCircleColor(getResources().getColor(R.color.purple));
+        dataSetLingkar.setLineWidth(2f);
+
+        LineDataSet dataSetKondisi = new LineDataSet(kondisihbEntries, "Kondisi HB(12,5 gr%)");
+        dataSetKondisi.setColor(getResources().getColor(R.color.red));
+        dataSetKondisi.setCircleColor(getResources().getColor(R.color.red));
+        dataSetKondisi.setLineWidth(2f);
+
+        LineDataSet dataSetSuhu = new LineDataSet(suhuEntries, "Suhu tubuh(36.3 °C)");
         dataSetSuhu.setColor(getResources().getColor(R.color.pink));
         dataSetSuhu.setCircleColor(getResources().getColor(R.color.pink));
         dataSetSuhu.setLineWidth(2f);
 
-        LineDataSet dataSetLaju = new LineDataSet(lajuEntries, "Laju pernafasan");
+        LineDataSet dataSetLaju = new LineDataSet(lajuEntries, "Laju pernafasan(20x)");
         dataSetLaju.setColor(getResources().getColor(R.color.yellow));
         dataSetLaju.setCircleColor(getResources().getColor(R.color.yellow));
         dataSetLaju.setLineWidth(2f);
 
-        LineDataSet dataSetTekanan = new LineDataSet(tekananEntries, "Tekanan darah");
+        LineDataSet dataSetTekanan = new LineDataSet(tekananEntries, "Tekanan darah(110/72 mmHg)");
         dataSetTekanan.setColor(getResources().getColor(R.color.blue));
         dataSetTekanan.setCircleColor(getResources().getColor(R.color.blue));
         dataSetTekanan.setLineWidth(2f);
 
         List<ILineDataSet> datasets = new ArrayList<>();
+        datasets.add(dataSetDenyut);
+        datasets.add(dataSetBerat);
+        datasets.add(dataSetLingkar);
+        datasets.add(dataSetKondisi);
         datasets.add(dataSetSuhu);
         datasets.add(dataSetLaju);
         datasets.add(dataSetTekanan);
 
         //set chart range
         YAxis leftAxis = lineChart.getAxisLeft();
-        leftAxis.setAxisMinimum(0f);
-        leftAxis.setAxisMaximum(110f);
+        leftAxis.setAxisMinimum(10f);
+        leftAxis.setAxisMaximum(120f);
 
         //set chart description
         lineChart.getDescription().setEnabled(true);
@@ -334,14 +369,21 @@ public class RekamMedis extends AppCompatActivity {
 
         //set chart label x axis
         XAxis xAxis = lineChart.getXAxis();
-        xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
+        xAxis.setPosition(XAxis.XAxisPosition.TOP);
         xAxis.setAxisMinimum(0f);
-        xAxis.setAxisMaximum(list.size()+1);
-        xAxis.setLabelCount(list.size()+1, true);
+        xAxis.setAxisMaximum(list.size() + 1);
+        xAxis.setLabelCount(list.size() + 1, true);
         xAxis.setGranularityEnabled(true);
         xAxis.setGranularity(7f);
         xAxis.setCenterAxisLabels(true);
         xAxis.setValueFormatter(new ClaimsXAxisValueFormatter(listLabels));
+
+        //set legend
+        Legend legend = lineChart.getLegend();
+        legend.setHorizontalAlignment(Legend.LegendHorizontalAlignment.LEFT);
+        legend.setVerticalAlignment(Legend.LegendVerticalAlignment.BOTTOM);
+        legend.setOrientation(Legend.LegendOrientation.HORIZONTAL);
+        legend.setWordWrapEnabled(true);
 
         //set data to chart
         LineData lineData = new LineData(datasets);
