@@ -16,27 +16,32 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatSpinner;
 
 import com.google.android.material.radiobutton.MaterialRadioButton;
+import com.google.firebase.database.ServerValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.sh.aplikasiku.R;
 import com.sh.aplikasiku.model.User;
 
+import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
 public class EditRekam extends AppCompatActivity {
-    private EditText editberat, editlingkar, editkondisi, edittekanan, editlaju, editsuhu, editdenyut;
+    private EditText editberat, editlingkar, editkondisi, edittekananSistolik, edittekananDiastolik,
+            editlaju, editsuhu, editdenyut;
     private Button btnsave;
     private AppCompatSpinner spinner_pasien;
     private RadioGroup rgRujukan;
     private MaterialRadioButton rbRujukanBaik, rbRujukanButuh;
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     private ProgressDialog progressDialog;
-    private String id = "", id_user, pasien, option, dateCreated, dateUpdated, rujukan;
+    private String id = "", id_user, pasien, option, dateCreated, dateUpdated, rujukan = "";
     private ArrayList<User> listUser = new ArrayList<>();
+    private int statusRujukan = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,15 +54,13 @@ public class EditRekam extends AppCompatActivity {
         editberat = findViewById(R.id.berat);
         editlingkar = findViewById(R.id.lingkar);
         editkondisi = findViewById(R.id.kondisi);
-        edittekanan = findViewById(R.id.tekanan);
+        edittekananSistolik = findViewById(R.id.tekanan_sistolik);
+        edittekananDiastolik = findViewById(R.id.tekanan_diastolik);
         editlaju = findViewById(R.id.laju);
         editsuhu = findViewById(R.id.suhu);
         editdenyut = findViewById(R.id.denyut);
         btnsave = findViewById(R.id.btn_save);
         spinner_pasien = findViewById(R.id.spinner_pasien);
-        rgRujukan = findViewById(R.id.rg_rujukan);
-        rbRujukanBaik = findViewById(R.id.rb_rujukan_baik);
-        rbRujukanButuh = findViewById(R.id.rb_rujukan_butuh);
 
         progressDialog = new ProgressDialog(EditRekam.this);
         progressDialog.setTitle("loading");
@@ -67,28 +70,21 @@ public class EditRekam extends AppCompatActivity {
             if (editberat.getText().length() > 0 &&
                     editlingkar.getText().length() > 0 &&
                     editkondisi.getText().length() > 0 &&
-                    edittekanan.getText().length() > 0 &&
+                    edittekananSistolik.getText().length() > 0 &&
+                    edittekananDiastolik.getText().length() > 0 &&
                     editlaju.getText().length() > 0 &&
                     editsuhu.getText().length() > 0 &&
-                    editdenyut.getText().length() > 0 && !rujukan.isEmpty()) {
+                    editdenyut.getText().length() > 0 ) {
                 saveData(editberat.getText().toString(),
                         editlingkar.getText().toString(),
                         editkondisi.getText().toString(),
-                        edittekanan.getText().toString(),
+                        edittekananSistolik.getText().toString(),
+                        edittekananDiastolik.getText().toString(),
                         editlaju.getText().toString(),
                         editsuhu.getText().toString(),
-                        editdenyut.getText().toString(),
-                        rujukan);
+                        editdenyut.getText().toString());
             } else {
                 Toast.makeText(getApplicationContext(), "Mohon lengkapi form!", Toast.LENGTH_SHORT).show();
-            }
-        });
-
-        rgRujukan.setOnCheckedChangeListener((radioGroup, i) -> {
-            if (rbRujukanBaik.isChecked()) {
-                rujukan = "Baik";
-            } else if (rbRujukanButuh.isChecked()) {
-                rujukan = "Butuh rujukan";
             }
         });
 
@@ -103,7 +99,6 @@ public class EditRekam extends AppCompatActivity {
                 editberat.setText(intent.getStringExtra("berat"));
                 editlingkar.setText(intent.getStringExtra("lingkar"));
                 editkondisi.setText(intent.getStringExtra("kondisi"));
-                edittekanan.setText(intent.getStringExtra("tekanan"));
                 editlaju.setText(intent.getStringExtra("laju"));
                 editsuhu.setText(intent.getStringExtra("suhu"));
                 editdenyut.setText(intent.getStringExtra("denyut"));
@@ -112,13 +107,13 @@ public class EditRekam extends AppCompatActivity {
                 dateUpdated = intent.getStringExtra("dateUpdated");
                 spinner_pasien.setEnabled(false);
 
-                if (rujukan.equalsIgnoreCase("baik")) {
-                    rbRujukanBaik.setChecked(true);
-                    rbRujukanButuh.setChecked(false);
-                } else if (rujukan.equalsIgnoreCase("butuh rujukan")) {
-                    rbRujukanBaik.setChecked(false);
-                    rbRujukanButuh.setChecked(true);
-                }
+                String tekananDarah = intent.getStringExtra("tekanan");
+                String sistolik = tekananDarah.substring(0, tekananDarah.indexOf("/"));
+                String diastolik = tekananDarah.substring(tekananDarah.indexOf("/"), tekananDarah.length());
+
+                edittekananSistolik.setText(sistolik);
+                edittekananDiastolik.setText(diastolik);
+                Toast.makeText(this, "ini " + sistolik + " dan " + diastolik, Toast.LENGTH_SHORT).show();
             } else {
                 id = null;
             }
@@ -137,13 +132,15 @@ public class EditRekam extends AppCompatActivity {
         return true;
     }
 
-    private void saveData(String berat, String lingkar, String kondisi, String tekanan, String laju, String suhu, String denyut, String rujukan) {
-        progressDialog.show();
+    private void saveData(String berat, String lingkar, String kondisi, String tekananSistolik,
+                          String tekananDiastolik, String laju, String suhu, String denyut) {
+//        progressDialog.show();
 
         //untuk mendapatkan tanggal saat data dibuat
         SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
         Calendar c = Calendar.getInstance();
         String date = sdf.format(c.getTime());
+        String tekanan = tekananSistolik+'/'+tekananDiastolik;
 
         //untuk menambahkan data, jika id length not null berati edit kalau di else nya berarti fitur tambah
         if (id != null) {
@@ -157,7 +154,7 @@ public class EditRekam extends AppCompatActivity {
             rekam.put("laju", laju);
             rekam.put("suhu", suhu);
             rekam.put("denyut", denyut);
-            rekam.put("rujukan", rujukan);
+            rekam.put("rujukan", checkRekamMedisForRujukan(berat, lingkar, kondisi, tekanan, laju, suhu, denyut));
             rekam.put("dateCreated", dateCreated);
             rekam.put("dateUpdated", date);
             db.collection("rekammedis").document(id)
@@ -185,7 +182,7 @@ public class EditRekam extends AppCompatActivity {
             rekam.put("laju", laju);
             rekam.put("suhu", suhu);
             rekam.put("denyut", denyut);
-            rekam.put("rujukan", rujukan);
+            rekam.put("rujukan", checkRekamMedisForRujukan(berat, lingkar, kondisi, tekanan, laju, suhu, denyut));
             rekam.put("dateCreated", date);
             rekam.put("dateUpdated", date);
             db.collection("rekammedis")
@@ -272,4 +269,36 @@ public class EditRekam extends AppCompatActivity {
         return pos;
     }
 
+    private String checkRekamMedisForRujukan(String berat, String lingkar, String kondisi, String tekanan, String laju, String suhu, String denyut) {
+        String rujukan;
+
+        if (Integer.parseInt(berat) <= 65 && Integer.parseInt(berat) >= 70) {
+            statusRujukan = statusRujukan + 1;
+        }
+        if (Integer.parseInt(lingkar) <= 28 && Integer.parseInt(lingkar) >= 30) {
+            statusRujukan = statusRujukan + 1;
+        }
+        if (Float.parseFloat(kondisi) != 12.5) {
+            statusRujukan = statusRujukan + 1;
+        }
+        String sistolik = tekanan.substring(0, tekanan.indexOf("/"));
+        if (Integer.parseInt(sistolik) != 110) {
+            statusRujukan = statusRujukan + 1;
+        }
+        if (Integer.parseInt(laju) != 20) {
+            statusRujukan = statusRujukan + 1;
+        }
+        if (Float.parseFloat(suhu) != 36.3) {
+            statusRujukan = statusRujukan + 1;
+        }
+        if (Integer.parseInt(denyut) != 80) {
+            statusRujukan = statusRujukan + 1;
+        }
+        if (statusRujukan >= 4) {
+            rujukan = "Butuh rujukan";
+        } else {
+            rujukan = "Baik";
+        }
+        return rujukan;
+    }
 }

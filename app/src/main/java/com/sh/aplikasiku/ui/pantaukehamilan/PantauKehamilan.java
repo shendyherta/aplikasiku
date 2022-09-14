@@ -293,7 +293,7 @@ public class PantauKehamilan extends AppCompatActivity {
 
     private void setEntriesToChart() {
         //set chart data
-        LineDataSet dataSet = new LineDataSet(pantauEntries, "Dentut");
+        LineDataSet dataSet = new LineDataSet(pantauEntries, "Denyut jantung");
         dataSet.setColor(getResources().getColor(R.color.pink));
         dataSet.setLineWidth(2f);
 

@@ -177,6 +177,7 @@ public class RekamMedis extends AppCompatActivity {
 
         if (userrole == 1) {
             db.collection("rekammedis")
+                    .orderBy("dateCreated")
                     .get()
                     .addOnCompleteListener(task -> {
                         list.clear();
@@ -219,6 +220,7 @@ public class RekamMedis extends AppCompatActivity {
             FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
             db.collection("rekammedis")
                     .whereEqualTo("idPasien", firebaseUser.getUid())
+                    .orderBy("dateCreated")
                     .get()
                     .addOnCompleteListener(task -> {
                         list.clear();
@@ -304,47 +306,57 @@ public class RekamMedis extends AppCompatActivity {
         listLabels.add("");
         setEntriesToChart();
     }
-//    private List<Entry> denyutEntries = new ArrayList<Entry>();
-//    private List<Entry> beratEntries = new ArrayList<Entry>();
-//    private List<Entry> lingkarEntries = new ArrayList<Entry>();
-//    private List<Entry> kondisihbEntries = new ArrayList<Entry>();
 
     private void setEntriesToChart() {
         //set chart data
         LineDataSet dataSetDenyut = new LineDataSet(denyutEntries, "Denyut jantung(80x/menit)");
         dataSetDenyut.setColor(getResources().getColor(R.color.grey_blue));
         dataSetDenyut.setCircleColor(getResources().getColor(R.color.grey_blue));
+        dataSetDenyut.setCircleRadius(4f);
         dataSetDenyut.setLineWidth(2f);
+        dataSetDenyut.setValueTextSize(8f);
 
         LineDataSet dataSetBerat = new LineDataSet(beratEntries, "Berat badan(65-70 kg)");
         dataSetBerat.setColor(getResources().getColor(R.color.green));
         dataSetBerat.setCircleColor(getResources().getColor(R.color.green));
+        dataSetBerat.setCircleRadius(4f);
         dataSetBerat.setLineWidth(2f);
+        dataSetBerat.setValueTextSize(8f);
 
         LineDataSet dataSetLingkar = new LineDataSet(lingkarEntries, "Lingkar lengan(28-30 cm)");
         dataSetLingkar.setColor(getResources().getColor(R.color.purple));
         dataSetLingkar.setCircleColor(getResources().getColor(R.color.purple));
+        dataSetLingkar.setCircleRadius(4f);
         dataSetLingkar.setLineWidth(2f);
+        dataSetLingkar.setValueTextSize(8f);
 
         LineDataSet dataSetKondisi = new LineDataSet(kondisihbEntries, "Kondisi HB(12,5 gr%)");
         dataSetKondisi.setColor(getResources().getColor(R.color.red));
         dataSetKondisi.setCircleColor(getResources().getColor(R.color.red));
+        dataSetKondisi.setCircleRadius(4f);
         dataSetKondisi.setLineWidth(2f);
+        dataSetKondisi.setValueTextSize(8f);
 
         LineDataSet dataSetSuhu = new LineDataSet(suhuEntries, "Suhu tubuh(36.3 °C)");
         dataSetSuhu.setColor(getResources().getColor(R.color.pink));
         dataSetSuhu.setCircleColor(getResources().getColor(R.color.pink));
+        dataSetSuhu.setCircleRadius(4f);
         dataSetSuhu.setLineWidth(2f);
+        dataSetSuhu.setValueTextSize(8f);
 
         LineDataSet dataSetLaju = new LineDataSet(lajuEntries, "Laju pernafasan(20x)");
         dataSetLaju.setColor(getResources().getColor(R.color.yellow));
         dataSetLaju.setCircleColor(getResources().getColor(R.color.yellow));
+        dataSetLaju.setCircleRadius(4f);
         dataSetLaju.setLineWidth(2f);
+        dataSetLaju.setValueTextSize(8f);
 
         LineDataSet dataSetTekanan = new LineDataSet(tekananEntries, "Tekanan darah(110/72 mmHg)");
         dataSetTekanan.setColor(getResources().getColor(R.color.blue));
         dataSetTekanan.setCircleColor(getResources().getColor(R.color.blue));
+        dataSetTekanan.setCircleRadius(4f);
         dataSetTekanan.setLineWidth(2f);
+        dataSetTekanan.setValueTextSize(8f);
 
         List<ILineDataSet> datasets = new ArrayList<>();
         datasets.add(dataSetDenyut);
@@ -389,7 +401,6 @@ public class RekamMedis extends AppCompatActivity {
         LineData lineData = new LineData(datasets);
         lineChart.getAxisRight().setEnabled(false);
         lineChart.setData(lineData);
-        lineChart.setPinchZoom(false);
         lineChart.invalidate();
     }
 

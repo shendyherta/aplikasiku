@@ -59,13 +59,13 @@ public class TampilanRekam extends AppCompatActivity {
 
         if (userrole == 1) {
             if (intent != null) {
-                tampilberat.setText(intent.getStringExtra("berat"));
-                tampillingkar.setText(intent.getStringExtra("lingkar"));
-                tampillaju.setText(intent.getStringExtra("laju"));
-                tampiltekanan.setText(intent.getStringExtra("tekanan"));
-                tampilsuhu.setText(intent.getStringExtra("suhu"));
-                tampildenyut.setText(intent.getStringExtra("denyut"));
-                tampilkondisi.setText(intent.getStringExtra("kondisi"));
+                tampilberat.setText(intent.getStringExtra("berat") + " kg");
+                tampillingkar.setText(intent.getStringExtra("lingkar") + " cm");
+                tampillaju.setText(intent.getStringExtra("laju") + "x/menit");
+                tampiltekanan.setText(intent.getStringExtra("tekanan") + " mmHg");
+                tampilsuhu.setText(intent.getStringExtra("suhu") + " °C");
+                tampildenyut.setText(intent.getStringExtra("denyut") + "x/menit");
+                tampilkondisi.setText(intent.getStringExtra("kondisi") + " gr%");
                 tampilpasien.setText(intent.getStringExtra("pasien"));
                 tampilRujukan.setText(intent.getStringExtra("rujukan"));
                 tampilUpdated.setText(intent.getStringExtra("dateUpdated"));
@@ -74,13 +74,13 @@ public class TampilanRekam extends AppCompatActivity {
             }
         } else {
             if (intent != null) {
-                tampilberat.setText(intent.getStringExtra("berat"));
-                tampillingkar.setText(intent.getStringExtra("lingkar"));
-                tampillaju.setText(intent.getStringExtra("laju"));
-                tampiltekanan.setText(intent.getStringExtra("tekanan"));
-                tampilsuhu.setText(intent.getStringExtra("suhu"));
-                tampildenyut.setText(intent.getStringExtra("denyut"));
-                tampilkondisi.setText(intent.getStringExtra("kondisi"));
+                tampilberat.setText(intent.getStringExtra("berat") + " kg");
+                tampillingkar.setText(intent.getStringExtra("lingkar") + " cm");
+                tampillaju.setText(intent.getStringExtra("laju") + "x/menit");
+                tampiltekanan.setText(intent.getStringExtra("tekanan") + " mmHg");
+                tampilsuhu.setText(intent.getStringExtra("suhu") + " °C");
+                tampildenyut.setText(intent.getStringExtra("denyut") + "x/menit");
+                tampilkondisi.setText(intent.getStringExtra("kondisi") + " gr%");
                 tampilRujukan.setText(intent.getStringExtra("rujukan"));
                 tampilCreated.setText(intent.getStringExtra("dateCreated"));
                 llPasien.setVisibility(View.GONE);
