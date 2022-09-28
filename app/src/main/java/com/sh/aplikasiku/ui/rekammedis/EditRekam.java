@@ -288,7 +288,7 @@ public class EditRekam extends AppCompatActivity {
         if (Integer.parseInt(laju) != 20) {
             statusRujukan = statusRujukan + 1;
         }
-        if (Float.parseFloat(suhu) != 36.3) {
+        if (Float.parseFloat(suhu) != 37) {
             statusRujukan = statusRujukan + 1;
         }
         if (Integer.parseInt(denyut) != 80) {

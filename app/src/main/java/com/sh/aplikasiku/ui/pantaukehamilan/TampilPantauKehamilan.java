@@ -3,6 +3,7 @@ package com.sh.aplikasiku.ui.pantaukehamilan;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.LinearLayoutCompat;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.app.ProgressDialog;
@@ -24,7 +25,9 @@ import java.util.List;
 public class TampilPantauKehamilan extends AppCompatActivity {
     private RecyclerView recyclerView;
     private List<UserPantau> list = new ArrayList<>();
-    private TextView tampildenyutjantung, tampilkondisibayi, tampilUpdated, tampilCreated, tampilpasien;
+    private TextView tampildenyutjantung, tampilkondisibayi, tampilUpdated, tampilCreated,
+            tampilpasien, tampilRujukan;
+    private ConstraintLayout clRujukan;
     private LinearLayoutCompat llPasien, llUpdate;
     private SharedPreferences sharedPref;
     private int userrole;
@@ -49,23 +52,29 @@ public class TampilPantauKehamilan extends AppCompatActivity {
         tampilCreated = findViewById(R.id.tv_date);
         llPasien = findViewById(R.id.ll_pasien);
         llUpdate = findViewById(R.id.ll_update);
+        clRujukan = findViewById(R.id.cl_rujukan);
+        tampilRujukan = findViewById(R.id.tv_rujukan);
 
         Intent intent = getIntent();
         if (userrole == 1) {
             if (intent != null) {
-                tampildenyutjantung.setText(intent.getStringExtra("denyutjantung"));
+                tampildenyutjantung.setText(String.format("%sx/menit", intent.getStringExtra("denyutjantung")));
                 tampilkondisibayi.setText(intent.getStringExtra("kondisibayi"));
                 tampilpasien.setText(intent.getStringExtra("pasien"));
+                tampilRujukan.setText(intent.getStringExtra("rujukan"));
                 tampilUpdated.setText(intent.getStringExtra("dateUpdated"));
                 tampilCreated.setText(intent.getStringExtra("dateCreated"));
+                setRujukanBackground();
             }
         } else {
             if (intent != null) {
-                tampildenyutjantung.setText(intent.getStringExtra("denyutjantung"));
+                tampildenyutjantung.setText(String.format("%sx/menit", intent.getStringExtra("denyutjantung")));
                 tampilkondisibayi.setText(intent.getStringExtra("kondisibayi"));
+                tampilRujukan.setText(intent.getStringExtra("rujukan"));
                 tampilCreated.setText(intent.getStringExtra("dateCreated"));
                 llPasien.setVisibility(View.GONE);
                 llUpdate.setVisibility(View.GONE);
+                setRujukanBackground();
             }
         }
     }
@@ -82,4 +91,9 @@ public class TampilPantauKehamilan extends AppCompatActivity {
         return true;
     }
 
+    private void setRujukanBackground() {
+        if (tampilRujukan.getText().equals("Butuh rujukan")) {
+            clRujukan.setBackgroundColor(getResources().getColor(R.color.grey_blue));
+        }
+    }
 }

@@ -43,13 +43,13 @@ public class AdminAdapterRekam extends RecyclerView.Adapter<AdminAdapterRekam.My
 
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
-        holder.berat.setText(list.get(position).getBeratBadan());
-        holder.lingkar.setText(list.get(position).getLingkarBadan());
-        holder.denyut.setText(list.get(position).getDenyutJantung());
-        holder.kondisi.setText(list.get(position).getKondisiHB());
-        holder.laju.setText(list.get(position).getLajuPernafasan());
-        holder.suhu.setText(list.get(position).getSuhu());
-        holder.tekanan.setText(list.get(position).getTekananDarah());
+        holder.berat.setText(String.format("%s kg", list.get(position).getBeratBadan()));
+        holder.lingkar.setText(String.format("%s cm", list.get(position).getLingkarBadan()));
+        holder.denyut.setText(String.format("%sx/menit", list.get(position).getDenyutJantung()));
+        holder.kondisi.setText(String.format("%s gr%%", list.get(position).getKondisiHB()));
+        holder.laju.setText(String.format("%sx/menit", list.get(position).getLajuPernafasan()));
+        holder.suhu.setText(String.format("%s °C", list.get(position).getSuhu()));
+        holder.tekanan.setText(String.format("%s mmHg", list.get(position).getTekananDarah()));
         holder.pasien.setText(list.get(position).getPasien());
         holder.date.setText(list.get(position).getDateCreated());
         holder.rujukan.setText(list.get(position).getRujukan());

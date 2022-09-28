@@ -9,6 +9,7 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.widget.LinearLayoutCompat;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.sh.aplikasiku.R;
@@ -36,9 +37,16 @@ public class UserAdapterPantau extends RecyclerView.Adapter<UserAdapterPantau.My
 
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
-        holder.denyutjantung.setText(list.get(position).getDenyut());
+        holder.denyutjantung.setText(String.format("%sx/menit", list.get(position).getDenyut()));
         holder.kondisibayi.setText(list.get(position).getKondisi());
         holder.date.setText(list.get(position).getDateCreated());
+        holder.rujukan.setText(list.get(position).getRujukan());
+
+        String rujukan = list.get(position).getRujukan();
+
+        if (rujukan.equalsIgnoreCase("butuh rujukan")) {
+            holder.clHeader.setBackgroundColor(context.getResources().getColor(R.color.grey_blue));
+        }
 
         holder.itemView.setOnClickListener(v -> {
             Intent intentbaca = new Intent(context, TampilPantauKehamilan.class);
@@ -47,6 +55,7 @@ public class UserAdapterPantau extends RecyclerView.Adapter<UserAdapterPantau.My
             intentbaca.putExtra("pasien", list.get(position).getPasien());
             intentbaca.putExtra("denyutjantung", list.get(position).getDenyut());
             intentbaca.putExtra("kondisibayi", list.get(position).getKondisi());
+            intentbaca.putExtra("rujukan", list.get(position).getRujukan());
             intentbaca.putExtra("dateCreated", list.get(position).getDateCreated());
             intentbaca.putExtra("dateUpdated", list.get(position).getDateUpdated());
             context.startActivity(intentbaca);
@@ -59,7 +68,8 @@ public class UserAdapterPantau extends RecyclerView.Adapter<UserAdapterPantau.My
     }
 
     class MyViewHolder extends RecyclerView.ViewHolder {
-        TextView kondisibayi, denyutjantung, date;
+        TextView kondisibayi, denyutjantung, date, rujukan;
+        ConstraintLayout clHeader;
         LinearLayoutCompat llPasien;
 
         public MyViewHolder(@NonNull View itemView) {
@@ -67,6 +77,8 @@ public class UserAdapterPantau extends RecyclerView.Adapter<UserAdapterPantau.My
             denyutjantung = itemView.findViewById(R.id.denyutjantung);
             kondisibayi = itemView.findViewById(R.id.kondisibayi);
             date = itemView.findViewById(R.id.tv_date);
+            rujukan = itemView.findViewById(R.id.tv_rujukan);
+            clHeader = itemView.findViewById(R.id.cl_header);
             llPasien = itemView.findViewById(R.id.ll_pasien);
 
             llPasien.setVisibility(View.GONE);

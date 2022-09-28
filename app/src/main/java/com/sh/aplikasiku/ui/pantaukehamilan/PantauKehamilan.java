@@ -25,6 +25,7 @@ import android.text.InputFilter;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.View;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.github.mikephil.charting.charts.BarLineChartBase;
@@ -58,8 +59,12 @@ import com.sh.aplikasiku.adapter.AdminAdapterPantau;
 import com.sh.aplikasiku.adapter.ClaimsXAxisValueFormatter;
 import com.sh.aplikasiku.adapter.UserAdapterPantau;
 import com.sh.aplikasiku.model.UserPantau;
+import com.sh.aplikasiku.model.UserRekam;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import android.os.Bundle;
@@ -68,6 +73,7 @@ public class PantauKehamilan extends AppCompatActivity {
     private RecyclerView recyclerView;
     private FloatingActionButton btnAdd;
     private LineChart lineChart;
+    private TextView tvTitle;
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     private List<UserPantau> list = new ArrayList<>();
     private List<Entry> pantauEntries = new ArrayList<>();
@@ -103,6 +109,7 @@ public class PantauKehamilan extends AppCompatActivity {
         recyclerView = findViewById(R.id.recyclerview);
         btnAdd = findViewById(R.id.btn_add);
         lineChart = findViewById(R.id.line_chart);
+        tvTitle = findViewById(R.id.tv_title);
 
         btnAdd.setOnClickListener(v -> {
             Intent intent = new Intent(getApplicationContext(), EditPantau.class);
@@ -130,6 +137,7 @@ public class PantauKehamilan extends AppCompatActivity {
                             intentbaca.putExtra("pasien", list.get(pos).getPasien());
                             intentbaca.putExtra("denyutjantung", list.get(pos).getDenyut());
                             intentbaca.putExtra("kondisibayi", list.get(pos).getKondisi());
+                            intentbaca.putExtra("rujukan", list.get(pos).getRujukan());
                             intentbaca.putExtra("dateCreated", list.get(pos).getDateCreated());
                             intentbaca.putExtra("dateUpdated", list.get(pos).getDateUpdated());
                             startActivity(intentbaca);
@@ -141,6 +149,7 @@ public class PantauKehamilan extends AppCompatActivity {
                             intent.putExtra("pasien", list.get(pos).getPasien());
                             intent.putExtra("denyutjantung", list.get(pos).getDenyut());
                             intent.putExtra("kondisibayi", list.get(pos).getKondisi());
+                            intent.putExtra("rujukan", list.get(pos).getRujukan());
                             intent.putExtra("dateCreated", list.get(pos).getDateCreated());
                             intent.putExtra("dateUpdated", list.get(pos).getDateUpdated());
                             intent.putExtra("option", "edit");
@@ -156,6 +165,7 @@ public class PantauKehamilan extends AppCompatActivity {
         } else {
             btnAdd.setVisibility(View.GONE);
             userAdapterPantau = new UserAdapterPantau(this, list);
+            tvTitle.setVisibility(View.GONE);
         }
 
         getData();
@@ -199,13 +209,15 @@ public class PantauKehamilan extends AppCompatActivity {
                                         String pasien = document.get("pasien").toString();
                                         String denyutjantung = document.get("denyutjantung").toString();
                                         String kondisibayi = document.get("kondisibayi").toString();
+                                        String rujukan = document.get("rujukan").toString();
                                         String dateCreated = document.get("dateCreated").toString();
                                         String dateUpdated = document.get("dateUpdated").toString();
                                         UserPantau user = new UserPantau(id, idUser, pasien,
-                                                denyutjantung, kondisibayi, dateCreated, dateUpdated);
+                                                denyutjantung, kondisibayi, rujukan, dateCreated, dateUpdated);
                                         user.setId(document.getId());
                                         list.add(user);
                                     }
+                                    sortData();
                                     showPantauKehamilan();
                                     lineChart.setVisibility(View.GONE);
                                 }
@@ -236,13 +248,15 @@ public class PantauKehamilan extends AppCompatActivity {
                                         String pasien = document.get("pasien").toString();
                                         String denyutjantung = document.get("denyutjantung").toString();
                                         String kondisibayi = document.get("kondisibayi").toString();
+                                        String rujukan = document.get("rujukan").toString();
                                         String dateCreated = document.get("dateCreated").toString();
                                         String dateUpdated = document.get("dateUpdated").toString();
                                         UserPantau user = new UserPantau(id, idUser, pasien,
-                                                denyutjantung, kondisibayi, dateCreated, dateUpdated);
+                                                denyutjantung, kondisibayi, rujukan, dateCreated, dateUpdated);
                                         user.setId(document.getId());
                                         list.add(user);
                                     }
+                                    sortData();
                                     showPantauKehamilan();
                                     setPantauEntries();
                                 }
@@ -301,11 +315,11 @@ public class PantauKehamilan extends AppCompatActivity {
         datasets.add(dataSet);
 
         //set chart limit y axis
-        LimitLine minLine = new LimitLine(80f, "Batas normal bawah");
+        LimitLine minLine = new LimitLine(100f, "Batas normal bawah");
         minLine.setLineColor(Color.GREEN);
         minLine.setLineWidth(2f);
 
-        LimitLine maxLine = new LimitLine(90f, "Batas normal atas");
+        LimitLine maxLine = new LimitLine(120f, "Batas normal atas");
         maxLine.setLineColor(Color.GREEN);
         maxLine.setLineWidth(2f);
 
@@ -314,8 +328,8 @@ public class PantauKehamilan extends AppCompatActivity {
         leftAxis.addLimitLine(minLine);
         leftAxis.addLimitLine(maxLine);
         leftAxis.setDrawLimitLinesBehindData(true);
-        leftAxis.setAxisMinimum(65f);
-        leftAxis.setAxisMaximum(110f);
+        leftAxis.setAxisMinimum(70f);
+        leftAxis.setAxisMaximum(130f);
 
         //set chart description
         lineChart.getDescription().setEnabled(true);
@@ -343,4 +357,30 @@ public class PantauKehamilan extends AppCompatActivity {
         lineChart.invalidate();
     }
 
+    private void sortData() {
+        int n = list.size();
+
+        for (int i = 0; i < n; i++) {
+            for (int j = 1; j < (n-i); j++) {
+                //create date format pattern
+                SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
+                Date strDate1;
+                Date strDate2;
+                try {
+                    //initialize date 1 and 2
+                    strDate1 = sdf.parse(list.get(j-1).getDateCreated());
+                    strDate2 = sdf.parse(list.get(j).getDateCreated());
+
+                    //compare date 1 and 2
+                    if (strDate2.after(strDate1)) {
+                        UserPantau temp = list.get(j-1);
+                        list.set(j-1, list.get(j));
+                        list.set(j, temp);
+                    }
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
 }

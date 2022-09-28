@@ -27,8 +27,12 @@ import com.sh.aplikasiku.R;
 import com.sh.aplikasiku.adapter.AdminAdapterArtikel;
 import com.sh.aplikasiku.adapter.UserAdapterArtikel;
 import com.sh.aplikasiku.model.UserArtikel;
+import com.sh.aplikasiku.model.UserPantau;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class Artikel extends AppCompatActivity {
@@ -164,6 +168,7 @@ public class Artikel extends AppCompatActivity {
                                     userArtikel.setId(document.getId());
                                     list.add(userArtikel);
                                 }
+                                sortData();
                                 showArtikel();
                             }
                         } catch (Exception e) {
@@ -202,6 +207,34 @@ public class Artikel extends AppCompatActivity {
             recyclerView.setAdapter(adminAdapterArtikel);
         } else {
             recyclerView.setAdapter(userAdapterArtikel);
+        }
+    }
+
+
+    private void sortData() {
+        int n = list.size();
+
+        for (int i = 0; i < n; i++) {
+            for (int j = 1; j < (n-i); j++) {
+                //create date format pattern
+                SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
+                Date strDate1;
+                Date strDate2;
+                try {
+                    //initialize date 1 and 2
+                    strDate1 = sdf.parse(list.get(j-1).getDateCreated());
+                    strDate2 = sdf.parse(list.get(j).getDateCreated());
+
+                    //compare date 1 and 2
+                    if (strDate2.after(strDate1)) {
+                        UserArtikel temp = list.get(j-1);
+                        list.set(j-1, list.get(j));
+                        list.set(j, temp);
+                    }
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+            }
         }
     }
 }

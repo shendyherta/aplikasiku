@@ -1,15 +1,16 @@
 package com.sh.aplikasiku.model;
 
 public class UserPantau {
-    private String id, idUser, pasien, denyut, kondisi, dateCreated, dateUpdated;
+    private String id, idUser, pasien, denyut, kondisi, rujukan, dateCreated, dateUpdated;
 
     public UserPantau(String id, String idUser, String pasien, String denyut, String kondisi,
-                      String dateCreated, String dateUpdated){
+                      String rujukan, String dateCreated, String dateUpdated){
         this.id = id;
         this.idUser = idUser;
         this.pasien = pasien;
         this.denyut = denyut;
         this.kondisi = kondisi;
+        this.rujukan = rujukan;
         this.dateCreated = dateCreated;
         this.dateUpdated = dateUpdated;
     }
@@ -52,6 +53,14 @@ public class UserPantau {
 
     public void setKondisi(String kondisi) {
         this.kondisi = kondisi;
+    }
+
+    public String getRujukan() {
+        return rujukan;
+    }
+
+    public void setRujukan(String rujukan) {
+        this.rujukan = rujukan;
     }
 
     public String getDateCreated() {

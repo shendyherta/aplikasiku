@@ -8,6 +8,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.result.ActivityResultLauncher;
@@ -36,13 +37,17 @@ import com.sh.aplikasiku.adapter.ClaimsXAxisValueFormatter;
 import com.sh.aplikasiku.adapter.UserAdapterRekam;
 import com.sh.aplikasiku.model.UserRekam;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class RekamMedis extends AppCompatActivity {
     private RecyclerView recyclerView;
     private FloatingActionButton btnAdd;
     private LineChart lineChart;
+    private TextView tvTitle;
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     private List<UserRekam> list = new ArrayList<>();
     private UserAdapterRekam userAdapterRekam;
@@ -83,6 +88,7 @@ public class RekamMedis extends AppCompatActivity {
         recyclerView = findViewById(R.id.recyclerview);
         btnAdd = findViewById(R.id.btn_add);
         lineChart = findViewById(R.id.line_chart);
+        tvTitle = findViewById(R.id.tv_title);
 
         //create progress bar
         progressDialog = new ProgressDialog(RekamMedis.this);
@@ -149,6 +155,7 @@ public class RekamMedis extends AppCompatActivity {
         } else {
             btnAdd.setVisibility(View.GONE);
             userAdapterRekam = new UserAdapterRekam(this, list);
+            tvTitle.setVisibility(View.GONE);
         }
 
         getData();
@@ -177,7 +184,6 @@ public class RekamMedis extends AppCompatActivity {
 
         if (userrole == 1) {
             db.collection("rekammedis")
-                    .orderBy("dateCreated")
                     .get()
                     .addOnCompleteListener(task -> {
                         list.clear();
@@ -204,6 +210,7 @@ public class RekamMedis extends AppCompatActivity {
                                         user.setId(document.getId());
                                         list.add(user);
                                     }
+                                    sortData();
                                     showRekamMedis();
                                     lineChart.setVisibility(View.GONE);
                                 }
@@ -220,7 +227,6 @@ public class RekamMedis extends AppCompatActivity {
             FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
             db.collection("rekammedis")
                     .whereEqualTo("idPasien", firebaseUser.getUid())
-                    .orderBy("dateCreated")
                     .get()
                     .addOnCompleteListener(task -> {
                         list.clear();
@@ -248,6 +254,7 @@ public class RekamMedis extends AppCompatActivity {
                                         user.setId(document.getId());
                                         list.add(user);
                                     }
+                                    sortData();
                                     showRekamMedis();
                                     setRekamEntries();
                                 }
@@ -369,7 +376,7 @@ public class RekamMedis extends AppCompatActivity {
 
         //set chart range
         YAxis leftAxis = lineChart.getAxisLeft();
-        leftAxis.setAxisMinimum(10f);
+        leftAxis.setAxisMinimum(0f);
         leftAxis.setAxisMaximum(120f);
 
         //set chart description
@@ -404,4 +411,30 @@ public class RekamMedis extends AppCompatActivity {
         lineChart.invalidate();
     }
 
+    private void sortData() {
+        int n = list.size();
+
+        for (int i = 0; i < n; i++) {
+            for (int j = 1; j < (n-i); j++) {
+                //create date format pattern
+                SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
+                Date strDate1;
+                Date strDate2;
+                try {
+                    //initialize date 1 and 2
+                    strDate1 = sdf.parse(list.get(j-1).getDateCreated());
+                    strDate2 = sdf.parse(list.get(j).getDateCreated());
+
+                    //compare date 1 and 2
+                    if (strDate2.after(strDate1)) {
+                        UserRekam temp = list.get(j-1);
+                        list.set(j-1, list.get(j));
+                        list.set(j, temp);
+                    }
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
 }

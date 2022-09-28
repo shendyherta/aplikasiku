@@ -56,9 +56,6 @@ public class MainActivity extends AppCompatActivity {
         ivProfile.setOnClickListener(v -> {
             popupWindow();
         });
-
-        Glide.with(this).load("https://firebasestorage.googleapis.com/v0/b/aplikasiku-8cb62.appspot.com/o/images%2FIMG1661410701197.jpeg?alt=media&token=f30eb211-ffdf-4d5a-84c3-46c123ddbb1e").circleCrop().into(ivProfile);
-
     }
 
     public void pantau(View view) {

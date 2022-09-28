@@ -30,8 +30,10 @@
                 android:id="@+id/iv_profile"
                 android:layout_width="30dp"
                 android:layout_height="30dp"
+                android:src="@drawable/ic_baseline_settings"
                 android:layout_gravity="end"
-                android:layout_marginEnd="20dp" />
+                android:layout_marginEnd="20dp"
+                app:tint="@color/grey_blue" />
 
         </androidx.appcompat.widget.Toolbar>
 

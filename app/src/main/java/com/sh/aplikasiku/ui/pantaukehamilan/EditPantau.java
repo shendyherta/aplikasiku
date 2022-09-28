@@ -108,6 +108,7 @@ public class EditPantau extends AppCompatActivity {
             dataPantau.put("pasien", pasien);
             dataPantau.put("denyutjantung", denyut);
             dataPantau.put("kondisibayi", kondisi);
+            dataPantau.put("rujukan", checkPantauForRujukan(denyut));
             dataPantau.put("dateCreated", dateCreated);
             dataPantau.put("dateUpdated", date);
 
@@ -132,6 +133,7 @@ public class EditPantau extends AppCompatActivity {
             dataPantau.put("pasien", pasien);
             dataPantau.put("denyutjantung", denyut);
             dataPantau.put("kondisibayi", kondisi);
+            dataPantau.put("rujukan", checkPantauForRujukan(denyut));
             dataPantau.put("dateCreated", date);
             dataPantau.put("dateUpdated", date);
 
@@ -216,5 +218,17 @@ public class EditPantau extends AppCompatActivity {
             }
         }
         return pos;
+    }
+
+    private String checkPantauForRujukan(String denyutBayi) {
+        String rujukan;
+
+        if (Integer.parseInt(denyutBayi) <= 85 && Integer.parseInt(denyutBayi) >= 130) {
+            rujukan = "Butuh rujukan";
+        } else {
+            rujukan = "Baik";
+        }
+
+        return rujukan;
     }
 }
