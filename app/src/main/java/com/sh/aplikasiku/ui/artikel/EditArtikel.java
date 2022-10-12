@@ -88,8 +88,16 @@ public class EditArtikel extends AppCompatActivity {
                 Glide.with(getApplicationContext()).load(intent.getStringExtra("avatar")).into(avatar);
                 btnAdd.setVisibility(View.GONE);
                 avatar.setVisibility(View.VISIBLE);
+
+                //set toolbar title
+                getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+                getSupportActionBar().setTitle("Edit Artikel");
             } else {
                 id = null;
+
+                //set toolbar title
+                getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+                getSupportActionBar().setTitle("Tambah Artikel");
             }
 
         }

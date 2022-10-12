@@ -34,7 +34,7 @@ public class TampilanRekam extends AppCompatActivity {
         setContentView(R.layout.activity_tampilan_rekam);
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setTitle("");
+        getSupportActionBar().setTitle("Rekam Medis");
 
         //get userrole
         sharedPref = getSharedPreferences(getString(R.string.data_user), MODE_PRIVATE);

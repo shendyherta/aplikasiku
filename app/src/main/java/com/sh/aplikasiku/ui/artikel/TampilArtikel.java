@@ -37,7 +37,7 @@ public class TampilArtikel extends AppCompatActivity {
         setContentView(R.layout.activity_tampil_artikel);
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setTitle("");
+        getSupportActionBar().setTitle("Artikel");
 
         //get userrole
         sharedPref = getSharedPreferences(getString(R.string.data_user), MODE_PRIVATE);

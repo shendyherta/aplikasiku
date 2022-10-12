@@ -109,13 +109,20 @@ public class EditRekam extends AppCompatActivity {
 
                 String tekananDarah = intent.getStringExtra("tekanan");
                 String sistolik = tekananDarah.substring(0, tekananDarah.indexOf("/"));
-                String diastolik = tekananDarah.substring(tekananDarah.indexOf("/"), tekananDarah.length());
+                String diastolik = tekananDarah.substring(tekananDarah.indexOf("/")+1, tekananDarah.length());
 
                 edittekananSistolik.setText(sistolik);
                 edittekananDiastolik.setText(diastolik);
-                Toast.makeText(this, "ini " + sistolik + " dan " + diastolik, Toast.LENGTH_SHORT).show();
+
+                //set toolbar title
+                getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+                getSupportActionBar().setTitle("Edit Rekam Medis");
             } else {
                 id = null;
+
+                //set toolbar title
+                getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+                getSupportActionBar().setTitle("Tambah Rekam Medis");
             }
         }
     }
@@ -272,26 +279,26 @@ public class EditRekam extends AppCompatActivity {
     private String checkRekamMedisForRujukan(String berat, String lingkar, String kondisi, String tekanan, String laju, String suhu, String denyut) {
         String rujukan;
 
-        if (Integer.parseInt(berat) <= 65 && Integer.parseInt(berat) >= 70) {
+        if (Integer.parseInt(berat) < 65 || Integer.parseInt(berat) > 70) {
             statusRujukan = statusRujukan + 1;
         }
-        if (Integer.parseInt(lingkar) <= 28 && Integer.parseInt(lingkar) >= 30) {
+        if (Integer.parseInt(lingkar) < 28 || Integer.parseInt(lingkar) > 30) {
             statusRujukan = statusRujukan + 1;
         }
-        if (Float.parseFloat(kondisi) != 12.5) {
+        if (Float.parseFloat(kondisi) < 12.0 || Float.parseFloat(kondisi) > 14.0) {
             statusRujukan = statusRujukan + 1;
         }
         String sistolik = tekanan.substring(0, tekanan.indexOf("/"));
-        if (Integer.parseInt(sistolik) != 110) {
+        if (Integer.parseInt(sistolik) < 108 || Integer.parseInt(sistolik) > 120) {
             statusRujukan = statusRujukan + 1;
         }
-        if (Integer.parseInt(laju) != 20) {
+        if (Integer.parseInt(laju) < 18 || Integer.parseInt(laju) > 20) {
             statusRujukan = statusRujukan + 1;
         }
-        if (Float.parseFloat(suhu) != 37) {
+        if (Float.parseFloat(suhu) < 36.6 || Float.parseFloat(suhu) > 37) {
             statusRujukan = statusRujukan + 1;
         }
-        if (Integer.parseInt(denyut) != 80) {
+        if (Integer.parseInt(denyut) < 75 || Integer.parseInt(denyut) > 90) {
             statusRujukan = statusRujukan + 1;
         }
         if (statusRujukan >= 4) {

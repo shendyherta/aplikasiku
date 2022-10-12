@@ -99,7 +99,7 @@
             <com.google.android.material.card.MaterialCardView
                 android:id="@+id/pantau"
                 android:layout_width="wrap_content"
-                android:layout_height="125dp"
+                android:layout_height="135dp"
                 android:layout_margin="10dp"
                 android:layout_weight="1"
                 android:onClick="pantau"
@@ -108,7 +108,7 @@
 
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="match_parent"
                     android:orientation="vertical"
                     android:padding="15dp">
 
@@ -133,7 +133,7 @@
             <com.google.android.material.card.MaterialCardView
                 android:id="@+id/artikel"
                 android:layout_width="wrap_content"
-                android:layout_height="125dp"
+                android:layout_height="135dp"
                 android:layout_margin="10dp"
                 android:layout_weight="1"
                 android:onClick="artikel"
@@ -142,7 +142,7 @@
 
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="match_parent"
                     android:orientation="vertical"
                     android:padding="15dp">
 
@@ -177,7 +177,7 @@
             <com.google.android.material.card.MaterialCardView
                 android:id="@+id/rekam"
                 android:layout_width="wrap_content"
-                android:layout_height="125dp"
+                android:layout_height="135dp"
                 android:layout_margin="10dp"
                 android:layout_weight="1"
                 android:onClick="rekam"
@@ -186,7 +186,7 @@
 
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="match_parent"
                     android:orientation="vertical"
                     android:padding="15dp">
 
@@ -211,7 +211,7 @@
             <com.google.android.material.card.MaterialCardView
                 android:id="@+id/rujukan"
                 android:layout_width="wrap_content"
-                android:layout_height="125dp"
+                android:layout_height="135dp"
                 android:layout_margin="10dp"
                 android:layout_weight="1"
                 android:onClick="rujukan"
@@ -220,7 +220,7 @@
 
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="match_parent"
                     android:orientation="vertical"
                     android:padding="15dp">
 

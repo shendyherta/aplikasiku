@@ -74,8 +74,16 @@ public class EditPantau extends AppCompatActivity {
                 dateCreated = intent.getStringExtra("dateCreated");
                 dateUpdated = intent.getStringExtra("dateUpdated");
                 spinner_pasien.setEnabled(false);
+
+                //set toolbar title
+                getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+                getSupportActionBar().setTitle("Edit Pantau Kehamilan");
             } else {
                 id = null;
+
+                //set toolbar title
+                getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+                getSupportActionBar().setTitle("Tambah Pantau Kehamilan");
             }
         }
     }
@@ -223,7 +231,7 @@ public class EditPantau extends AppCompatActivity {
     private String checkPantauForRujukan(String denyutBayi) {
         String rujukan;
 
-        if (Integer.parseInt(denyutBayi) <= 85 && Integer.parseInt(denyutBayi) >= 130) {
+        if (Integer.parseInt(denyutBayi) <= 85 || Integer.parseInt(denyutBayi) >= 130) {
             rujukan = "Butuh rujukan";
         } else {
             rujukan = "Baik";

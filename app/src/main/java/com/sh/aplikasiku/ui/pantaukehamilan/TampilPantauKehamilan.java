@@ -38,7 +38,7 @@ public class TampilPantauKehamilan extends AppCompatActivity {
         setContentView(R.layout.activity_tampil_pantau_kehamilan);
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setTitle("");
+        getSupportActionBar().setTitle("Pantau Kehamilan");
 
         //get userrole
         sharedPref = getSharedPreferences(getString(R.string.data_user), MODE_PRIVATE);
