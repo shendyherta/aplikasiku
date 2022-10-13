@@ -13,6 +13,12 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Aplikasiku">
         <activity
+            android:name=".ui.profile.EditProfileActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.profile.ProfileActivity"
+            android:exported="false" />
+        <activity
             android:name=".ui.AboutActivity"
             android:exported="false" />
         <activity
