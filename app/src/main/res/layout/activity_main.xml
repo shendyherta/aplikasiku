@@ -30,9 +30,9 @@
                 android:id="@+id/iv_profile"
                 android:layout_width="30dp"
                 android:layout_height="30dp"
-                android:src="@drawable/ic_baseline_settings"
                 android:layout_gravity="end"
                 android:layout_marginEnd="20dp"
+                android:src="@drawable/ic_baseline_settings"
                 app:tint="@color/grey_blue" />
 
         </androidx.appcompat.widget.Toolbar>
@@ -99,7 +99,8 @@
             <com.google.android.material.card.MaterialCardView
                 android:id="@+id/pantau"
                 android:layout_width="wrap_content"
-                android:layout_height="135dp"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
                 android:layout_margin="10dp"
                 android:layout_weight="1"
                 android:onClick="pantau"
@@ -133,7 +134,7 @@
             <com.google.android.material.card.MaterialCardView
                 android:id="@+id/artikel"
                 android:layout_width="wrap_content"
-                android:layout_height="135dp"
+                android:layout_height="match_parent"
                 android:layout_margin="10dp"
                 android:layout_weight="1"
                 android:onClick="artikel"
@@ -177,7 +178,8 @@
             <com.google.android.material.card.MaterialCardView
                 android:id="@+id/rekam"
                 android:layout_width="wrap_content"
-                android:layout_height="135dp"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
                 android:layout_margin="10dp"
                 android:layout_weight="1"
                 android:onClick="rekam"
@@ -211,7 +213,8 @@
             <com.google.android.material.card.MaterialCardView
                 android:id="@+id/rujukan"
                 android:layout_width="wrap_content"
-                android:layout_height="135dp"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
                 android:layout_margin="10dp"
                 android:layout_weight="1"
                 android:onClick="rujukan"
