@@ -30,53 +30,61 @@ public class Splashscreen extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splashscreen);
 
+        //cek apakah user sudah login atau belum
         try {
             if (FirebaseAuth.getInstance().getCurrentUser() != null) {
+                //jika sudah, langsung menjalankan fungsi getUserData
+                //mendapatkan id dengan fungsi firebaseauth
                 String id = FirebaseAuth.getInstance().getCurrentUser().getUid();
+                //memanggil fungsi getUserData
                 getUserData(id);
             } else {
+                //memanggil fungsi navigateToLogin()
                 navigateToLogin();
             }
         } catch (Exception e) {
+            //saat terjadi error, langsung memanggil fungsi navigateToLogin()
             Log.d("HALOO", "run: " + e.getMessage());
             navigateToLogin();
         }
     }
 
+    //fungsi untuk intent ke activity login
     private void navigateToLogin() {
         Intent home = new Intent(Splashscreen.this, LoginActivity.class);
         startActivity(home);
         finish();
     }
 
+    //fungsi untuk mengecek apakah user yang login sudah terdaftar di database
     private void getUserData(String idUser) {
         db.collection("users")
                 .whereEqualTo("id", idUser)
                 .get()
-                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                    @SuppressLint("NotifyDataSetChanged")
-                    @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        if (task.isSuccessful()) {
-                            try {
-                                if (task.getResult().getDocuments().size() == 0) {
-                                    Log.d("SplashScreen", "onComplete: User tidak ditemukan!");
-                                    navigateToLogin();
-                                } else {
-                                    for (QueryDocumentSnapshot document : task.getResult()) {
-                                        startActivity(new Intent(getApplicationContext(), MainActivity.class));
-                                        finish();
-                                    }
-                                }
-                            } catch (Exception e) {
-                                Toast.makeText(getApplicationContext(), "Coba lagi nanti!", Toast.LENGTH_SHORT).show();
-                                Log.d("SPLASH", "onComplete: " + e.getMessage());
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        try {
+                            if (task.getResult().getDocuments().size() == 0) {
+                                //jika tidak ada, langsung memanggil fungsi navigateToLogin()
+                                Log.d("SplashScreen", "onComplete: User tidak ditemukan!");
                                 navigateToLogin();
+                            } else {
+                                //jika ada, langsung diarahkan ke activity main
+                                for (QueryDocumentSnapshot document : task.getResult()) {
+                                    startActivity(new Intent(getApplicationContext(), MainActivity.class));
+                                    finish();
+                                }
                             }
-                        } else {
-                            Toast.makeText(getApplicationContext(), "Gagal mendapatkan data!", Toast.LENGTH_SHORT).show();
+                        } catch (Exception e) {
+                            //saat gagal mendapatkan data dari result, langsung diarahkan ke halaman login
+                            Toast.makeText(getApplicationContext(), "Coba lagi nanti!", Toast.LENGTH_SHORT).show();
+                            Log.d("SPLASH", "onComplete: " + e.getMessage());
                             navigateToLogin();
                         }
+                    } else {
+                        //saat gagal mendapatkan data, langsung diarahkan ke halaman login
+                        Toast.makeText(getApplicationContext(), "Gagal mendapatkan data!", Toast.LENGTH_SHORT).show();
+                        navigateToLogin();
                     }
                 });
     }

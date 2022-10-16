@@ -39,6 +39,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class EditArtikel extends AppCompatActivity {
+
+    //inisiasi variabel baru dan komponen penampung
     private EditText editjudul, editpenjelasan;
     private ImageView avatar;
     private AppCompatImageButton btnAdd;
@@ -52,34 +54,48 @@ public class EditArtikel extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_artikel);
 
+        //mengubah title di toolbar
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setTitle("");
 
+        //menyambungkan komponen dengan xml
         editjudul = findViewById(R.id.judul);
         editpenjelasan = findViewById(R.id.penjelasan);
         btnsave = findViewById(R.id.btn_save);
         avatar = findViewById(R.id.avatar);
         btnAdd = findViewById(R.id.btn_add);
 
-
+        //membuat komponen progressdialog
         progressDialog = new ProgressDialog(EditArtikel.this);
         progressDialog.setTitle("loading");
         progressDialog.setMessage("menyimpan...");
 
+        //menangani ketika tombol tambah ditekan dan memanggil fungsi selectImage()
         btnAdd.setOnClickListener(v -> selectImage());
+        //menangani ketika avatar (kondisi imageview telah terisi) ditekan dan memanggil fungsi
+        // selectImage()
         avatar.setOnClickListener(v -> selectImage());
 
+        //menangani ketika tombol save ditekan
         btnsave.setOnClickListener(v -> {
+            //cek apakah judul artikel dan penjelasannya tidak kosong
             if (editjudul.getText().length() > 0 && editpenjelasan.getText().length() > 0) {
+                //jika tidak langsung menjalankan fungsi upload dengan mengirim
+                // parameter judul artikel dan penjelasannya
                 upload(editjudul.getText().toString(), editpenjelasan.getText().toString());
             } else {
+                //jika iya menampilkan peringatan
                 Toast.makeText(getApplicationContext(), "Silakan isi dulu artikel", Toast.LENGTH_SHORT).show();
             }
         });
+
+        //mendapatkan data dari intent
         Intent intent = getIntent();
         if (intent != null) {
             String option = intent.getStringExtra("option");
+            //cek apakah option berisi edit atau tambah/kosong
             if (option.equalsIgnoreCase("edit")) {
+                //jika edit masukkan data intent ke variabel penampung dan komponen
                 id = intent.getStringExtra("id");
                 editjudul.setText(intent.getStringExtra("judul"));
                 editpenjelasan.setText(intent.getStringExtra("penjelasan"));
@@ -89,13 +105,14 @@ public class EditArtikel extends AppCompatActivity {
                 btnAdd.setVisibility(View.GONE);
                 avatar.setVisibility(View.VISIBLE);
 
-                //set toolbar title
+                //mengubah title di toolbar
                 getSupportActionBar().setDisplayHomeAsUpEnabled(true);
                 getSupportActionBar().setTitle("Edit Artikel");
             } else {
+                //jika selain edit, kosong i variabel id
                 id = null;
 
-                //set toolbar title
+                //mengubah title di toolbar
                 getSupportActionBar().setDisplayHomeAsUpEnabled(true);
                 getSupportActionBar().setTitle("Tambah Artikel");
             }
@@ -103,31 +120,42 @@ public class EditArtikel extends AppCompatActivity {
         }
     }
 
+    //fungsi untuk memilih image
     private void selectImage() {
+        //membuat array CharSequence untuk menu popup
         final CharSequence[] items = {"Take Photo", "Choose from Library", "cancel"};
+
+        //membuat popup dialog
         AlertDialog.Builder builder = new AlertDialog.Builder(EditArtikel.this);
         builder.setTitle(getString(R.string.app_name));
         builder.setIcon(R.mipmap.ic_launcher);
+
+        //menambahkan menu ke popup dialog
         builder.setItems(items, (dialog, item) -> {
             if (items[item].equals("Take Photo")) {
+                //Mengambil foto lewat kamera
                 Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
                 startActivityForResult(intent, 10);
             } else if (items[item].equals("Choose from Library")) {
+                //mengambil foto di galeri
                 Intent intent = new Intent(Intent.ACTION_PICK);
                 intent.setType("image/*");
                 startActivityForResult(Intent.createChooser(intent, "Select Image"), 20);
             } else if (items[item].equals("Cancel")) {
+                //menutup dialog
                 dialog.dismiss();
                 ;
             }
         });
+        //menampilkan dialog
         builder.show();
     }
 
-    //codingan pengambilan foto galeri
+    //codingan pengambilan foto galeri dengan mendapatkan result
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+        //codingan mengambil foto dari galeri
         if (requestCode == 20 && resultCode == RESULT_OK && data != null) {
             final Uri path = data.getData();
             Thread thread = new Thread(() -> {
@@ -160,7 +188,9 @@ public class EditArtikel extends AppCompatActivity {
 
     }
 
+    //fungsi untuk mengirim judul dan penjelasan artikel
     private void upload(String judul, String penjelasan) {
+        //menampilkan progressdialog
         progressDialog.show();
         avatar.setDrawingCacheEnabled(true);
         avatar.buildDrawingCache();
@@ -169,7 +199,7 @@ public class EditArtikel extends AppCompatActivity {
         bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
         byte[] data = baos.toByteArray();
 
-        //upload
+        //upload gambar
         FirebaseStorage storage = FirebaseStorage.getInstance();
         StorageReference reference = storage.getReference("images").child("IMG" + new Date().getTime() + ".jpeg");
         UploadTask uploadTask = reference.putBytes(data);

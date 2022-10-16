@@ -21,9 +21,11 @@ public class Rujukan extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_rujukan);
 
+        //mengubah title di toolbar
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setTitle("Rujukan");
 
+        //menyambungkan komponen webview dengan xml
         mWebView = (WebView) findViewById(R.id.webView);
 
         //menghidupkan javascript
@@ -51,12 +53,14 @@ public class Rujukan extends AppCompatActivity {
         return super.onKeyDown(keyCode, event);
     }
 
+    //menutup aplikasi ketika tombol back ditekan
     @Override
     public void onBackPressed() {
         super.onBackPressed();
         this.finish();
     }
 
+    //menampilkan tombol back pada toolbar
     @Override
     public boolean onSupportNavigateUp() {
         onBackPressed();

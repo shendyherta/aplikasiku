@@ -16,24 +16,29 @@ import com.sh.aplikasiku.model.UserRekam;
 import java.util.List;
 
 public class AdminAdapterRekam extends RecyclerView.Adapter<AdminAdapterRekam.MyViewHolder>{
+
+    //inisiasi variabel baru dan komponen penampung
     private Context context;
     private List<UserRekam> list;
     private Dialog dialog;
 
+    //membuat interface dialog ketika di klik
     public interface Dialog{
         void onClick(int pos);
     }
 
+    //fungsi untuk menerima dialog buatan dan memasukkannya di variabel global disini
     public void setDialog(Dialog dialog){
         this.dialog = dialog;
     }
 
-    //konstruktor
+    //konstruktor untuk menerima data dan memasukkannya ke variabel global disini
     public AdminAdapterRekam(Context context, List<UserRekam> list){
         this.context = context;
         this.list = list;
     }
 
+    //fungsi untuk membuat viewholder dan menggunakan xml pilihan dengan layout inflater
     @NonNull
     @Override
     public MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -41,6 +46,7 @@ public class AdminAdapterRekam extends RecyclerView.Adapter<AdminAdapterRekam.My
         return new MyViewHolder(itemView);
     }
 
+    //fungsi untuk melakukan bind data dengan view
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
         holder.berat.setText(String.format("%s kg", list.get(position).getBeratBadan()));
@@ -56,23 +62,29 @@ public class AdminAdapterRekam extends RecyclerView.Adapter<AdminAdapterRekam.My
 
         String rujukan = list.get(position).getRujukan();
 
+        //merubah warna background rujukan ke abu-abu jika rujukan berisi butuh rujukan
         if (rujukan.equalsIgnoreCase("butuh rujukan")) {
             holder.clHeader.setBackgroundColor(context.getResources().getColor(R.color.grey_blue));
         }
 
     }
 
+    //fungsi untuk mengembalikan ukuran dari data list
     @Override
     public int getItemCount() {
         return list.size();
     }
 
+    //class untuk membuat komponen penampung dan menyambungkannya
     class MyViewHolder extends RecyclerView.ViewHolder{
+
+        //inisiasi komponen penampung
         TextView berat, lingkar, suhu, laju, kondisi, tekanan, denyut, pasien, date, rujukan;
         ConstraintLayout clHeader;
 
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
+            //menyambungkan komponen dengan xml
             berat = itemView.findViewById(R.id.berat);
             lingkar = itemView.findViewById(R.id.lingkar);
             denyut = itemView.findViewById(R.id.denyut);
@@ -85,6 +97,7 @@ public class AdminAdapterRekam extends RecyclerView.Adapter<AdminAdapterRekam.My
             rujukan = itemView.findViewById(R.id.tv_rujukan);
             clHeader = itemView.findViewById(R.id.cl_header);
 
+            //menangani ketika dialog di klik
             itemView.setOnClickListener(view -> {
                 if(dialog!=null){
                     dialog.onClick(getLayoutPosition());

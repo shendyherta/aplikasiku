@@ -19,15 +19,18 @@ import com.sh.aplikasiku.model.UserPantau;
 import java.util.List;
 
 public class UserAdapterPantau extends RecyclerView.Adapter<UserAdapterPantau.MyViewHolder> {
+
+    //inisiasi variabel baru
     private Context context;
     private List<UserPantau> list;
 
-    //konstruktor
+    //konstruktor untuk menerima data dan memasukkannya ke variabel global disini
     public UserAdapterPantau(Context context, List<UserPantau> list) {
         this.context = context;
         this.list = list;
     }
 
+    //fungsi untuk membuat viewholder dan menggunakan xml pilihan dengan layout inflater
     @NonNull
     @Override
     public MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -35,6 +38,7 @@ public class UserAdapterPantau extends RecyclerView.Adapter<UserAdapterPantau.My
         return new MyViewHolder(itemView);
     }
 
+    //fungsi untuk melakukan bind data dengan view
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
         holder.denyutjantung.setText(String.format("%sx/menit", list.get(position).getDenyut()));
@@ -44,11 +48,14 @@ public class UserAdapterPantau extends RecyclerView.Adapter<UserAdapterPantau.My
 
         String rujukan = list.get(position).getRujukan();
 
+        //merubah warna background rujukan ke abu-abu jika rujukan berisi butuh rujukan
         if (rujukan.equalsIgnoreCase("butuh rujukan")) {
             holder.clHeader.setBackgroundColor(context.getResources().getColor(R.color.grey_blue));
         }
 
+        //menangani ketika item pada recyclerview di klik
         holder.itemView.setOnClickListener(v -> {
+            //mengirim data artikel ketika di klik ke halaman tampil pantau kehamilan
             Intent intentbaca = new Intent(context, TampilPantauKehamilan.class);
             intentbaca.putExtra("id", list.get(position).getId());
             intentbaca.putExtra("idUser", list.get(position).getIdUser());
@@ -62,18 +69,23 @@ public class UserAdapterPantau extends RecyclerView.Adapter<UserAdapterPantau.My
         });
     }
 
+    //fungsi untuk mengembalikan ukuran dari data list
     @Override
     public int getItemCount() {
         return list.size();
     }
 
+    //class untuk membuat komponen penampung dan menyambungkannya
     class MyViewHolder extends RecyclerView.ViewHolder {
+
+        //inisiasi komponen penampung
         TextView kondisibayi, denyutjantung, date, rujukan;
         ConstraintLayout clHeader;
         LinearLayoutCompat llPasien;
 
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
+            //menyambungkan komponen dengan xml
             denyutjantung = itemView.findViewById(R.id.denyutjantung);
             kondisibayi = itemView.findViewById(R.id.kondisibayi);
             date = itemView.findViewById(R.id.tv_date);

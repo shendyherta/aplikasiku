@@ -14,41 +14,44 @@ import java.util.Locale;
 
 public class ClaimsXAxisValueFormatter extends ValueFormatter {
 
+    //fungsi untuk menampilkan label secara urut berdasarkan tanggal data dibuat
     List<String> datesList;
 
+    //constructor untuk menerima data list tanggal dan memasukkannya ke variabel global datesList
     public ClaimsXAxisValueFormatter(List<String> arrayOfDates) {
         this.datesList = arrayOfDates;
     }
 
-
+    //fungsi untuk mendapatkan posisi label
     @Override
     public String getAxisLabel(float value, AxisBase axis) {
-/*
-Depends on the position number on the X axis, we need to display the label, Here, this is the logic to convert the float value to integer so that I can get the value from array based on that integer and can convert it to the required value here, month and date as value. This is required for my data to show properly, you can customize according to your needs.
-*/
+    /*
+    Depends on the position number on the X axis, we need to display the label, Here, this is the logic
+    to convert the float value to integer so that I can get the value from array based on that integer
+    and can convert it to the required value here, month and date as value. This is required for my
+    data to show properly, you can customize according to your needs.
+    */
+        //merubah value dari float ke angka bulat
         Integer position = Math.round(value);
+        //membuat simple date format dengan pattern dd-MM-yyyy
         SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
 
+        //melakukan perulangan untuk mencari posisi yang berada di antara value > i+1 dan value < i+2
         for (int i = 0; i < datesList.size(); i++) {
             if (value > i+1 && value <i+2) {
+                //jika iya, isi variabel position dengan nilai i
                 position = i;
                 break;
             }
         }
-//        if (value > 1 && value < 2) {
-//            position = 0;
-//        } else if (value > 2 && value < 3) {
-//            position = 1;
-//        } else if (value > 3 && value < 4) {
-//            position = 2;
-//        } else if (value > 4 && value <= 5) {
-//            position = 3;
-//        }
+
+        //jika position kurang dari ukuran list tanggal, kembalikan dengan format milisecond
         if (position < datesList.size())
             return sdf.format(new Date((getDateInMilliSeconds(datesList.get(position)))));
         return "";
     }
 
+    //fungsi untuk merubah data tanggal ke miliseconds
     private long getDateInMilliSeconds(String givenDateString) {
         SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
         long timeInMilliseconds = 1;

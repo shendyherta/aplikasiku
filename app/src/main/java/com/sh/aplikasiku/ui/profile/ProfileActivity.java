@@ -19,6 +19,7 @@ import com.sh.aplikasiku.ui.pantaukehamilan.EditPantau;
 
 public class ProfileActivity extends AppCompatActivity {
 
+    //inisiasi variabel baru dan komponen penampung
     FirebaseUser firebaseUser;
     private SharedPreferences sharedPref;
     private String username;
@@ -27,7 +28,7 @@ public class ProfileActivity extends AppCompatActivity {
     private Button btnEdit;
     private int userrole;
 
-    //create activity result
+    //membuat fungsi activity result untuk mendapatkan feedback result dari intent
     ActivityResultLauncher<Intent> getCreateEditResult = registerForActivityResult(
             new ActivityResultContracts.StartActivityForResult(),
             result -> {
@@ -41,54 +42,65 @@ public class ProfileActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
 
+        //mengubah title di toolbar
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setTitle("Profil Pengguna");
 
+        //menyambungkan komponen dengan xml
         tvUsername = findViewById(R.id.tv_username);
         tvEmail = findViewById(R.id.tv_email);
         btnEdit = findViewById(R.id.btn_edit);
 
+        //menagani ketika tombol edit di tekan
         btnEdit.setOnClickListener(v -> {
+            //intent ke halaman edit profile
             Intent intent = new Intent(getApplicationContext(), EditProfileActivity.class);
             intent.putExtra("username", username);
+            //menggunakan intent dengan activity result untuk mendapatkan feedback dari halaman edit profile
             getCreateEditResult.launch(intent);
         });
 
+        //memanggil fungsi getUserData() untuk mendapatkan data user yang sedang login
         getUserData();
+
+        //mengembalikan result ok untuk main activity agar menjalankan ulang pemanggilan
+        // sharedpreferences jika ada perubahan data user di sharedpreferences
         setResult(RESULT_OK);
     }
 
+    //menutup aplikasi ketika tombol back ditekan
     @Override
     public void onBackPressed() {
         super.onBackPressed();
         this.finish();
     }
 
+    //menampilkan tombol back pada toolbar
     @Override
     public boolean onSupportNavigateUp() {
         onBackPressed();
         return true;
     }
 
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-    }
-
+    //fungsi untuk mendapatkan data user
     private void getUserData() {
-        //get username
+        //mendapatkan sharedpreferences berdasarkan key "data_user"
         sharedPref = getSharedPreferences(getString(R.string.data_user), MODE_PRIVATE);
-        username = sharedPref.getString(getString(R.string.user_name), "");
 
-        //get logged in user
-        firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+        //get username dan role dari sharedpreferences
+        username = sharedPref.getString(getString(R.string.user_name), "");
         userrole = sharedPref.getInt(getString(R.string.user_role), 0);
 
-        //set user data
+        //mendapatkan instance firebaseauth yang sedang login
+        firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+
+        //set username dan role di textview
         tvUsername.setText(username);
         tvEmail.setText(firebaseUser.getEmail());
 
+        //cek apakah role admin atau user biasa
         if (userrole == 1) {
+            //jika admin, menghilangkan tombol edit
             btnEdit.setVisibility(View.GONE);
         }
     }

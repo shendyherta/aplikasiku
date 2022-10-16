@@ -44,6 +44,8 @@ import java.util.Date;
 import java.util.List;
 
 public class RekamMedis extends AppCompatActivity {
+
+    //inisiasi variabel baru dan komponen penampung
     private RecyclerView recyclerView;
     private FloatingActionButton btnAdd;
     private LineChart lineChart;
@@ -64,7 +66,7 @@ public class RekamMedis extends AppCompatActivity {
     private List<Entry> tekananEntries = new ArrayList<Entry>();
     private List<String> listLabels = new ArrayList<>();
 
-    //create activity result
+    //membuat fungsi activity result untuk mendapatkan feedback result dari intent
     ActivityResultLauncher<Intent> getCreateEditResult = registerForActivityResult(
             new ActivityResultContracts.StartActivityForResult(),
             result -> {
@@ -78,40 +80,61 @@ public class RekamMedis extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_rekam_medis);
 
+        //mengubah title di toolbar
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setTitle("Rekam Medis");
 
-        //get userrole
+        //mendapatkan sharedpreferences berdasarkan key "data_user"
         sharedPref = getSharedPreferences(getString(R.string.data_user), MODE_PRIVATE);
+
+        //mendapatkan userrole dari sharedpreferences
         userrole = sharedPref.getInt(getString(R.string.user_role), 0);
 
+        //menyambungkan komponen dengan xml
         recyclerView = findViewById(R.id.recyclerview);
         btnAdd = findViewById(R.id.btn_add);
         lineChart = findViewById(R.id.line_chart);
         tvTitle = findViewById(R.id.tv_title);
 
-        //create progress bar
+        //membuat komponen progressdialog
         progressDialog = new ProgressDialog(RekamMedis.this);
         progressDialog.setTitle("loading");
         progressDialog.setMessage("Mengambil data");
 
-        userAdapterRekam = new UserAdapterRekam(getApplicationContext(), list);
-
+        //menangani ketika tombol floating tambah di tekan
         btnAdd.setOnClickListener(v -> {
+            //intent ke halaman edit rekam medis dengan data option add
             Intent intent = new Intent(getApplicationContext(), EditRekam.class);
             intent.putExtra("option", "add");
+            //menjalankan intent dengan activity result
             getCreateEditResult.launch(intent);
         });
 
+        //cek userrole apakah 1(admin) atau 2(user biasa)
         if (userrole == 1) {
+            //jika role 1 atau admin
+
+            //menampilkan tombol floating tambah
             btnAdd.setVisibility(View.VISIBLE);
+
+            //inisiasi adapter rekam admin
             adminAdapterRekam = new AdminAdapterRekam(this, list);
+
+            //membuat fungsi ketika item pada adapter ditekan akan memunculkan dialog
             adminAdapterRekam.setDialog(pos -> {
+                //membuat array untuk menjadi menu di dialog
                 final CharSequence[] dialogItem = {"Detail", "Edit", "Hapus"};
+
+                //membuat dialog kosong
                 AlertDialog.Builder dialog = new AlertDialog.Builder(RekamMedis.this);
+
+                //menambahkan array menu ke dialog kosong
                 dialog.setItems(dialogItem, (dialogInterface, i) -> {
+                    //menagani ketika menu pada dialog di klik
                     switch (i) {
+                        //jika kasus 0 atau Detail
                         case 0:
+                            //intent ke halaman tampil rekam dengan mengirim data rekam yang dipilih
                             Intent intentbaca = new Intent(getApplicationContext(), TampilanRekam.class);
                             intentbaca.putExtra("id", list.get(pos).getId());
                             intentbaca.putExtra("idUser", list.get(pos).getIdUser());
@@ -128,7 +151,9 @@ public class RekamMedis extends AppCompatActivity {
                             intentbaca.putExtra("dateUpdated", list.get(pos).getDateUpdated());
                             startActivity(intentbaca);
                             break;
+                        //jika kasus 1 atau Edit
                         case 1:
+                            //intent ke halaman edit rekam dengan data option edit
                             Intent intent = new Intent(getApplicationContext(), EditRekam.class);
                             intent.putExtra("id", list.get(pos).getId());
                             intent.putExtra("idUser", list.get(pos).getIdUser());
@@ -145,19 +170,24 @@ public class RekamMedis extends AppCompatActivity {
                             intent.putExtra("option", "edit");
                             getCreateEditResult.launch(intent);
                             break;
+                        //jika kasus 2 atau Hapus
                         case 2:
+                            //menghapus data rekam yang di pilih
                             deleteData(list.get(pos).getId());
                             break;
                     }
                 });
+                //menampilkan dialog
                 dialog.show();
             });
         } else {
+            //jika role 2 (user biasa), menyembunyikan tombol floating tambah dan menginisiasi adapter rekam user
             btnAdd.setVisibility(View.GONE);
             userAdapterRekam = new UserAdapterRekam(this, list);
             tvTitle.setVisibility(View.GONE);
         }
 
+        //menanggil fungsi getData()
         getData();
     }
 
@@ -167,32 +197,46 @@ public class RekamMedis extends AppCompatActivity {
         super.onStart();
     }
 
+    //menutup aplikasi ketika tombol back ditekan
     @Override
     public void onBackPressed() {
         super.onBackPressed();
         this.finish();
     }
 
+    //menampilkan tombol back pada toolbar
     @Override
     public boolean onSupportNavigateUp() {
         onBackPressed();
         return true;
     }
 
+    //fungsi untuk memanggil data rekam di firebase
     private void getData() {
+        //tampilkan progressdialog
         progressDialog.show();
 
+        //memanggil data rekam pada firebase
+        //cek apakah role 1 (admin) atau 2 (user biasa)
         if (userrole == 1) {
+            //jika role 1, ambil semua data
             db.collection("rekammedis")
                     .get()
                     .addOnCompleteListener(task -> {
+                        //kosong kan list agar tidak menumpuk ketika diisi ulang
                         list.clear();
+                        //cek apakah berhasil atau tidak
                         if (task.isSuccessful()) {
+                            //coba mengecek dan menggunakan data
                             try {
+                                //cek apakah data tidak kosong
                                 if (task.getResult().getDocuments().size() == 0) {
+                                    //jika iya, menampilkan toast peringatan
                                     Toast.makeText(RekamMedis.this, "Belum ada data rekam medis!", Toast.LENGTH_SHORT).show();
                                 } else {
+                                    //jika tidak, melakukan perulangan pada data result
                                     for (QueryDocumentSnapshot document : task.getResult()) {
+                                        //memecah data ke masing-masing variabel yang sesuai
                                         String id = document.getId();
                                         String idUser = document.get("idPasien").toString();
                                         String pasien = document.get("pasien").toString();
@@ -206,37 +250,57 @@ public class RekamMedis extends AppCompatActivity {
                                         String rujukan = document.get("rujukan").toString();
                                         String dateCreated = document.get("dateCreated").toString();
                                         String dateUpdated = document.get("dateUpdated").toString();
+
+                                        //memasukkan pecahal variabel ke variabel UserRekam
                                         UserRekam user = new UserRekam(id, idUser, pasien, berat, lingkar, kondisi, tekanan, laju, suhu, denyut, rujukan, dateCreated, dateUpdated);
                                         user.setId(document.getId());
+                                        //menambahkan variabel user ke vairabel list
                                         list.add(user);
                                     }
+                                    //memanggil fungsi sortData()
                                     sortData();
+                                    //kemudian memanggil fungsi showRekamMedis()
                                     showRekamMedis();
+                                    //karena admin tidak butuh chart, maka disembunyikan
                                     lineChart.setVisibility(View.GONE);
                                 }
                             } catch (Exception e) {
+                                //jika percobaan gagal, menampilkan toast peringatan
                                 Toast.makeText(getApplicationContext(), "Coba lagi nanti!", Toast.LENGTH_SHORT).show();
                                 Log.d("REKAMMEDISGETDATA", "getData: " + e.getMessage());
                             }
                         } else {
+                            //jika percobaan gagal, menampilkan toast peringatan
                             Toast.makeText(getApplicationContext(), "Data Gagal", Toast.LENGTH_SHORT).show();
                         }
+                        //menutup progressdialog
                         progressDialog.dismiss();
                     });
         } else {
+            //jika role 2, ambil data yang memiliki id user yang sama dengan user yang login
+
+            //inisiasi firebaseuser untuk mendapatkan data user yang login
             FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+
+            //mendapatkan data rekam dengan filter id user yang sedang login
             db.collection("rekammedis")
                     .whereEqualTo("idPasien", firebaseUser.getUid())
                     .get()
                     .addOnCompleteListener(task -> {
                         list.clear();
+                        //cek apakah berhasil atau tidak
                         if (task.isSuccessful()) {
+                            //coba mengecek dan menggunakan data
                             try {
+                                //cek apakah data tidak kosong
                                 Log.d("QWE", "getData: " + task.getResult().getDocuments());
                                 if (task.getResult().getDocuments().size() == 0) {
+                                    //jika iya, menampilkan toast peringatan
                                     Toast.makeText(RekamMedis.this, "Belum ada data rekam medis!", Toast.LENGTH_SHORT).show();
                                 } else {
+                                    //jika tidak, melakukan perulangan pada data result
                                     for (QueryDocumentSnapshot document : task.getResult()) {
+                                        //memecah data ke masing-masing variabel yang sesuai
                                         String id = document.getId();
                                         String idUser = document.get("idPasien").toString();
                                         String pasien = document.get("pasien").toString();
@@ -250,51 +314,71 @@ public class RekamMedis extends AppCompatActivity {
                                         String rujukan = document.get("rujukan").toString();
                                         String dateCreated = document.get("dateCreated").toString();
                                         String dateUpdated = document.get("dateUpdated").toString();
+                                        //memasukkan pecahal variabel ke variabel UserRekam
                                         UserRekam user = new UserRekam(id, idUser, pasien, berat, lingkar, kondisi, tekanan, laju, suhu, denyut, rujukan, dateCreated, dateUpdated);
                                         user.setId(document.getId());
+                                        //menambahkan variabel user ke vairabel list
                                         list.add(user);
                                     }
+                                    //memanggil fungsi sortData()
                                     sortData();
+                                    //memanggil fungsi showRekamMedis()
                                     showRekamMedis();
+                                    //memanggil fungsi setRekamEntries() untuk chart
                                     setRekamEntries();
                                 }
                             } catch (Exception e) {
+                                //jika percobaan gagal, menampilkan toast peringatan
                                 Toast.makeText(getApplicationContext(), "Coba lagi nanti!", Toast.LENGTH_SHORT).show();
                                 Log.d("REKAMMEDISGETDATA", "getData: " + e.getMessage());
                             }
                         } else {
+                            //jika percobaan gagal, menampilkan toast peringatan
                             Toast.makeText(getApplicationContext(), "Data Gagal", Toast.LENGTH_SHORT).show();
                         }
+                        //menutup progressdialog
                         progressDialog.dismiss();
                     });
         }
 
     }
 
+    //fungsi untuk menghapus data rekam berdasarkan id
     private void deleteData(String id) {
         progressDialog.show();
+        //menghapus data rekam di firebase berdasarkan id pada parameter
         db.collection("rekammedis").document(id)
                 .delete()
                 .addOnCompleteListener(task -> {
+                    //cek apakah berhasil atau tidak
                     if (!task.isSuccessful()) {
+                        //jika gagal tampilkan toast peringatan
                         Toast.makeText(getApplicationContext(), "Data gagal dihapus!", Toast.LENGTH_SHORT).show();
                     }
+                    //tutup progressdialog
                     progressDialog.dismiss();
+
+                    //panggil fungsi getData()
                     getData();
                 });
     }
 
+    //fungsi untuk menampilkan rekam berdasarkan role
     private void showRekamMedis() {
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getApplicationContext(), LinearLayoutManager.VERTICAL, false);
         recyclerView.setLayoutManager(layoutManager);
 
+        //cek role apakah 1 atau bukan
         if (userrole == 1) {
+            //jika 1 pakai adapter rekam admin
             recyclerView.setAdapter(adminAdapterRekam);
         } else {
+            //jika bukan pakai adapter rekam user
             recyclerView.setAdapter(userAdapterRekam);
         }
     }
 
+    //fungsi untuk membuat label chart berdasarkan tanggal data rekam dibuat
     private void setRekamEntries() {
         for (int i = 0; i < list.size(); i++) {
             denyutEntries.add(new Entry(i + 1, Float.parseFloat(list.get(i).getDenyutJantung())));
@@ -311,9 +395,11 @@ public class RekamMedis extends AppCompatActivity {
             listLabels.add(list.get(i).getDateCreated());
         }
         listLabels.add("");
+        //memanggil fungsi setEntriesToChart() untuk membuat chart
         setEntriesToChart();
     }
 
+    //fungsi untuk membuat chart berdasarkan data list rekam
     private void setEntriesToChart() {
         //set chart data
         LineDataSet dataSetDenyut = new LineDataSet(denyutEntries, "Denyut jantung(80x/menit)");
@@ -365,6 +451,7 @@ public class RekamMedis extends AppCompatActivity {
         dataSetTekanan.setLineWidth(2f);
         dataSetTekanan.setValueTextSize(8f);
 
+        //inisiasi dataset berdasarkan chart data diatas
         List<ILineDataSet> datasets = new ArrayList<>();
         datasets.add(dataSetDenyut);
         datasets.add(dataSetBerat);
@@ -374,7 +461,7 @@ public class RekamMedis extends AppCompatActivity {
         datasets.add(dataSetLaju);
         datasets.add(dataSetTekanan);
 
-        //set chart range
+        //set chart limit y axis
         YAxis leftAxis = lineChart.getAxisLeft();
         leftAxis.setAxisMinimum(0f);
         leftAxis.setAxisMaximum(120f);
@@ -411,6 +498,7 @@ public class RekamMedis extends AppCompatActivity {
         lineChart.invalidate();
     }
 
+    //fungsi untuk mengurutkan data berdasarkan tanggal yang baru terbuat di bagian paling atas
     private void sortData() {
         int n = list.size();
 

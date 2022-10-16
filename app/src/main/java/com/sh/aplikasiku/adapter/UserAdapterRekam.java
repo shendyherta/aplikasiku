@@ -19,15 +19,18 @@ import com.sh.aplikasiku.model.UserRekam;
 import java.util.List;
 
 public class UserAdapterRekam extends RecyclerView.Adapter<UserAdapterRekam.MyViewHolder> {
+
+    //inisiasi variabel baru
     private Context context;
     private List<UserRekam> list;
 
-    //konstruktor
+    //konstruktor untuk menerima data dan memasukkannya ke variabel global disini
     public UserAdapterRekam(Context context, List<UserRekam> list) {
         this.context = context;
         this.list = list;
     }
 
+    //fungsi untuk membuat viewholder dan menggunakan xml pilihan dengan layout inflater
     @NonNull
     @Override
     public MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -35,6 +38,7 @@ public class UserAdapterRekam extends RecyclerView.Adapter<UserAdapterRekam.MyVi
         return new MyViewHolder(itemView);
     }
 
+    //fungsi untuk melakukan bind data dengan view
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
         holder.berat.setText(String.format("%s kg", list.get(position).getBeratBadan()));
@@ -50,11 +54,14 @@ public class UserAdapterRekam extends RecyclerView.Adapter<UserAdapterRekam.MyVi
 
         String rujukan = list.get(position).getRujukan();
 
+        //merubah warna background rujukan ke abu-abu jika rujukan berisi butuh rujukan
         if (rujukan.equalsIgnoreCase("butuh rujukan")) {
             holder.clHeader.setBackgroundColor(context.getResources().getColor(R.color.grey_blue));
         }
 
+        //menangani ketika item pada recyclerview di klik
         holder.itemView.setOnClickListener(v -> {
+            //mengirim data artikel ketika di klik ke halaman tampil rekam medis
             Intent intent = new Intent(context, TampilanRekam.class);
             intent.putExtra("id", list.get(position).getId());
             intent.putExtra("berat", list.get(position).getBeratBadan());
@@ -70,18 +77,23 @@ public class UserAdapterRekam extends RecyclerView.Adapter<UserAdapterRekam.MyVi
         });
     }
 
+    //fungsi untuk mengembalikan ukuran dari data list
     @Override
     public int getItemCount() {
         return list.size();
     }
 
+    //class untuk membuat komponen penampung dan menyambungkannya
     class MyViewHolder extends RecyclerView.ViewHolder {
+
+        //inisiasi komponen penampung
         TextView berat, lingkar, suhu, laju, kondisi, tekanan, denyut, date, rujukan;
         LinearLayoutCompat llPasien;
         ConstraintLayout clHeader;
 
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
+            //menyambungkan komponen dengan xml
             berat = itemView.findViewById(R.id.berat);
             lingkar = itemView.findViewById(R.id.lingkar);
             denyut = itemView.findViewById(R.id.denyut);
